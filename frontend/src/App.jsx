@@ -1,7 +1,14 @@
-import StudentLogin from './component/StudentLogin.jsx'
+import StudentLogin from './component/StudentLogin.jsx';
+import Navbar from "./component/Navbar";
+
 import './App.css'
 
 function App() {
-  return <StudentLogin />;
+
+  return <>
+  <Navbar/>
+  <StudentLogin />
+  </>
+  ;
 }
-export default App
+export default App;

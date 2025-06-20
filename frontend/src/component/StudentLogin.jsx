@@ -7,10 +7,12 @@ const StudentLogin = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Logging in with", { email, password });
-    toast.success("Login Success with: " + email) 
-    
+    try {
+      throw new Error("Fake login failure"); // Simulate an error
+      toast.success("Login Success with: " + email);
+    } catch (error) {
+      toast.error("Login Failed");
+    }
   };
 
   return (

@@ -5,6 +5,10 @@ const StudentLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  /* This messages are set to test toast messages.
+     You can use toast.success and toast.error to show success and error messages
+     For more information check "https://fkhadra.github.io/react-toastify/introduction/"
+  */
   const handleSubmit = (e) => {
     e.preventDefault();
     try {

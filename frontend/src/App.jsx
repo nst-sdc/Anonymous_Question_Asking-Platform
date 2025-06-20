@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ToastContainer } from 'react-toastify'
 import StudentLogin from './component/StudentLogin.jsx';
 import Navbar from './component/Navbar';
 import './App.css';
@@ -10,6 +11,17 @@ function App() {
     <>
       <Navbar username={username} />
       <StudentLogin />
+      <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+      />
     </>
   );
 }

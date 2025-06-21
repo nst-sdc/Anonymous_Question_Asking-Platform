@@ -21,7 +21,7 @@ function App() {
             </Routes>
 
             <ToastContainer
-              position="top-right"
+              position="top-bottom"
               autoClose={3000}
               hideProgressBar={false}
               newestOnTop
@@ -30,7 +30,7 @@ function App() {
               pauseOnFocusLoss
               draggable
               pauseOnHover
-              theme="light"
+              theme="color"
             />
           </>
         </Router>

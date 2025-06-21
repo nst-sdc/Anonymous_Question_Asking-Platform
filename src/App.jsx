@@ -19,6 +19,7 @@ function App() {
               <Route path="/teacher" element={<TeacherDashboard />} />
               <Route path="/student" element={<StudentDashboard />} />
             </Routes>
+
             <ToastContainer
               position="top-right"
               autoClose={3000}

@@ -1,7 +1,15 @@
-import StudentLogin from './component/StudentLogin.jsx'
-import './App.css'
+import StudentLogin from './component/StudentLogin.jsx';
+import Poll from './component/Poll.jsx';
+import './App.css';
 
 function App() {
-  return <StudentLogin />;
+  return (
+    <div>
+      <StudentLogin />
+      <Poll />
+    </div>
+  );
 }
-export default App
+
+export default App;
+

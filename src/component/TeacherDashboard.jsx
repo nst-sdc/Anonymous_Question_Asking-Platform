@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GraduationCap, Plus, Users, LogOut, Copy, Check } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import ChatRoom from './ChatRoom';
 
 // TeacherDashboard component ka main logic
 const TeacherDashboard = () => {

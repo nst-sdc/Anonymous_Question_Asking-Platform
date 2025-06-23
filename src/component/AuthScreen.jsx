@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GraduationCap, Users, ArrowRight } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { toast } from 'react-toastify';
 
 const AuthScreen = () => {
   const [selectedRole, setSelectedRole] = useState(null);
@@ -9,21 +10,25 @@ const AuthScreen = () => {
   const { login } = useApp();
   const navigate = useNavigate();
 
+  // Now you can use toast messages 
   const handleLogin = () => {
-    if (!selectedRole) return;
-
-    if (selectedRole === 'teacher' && !teacherName.trim()) {
+    if (!selectedRole) {
+      toast.error("Please select a role to continue");
       return;
     }
 
-    // Call the login function from AppContext
-    login(selectedRole, teacherName.trim());
-    
+    if (selectedRole === 'teacher' && !teacherName.trim()) {
+      toast.error("Please enter your name to continue as a teacher");
+      return;
+    }
+
     // Navigate based on role
     if (selectedRole === 'teacher') {
       navigate('/teacher');
+      toast.success("Successfully logged in as Teacher");
     } else {
       navigate('/student');
+      toast.success("Successfully logged in as Student");
     }
   };
 

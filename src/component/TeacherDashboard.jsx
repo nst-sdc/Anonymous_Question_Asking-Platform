@@ -1,47 +1,69 @@
 import React, { useState } from 'react';
-import { GraduationCap, Plus, Users, LogOut, Copy, Check } from 'lucide-react';
+import { GraduationCap, Plus, Users, LogOut, Copy, Check, MessageSquare } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import Chat from './Chat';
 
-// TeacherDashboard component ka main logic
+// TeacherDashboard component
 const TeacherDashboard = () => {
-  // State variables
   const [roomName, setRoomName] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [copiedCode, setCopiedCode] = useState('');
   const { user, currentRoom, createRoom, logout, rooms, joinRoom } = useApp();
 
-  // Room create karne ka handler
   const handleCreateRoom = () => {
     if (!roomName.trim()) return;
-    createRoom(roomName); // naye room ka naam bhejkar create karo
+    createRoom(roomName);
     setRoomName('');
-    setShowCreateForm(false); // form hide kar do
+    setShowCreateForm(false);
   };
 
-  // Clipboard me room code copy karne ka function
   const copyToClipboard = (code) => {
-    navigator.clipboard.writeText(code); // code copy karo
-    setCopiedCode(code); // UI me check dikhane ke liye
-    setTimeout(() => setCopiedCode(''), 2000); // 2 sec baad reset
+    navigator.clipboard.writeText(code);
+    setCopiedCode(code);
+    setTimeout(() => setCopiedCode(''), 2000);
   };
 
-  // Agar user abhi kisi room me hai, toh ChatRoom dikhana chahiye
+  // If user is in a room, show the Chat component
   if (currentRoom) {
-    return <ChatRoom />;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50 p-4">
+        <div className="max-w-6xl mx-auto h-screen flex flex-col">
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg p-4 mb-4 border border-white/20 flex justify-between items-center">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+                <MessageSquare className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-gray-800">Room: {currentRoom.name}</h1>
+                <p className="text-gray-600 text-sm">Share this code with students: {currentRoom.code}</p>
+              </div>
+            </div>
+            <button
+              onClick={() => joinRoom(null)}
+              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors flex items-center space-x-2"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Leave Room</span>
+            </button>
+          </div>
+          <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-white/20 overflow-hidden">
+            <Chat roomId={currentRoom.code} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
-  // Sirf uss teacher ke rooms filter karo
+  // Filter rooms for the current teacher
   const teacherRooms = rooms.filter((room) => room.teacherId === user?.id);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50 p-4">
       <div className="max-w-6xl mx-auto">
-        
-        {/* ==== Header Section ==== */}
+        {/* Header Section */}
         <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg p-6 mb-6 border border-white/20">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              {/* Dashboard icon */}
               <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
                 <GraduationCap className="w-5 h-5 text-white" />
               </div>
@@ -50,11 +72,9 @@ const TeacherDashboard = () => {
                 <p className="text-gray-600 text-sm">Teacher Dashboard</p>
               </div>
             </div>
-            
-            {/* Logout button */}
             <button
               onClick={logout}
-              className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-red-500 transition-colors"
+              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors flex items-center space-x-2"
             >
               <LogOut className="w-4 h-4" />
               <span>Logout</span>
@@ -62,35 +82,33 @@ const TeacherDashboard = () => {
           </div>
         </div>
 
-        {/* ==== Room Management Section ==== */}
+        {/* Create Room Section */}
         <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg p-6 mb-6 border border-white/20">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-gray-800">Room Management</h2>
-
-            {/* Create Room Button */}
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold text-gray-800">Your Classrooms</h2>
             <button
               onClick={() => setShowCreateForm(!showCreateForm)}
-              className="flex items-center space-x-2 bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 py-2 rounded-xl hover:from-purple-600 hover:to-pink-700 transition-all duration-200"
+              className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center space-x-2"
             >
               <Plus className="w-4 h-4" />
-              <span>Create Room</span>
+              <span>Create New</span>
             </button>
           </div>
 
-          {/* ==== Room Creation Form ==== */}
           {showCreateForm && (
-            <div className="bg-gray-50 rounded-xl p-4 mb-4">
-              <div className="flex space-x-3">
+            <div className="mb-6 p-4 bg-purple-50 rounded-lg border border-purple-100">
+              <h3 className="font-medium text-gray-700 mb-2">Create New Classroom</h3>
+              <div className="flex space-x-2">
                 <input
                   type="text"
-                  placeholder="Enter room name"
                   value={roomName}
                   onChange={(e) => setRoomName(e.target.value)}
-                  className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+                  placeholder="Enter classroom name"
+                  className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
                 <button
                   onClick={handleCreateRoom}
-                  className="bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-600 transition-colors"
+                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
                 >
                   Create
                 </button>
@@ -98,53 +116,50 @@ const TeacherDashboard = () => {
             </div>
           )}
 
-          {/* ==== List of Created Rooms ==== */}
+          {/* List of Rooms */}
           {teacherRooms.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {teacherRooms.map((room) => (
-                <div key={room.id} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                  
-                  {/* Room name aur participants count */}
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-gray-800">{room.name}</h3>
-                    <div className="flex items-center space-x-1 text-gray-500">
-                      <Users className="w-4 h-4" />
-                      <span className="text-sm">{room.participants?.length || 0}</span>
+                <div
+                  key={room.code}
+                  className="p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-medium text-gray-800">{room.name}</h3>
+                      <p className="text-sm text-gray-500 mt-1">Code: {room.code}</p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        {room.students?.length || 0} students
+                      </p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => copyToClipboard(room.code)}
+                        className="p-2 text-gray-500 hover:text-purple-600 transition-colors"
+                        title="Copy code"
+                      >
+                        {copiedCode === room.code ? (
+                          <Check className="w-4 h-4 text-green-500" />
+                        ) : (
+                          <Copy className="w-4 h-4" />
+                        )}
+                      </button>
+                      <button
+                        onClick={() => joinRoom(room.code)}
+                        className="p-2 text-gray-500 hover:text-purple-600 transition-colors"
+                        title="Enter classroom"
+                      >
+                        <MessageSquare className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
-
-                  {/* Room code aur copy button */}
-                  <div className="flex items-center space-x-2 mb-3">
-                    <code className="bg-gray-100 px-3 py-1 rounded-lg font-mono text-sm">
-                      {room.code}
-                    </code>
-                    <button
-                      onClick={() => copyToClipboard(room.code)}
-                      className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
-                    >
-                      {copiedCode === room.code ? (
-                        <Check className="w-4 h-4 text-green-500" />
-                      ) : (
-                        <Copy className="w-4 h-4 text-gray-500" />
-                      )}
-                    </button>
-                  </div>
-
-                  {/* Enter Room Button */}
-                  <button
-                    onClick={() => joinRoom(room.code)}
-                    className="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white py-2 px-4 rounded-lg text-sm hover:from-purple-600 hover:to-pink-700 transition-all duration-200"
-                  >
-                    Enter Room
-                  </button>
                 </div>
               ))}
             </div>
           ) : (
-            // Agar koi room nahi bana hai
             <div className="text-center py-8 text-gray-500">
-              <GraduationCap className="w-12 h-12 mx-auto mb-3 opacity-50" />
-              <p>No rooms created yet. Create your first room to get started!</p>
+              <Users className="w-12 h-12 mx-auto text-gray-300 mb-2" />
+              <p>No classrooms yet. Create your first classroom to get started!</p>
             </div>
           )}
         </div>

@@ -4,13 +4,23 @@ import { generateAnonymousName, checkProfanity } from '../utils/helpers';
 // Context banaya gaya jisse globally data share ho sake
 const AppContext = createContext();
 
-// Custom hook to use the context easily
+// Custom hook to use the app context
 export const useApp = () => {
   const context = useContext(AppContext);
   if (!context) {
     throw new Error('useApp must be used within AppProvider');
   }
   return context;
+};
+
+// Custom hook specifically for authentication
+export const useAuth = () => {
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error('useAuth must be used within AppProvider');
+  }
+  const { user, login, logout, isAuthenticated } = context;
+  return { user, login, logout, isAuthenticated };
 };
 
 // Main AppProvider component
@@ -267,6 +277,8 @@ export const AppProvider = ({ children }) => {
     setCurrentRoom(updatedRoom);
   };
 
+  const isAuthenticated = user !== null;
+
   return (
     <AppContext.Provider
       value={{
@@ -284,6 +296,7 @@ export const AppProvider = ({ children }) => {
         createPoll,
         votePoll,
         rooms,
+        isAuthenticated,
       }}
     >
       {children}

@@ -15,10 +15,10 @@ const AuthScreen = () => {
     if (selectedRole === 'teacher' && !teacherName.trim()) {
       return;
     }
-
+    
     // Call the login function from AppContext
     login(selectedRole, teacherName.trim());
-    
+
     // Navigate based on role
     if (selectedRole === 'teacher') {
       navigate('/teacher');

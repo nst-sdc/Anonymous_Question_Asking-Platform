@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MessageCircle, LogOut, AlertCircle } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { useNavigate } from 'react-router-dom';
 
 // StudentDashboard component
 const StudentDashboard = () => {
@@ -10,6 +11,7 @@ const StudentDashboard = () => {
 
   // AppContext se functions aur values
   const { user, currentRoom, joinRoom, logout } = useApp();
+  const navigate = useNavigate();
 
   // Room join karne ka logic
   const handleJoinRoom = () => {
@@ -48,10 +50,12 @@ const StudentDashboard = () => {
     );
   }
 
-  // Agar user already kisi room me hai toh ChatRoom dikhao
-  if (currentRoom) {
-    return <ChatRoom />;
-  }
+  // Redirect to chat room if user is in a room
+  useEffect(() => {
+    if (currentRoom) {
+      navigate(`/chat/${currentRoom.id}`);
+    }
+  }, [currentRoom, navigate]);
 
   // Main dashboard UI
   return (

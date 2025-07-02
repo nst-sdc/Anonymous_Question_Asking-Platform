@@ -56,11 +56,16 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     );
     
-    expect(screen.getByText('Something went wrong.')).toBeInTheDocument();
+    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
     expect(console.error).toHaveBeenCalled();
     
     // Check that the error details are not shown by default
     expect(screen.queryByText('Test error')).not.toBeInTheDocument();
+    
+    // Check if Error details summary is present when in development mode
+    const originalEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'development';
+    
     render(
       <ErrorBoundary>
         <ErrorComponent shouldThrow={true} />

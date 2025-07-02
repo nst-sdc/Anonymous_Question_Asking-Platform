@@ -46,7 +46,7 @@ export const AppProvider = ({ children }) => {
   const [user, setUser] = useState(() => loadState('chat-user', null));
   const [currentRoom, setCurrentRoom] = useState(() => loadState('current-room', null));
   const [rooms, setRooms] = useState(() => loadState('chat-rooms', []));
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // Initialize as false to prevent relentless loading
   const [error, setError] = useState(null);
 
   // Save state to localStorage when it changes
@@ -60,7 +60,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     saveState('chat-rooms', rooms);
-    setIsLoading(false);
+    // Don't set isLoading here as it might cause issues with frequent room updates
   }, [rooms]);
 
   // Login function with validation and error handling
@@ -520,7 +520,7 @@ export const AppProvider = ({ children }) => {
         id: uuidv4(),
         content,
         userId: user.id,
-        username: user.anonymousName || 'Anonymous',
+        username: user.role === 'teacher' ? user.anonymousName : 'Anonymous Student',
         userRole: user.role,
         timestamp: new Date().toISOString(),
         reactions: {},
@@ -608,7 +608,7 @@ export const AppProvider = ({ children }) => {
         // Notify other users
         const banMessage = {
           id: uuidv4(),
-          content: `${targetUser.anonymousName} has been banned for violating community guidelines.`,
+          content: `${targetUser.role === 'teacher' ? targetUser.anonymousName : 'A student'} has been banned for violating community guidelines.`,
           userId: 'system',
           username: 'System',
           userRole: 'system',
@@ -621,7 +621,7 @@ export const AppProvider = ({ children }) => {
         // Notify about silence
         const silenceMessage = {
           id: uuidv4(),
-          content: `${targetUser.anonymousName} has been silenced for ${duration} minutes.`,
+          content: `${targetUser.role === 'teacher' ? targetUser.anonymousName : 'A student'} has been silenced for ${duration} minutes.`,
           userId: 'system',
           username: 'System',
           userRole: 'system',

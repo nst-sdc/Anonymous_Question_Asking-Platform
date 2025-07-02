@@ -14,18 +14,21 @@ const StudentDashboard = () => {
   const navigate = useNavigate();
 
   // Room join karne ka logic
-  const handleJoinRoom = () => {
+  const handleJoinRoom = async () => {
     if (!roomCode.trim()) {
       setError('Please enter a room code'); // Agar input empty hai toh error
       return;
     }
 
-    // joinRoom function call karke success check karo
-    const success = joinRoom(roomCode.toUpperCase());
-    if (!success) {
-      setError('Invalid room code or you are banned from joining rooms');
-    } else {
-      setError('');
+    try {
+      // joinRoom function call karke success check karo
+      const success = await joinRoom(roomCode.toUpperCase());
+      if (success) {
+        setError('');
+        // Navigation will be handled by the useEffect that watches currentRoom
+      }
+    } catch (err) {
+      setError(err.message || 'Invalid room code or you are banned from joining rooms');
     }
   };
 
@@ -71,7 +74,7 @@ const StudentDashboard = () => {
                 <MessageCircle className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-800">Welcome, {user?.anonymousName}</h1>
+                <h1 className="text-xl font-bold text-gray-800">Welcome, Anonymous Student</h1>
                 <p className="text-gray-600 text-sm">Student Dashboard</p>
               </div>
             </div>

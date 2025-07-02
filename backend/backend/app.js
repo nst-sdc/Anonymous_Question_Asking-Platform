@@ -17,11 +17,21 @@ app.get('/', (req, res) => {
 });
 
 // Connect to DB (this part requires a .env file or hardcoded URI)
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/yourdbname', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+// Replace the old mongoose.connect(...) chain with a dedicated async connection function:
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(
+      process.env.MONGO_URI || 'mongodb://localhost:27017/anonymous-qa-platform'
+    );
+    console.log('MongoDB connected successfully');
+  } catch (error) {
+    console.error('MongoDB connection failed:', error.message);
+    process.exit(1);
+  }
+};
+
+connectDB();
 
 // Start server
 const PORT = process.env.PORT || 5000;

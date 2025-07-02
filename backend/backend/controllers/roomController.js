@@ -5,7 +5,7 @@ const joinRoom = async (req, res) => {
   const { code } = req.body;
 
   try {
-   try {
+     const user = await User.findById(req.user.id);
      const user = await User.findById(req.user.id); 
      
      if (!user) {

@@ -7,9 +7,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Routes
 app.use('/api/rooms', require('./routes/roomRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
+
 
 // Default route
 app.get('/', (req, res) => {

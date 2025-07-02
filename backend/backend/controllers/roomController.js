@@ -5,7 +5,12 @@ const joinRoom = async (req, res) => {
   const { code } = req.body;
 
   try {
-    const user = await User.findById(req.user.id); 
+   try {
+     const user = await User.findById(req.user.id); 
+     
+     if (!user) {
+       return res.status(404).json({ message: 'User not found' });
+     }
 
 
     user.recentRooms = user.recentRooms.filter(room => room.code !== code);

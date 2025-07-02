@@ -13,7 +13,12 @@ export default function Navbar() {
           <a href="#" className="text-gray-700 hover:text-blue-600">About</a>
         </div>
         <div className="md:hidden">
-          <button onClick={() => setIsOpen(!isOpen)} className="text-gray-700 text-2xl focus:outline-none">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-gray-700 text-2xl focus:outline-none"
+            aria-label="Toggle mobile menu"
+            aria-expanded={isOpen}
+          >
             ☰
           </button>
         </div>

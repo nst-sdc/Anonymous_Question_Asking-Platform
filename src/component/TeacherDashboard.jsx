@@ -65,8 +65,9 @@ const TeacherDashboard = () => {
         setShowCreateForm(false);
         
         // Redirect to the room if not already there
-        if (currentRoom?.code !== roomCode) {
-          navigate(`/chat/${roomCode}`);
+        const newRoom = rooms.find(r => r.code === roomCode);
+        if (newRoom && currentRoom?.id !== newRoom.id) {
+          navigate(`/chat/${newRoom.id}`);
         }
       }
     } catch (err) {
@@ -80,7 +81,7 @@ const TeacherDashboard = () => {
               position: 'top-center',
               autoClose: 3000,
             });
-            navigate(`/chat/${existingRoom.code}`);
+            navigate(`/chat/${existingRoom.id}`);
             return;
           }
         }
@@ -96,6 +97,11 @@ const TeacherDashboard = () => {
     try {
       const success = await joinRoom(roomCode);
       if (success) {
+        // Find the room by code to get its ID for navigation
+        const roomToJoin = rooms.find(r => r.code === roomCode);
+        if (roomToJoin) {
+          navigate(`/chat/${roomToJoin.id}`);
+        }
         toast.success('Joining room...', {
           position: 'top-right',
           autoClose: 2000,
@@ -151,7 +157,7 @@ const TeacherDashboard = () => {
   // Effect to handle room redirection
   const userId = user?.id;
   const userRole = user?.role;
-  const currentRoomCode = currentRoom?.code;
+  const currentRoomId = currentRoom?.id;
   
   // Memoize the active teacher room
   const activeTeacherRoom = useMemo(() => 
@@ -167,25 +173,28 @@ const TeacherDashboard = () => {
     const currentPath = window.location.pathname;
     
     // Function to handle navigation
-    const handleNavigation = (roomCode) => {
-      if (!currentPath.includes(`/chat/${roomCode}`)) {
-        navigate(`/chat/${roomCode}`);
+    const handleNavigation = (roomId) => {
+      if (!currentPath.includes(`/chat/${roomId}`)) {
+        navigate(`/chat/${roomId}`);
       }
     };
 
-    if (currentRoomCode) {
+    if (currentRoomId) {
       // Only navigate if we're not already on the chat page
-      handleNavigation(currentRoomCode);
+      handleNavigation(currentRoomId);
     } else if (userRole === 'teacher' && activeTeacherRoom) {
       // If teacher has an active room, try to rejoin it
       const isInRoom = activeTeacherRoom.participants.some(p => p.id === userId);
       if (!isInRoom) {
-        joinRoom(activeTeacherRoom.code).catch(err => {
+        joinRoom(activeTeacherRoom.code).then(() => {
+          // Navigate using room ID after joining
+          handleNavigation(activeTeacherRoom.id);
+        }).catch(err => {
           console.error('Failed to rejoin room:', err);
         });
       }
     }
-  }, [currentRoomCode, userRole, userId, activeTeacherRoom, joinRoom, navigate]);
+  }, [currentRoomId, userRole, userId, activeTeacherRoom, joinRoom, navigate]);
 
   // Show loading state
   if (isLoading) {
@@ -451,7 +460,7 @@ const TeacherDashboard = () => {
                       {/* Action buttons */}
                       <div className="flex space-x-2">
                         <button
-                          onClick={() => handleJoinRoom(room.code)}
+                          onClick={() => navigate(`/chat/${room.id}`)}
                           disabled={!isActive}
                           className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
                             isActive

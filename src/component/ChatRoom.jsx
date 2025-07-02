@@ -292,7 +292,7 @@ const ChatRoom = () => {
                     <div className="flex items-center space-x-2">
                       <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
                         <span className="text-white text-sm font-bold">
-                          {msg.username.charAt(0)}
+                          {msg.userRole === 'teacher' ? msg.username.charAt(0) : 'S'}
                         </span>
                       </div>
                       <span className="font-medium text-gray-800">{msg.username}</span>
@@ -416,12 +416,12 @@ const ChatRoom = () => {
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
                       <span className="text-white text-sm font-bold">
-                        {participant.anonymousName?.charAt(0) || 'T'}
+                        {participant.role === 'teacher' ? (participant.anonymousName?.charAt(0) || 'T') : 'S'}
                       </span>
                     </div>
                     <div>
                       <div className="font-medium text-gray-800">
-                        {participant.anonymousName}
+                        {participant.role === 'teacher' ? participant.anonymousName : 'Anonymous Student'}
                         {participant.role === 'teacher' && ' (Teacher)'}
                       </div>
                       {participant.violations > 0 && (

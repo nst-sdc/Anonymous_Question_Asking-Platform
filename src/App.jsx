@@ -69,7 +69,11 @@ function App() {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
     document.documentElement.classList.toggle('dark', dark);
-    setIsLoading(false);
+    
+    // Set loading to false immediately after initial render
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500); // Short delay to ensure theme is applied
     
     // Set up system theme change listener
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -80,8 +84,11 @@ function App() {
     };
     
     mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [dark]);
+    return () => {
+      mediaQuery.removeEventListener('change', handleChange);
+      clearTimeout(timer);
+    };
+  }, []); // Only run once on mount, not when dark changes
 
   // Apply theme class to body and sync with system preference
   useEffect(() => {

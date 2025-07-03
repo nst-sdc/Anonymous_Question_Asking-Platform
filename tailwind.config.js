@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      scale: {
+        '102': '1.02',
+      },
       colors: {
         border: 'rgb(var(--color-border))',
         bg: 'rgb(var(--color-bg) / <alpha-value>)',

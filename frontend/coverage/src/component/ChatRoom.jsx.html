@@ -1,0 +1,1810 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for src/component/ChatRoom.jsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/component</a> ChatRoom.jsx</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>0/125</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/109</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/44</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>0/115</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line low'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a>
+<a name='L339'></a><a href='#L339'>339</a>
+<a name='L340'></a><a href='#L340'>340</a>
+<a name='L341'></a><a href='#L341'>341</a>
+<a name='L342'></a><a href='#L342'>342</a>
+<a name='L343'></a><a href='#L343'>343</a>
+<a name='L344'></a><a href='#L344'>344</a>
+<a name='L345'></a><a href='#L345'>345</a>
+<a name='L346'></a><a href='#L346'>346</a>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a>
+<a name='L354'></a><a href='#L354'>354</a>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a>
+<a name='L357'></a><a href='#L357'>357</a>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a>
+<a name='L362'></a><a href='#L362'>362</a>
+<a name='L363'></a><a href='#L363'>363</a>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a>
+<a name='L377'></a><a href='#L377'>377</a>
+<a name='L378'></a><a href='#L378'>378</a>
+<a name='L379'></a><a href='#L379'>379</a>
+<a name='L380'></a><a href='#L380'>380</a>
+<a name='L381'></a><a href='#L381'>381</a>
+<a name='L382'></a><a href='#L382'>382</a>
+<a name='L383'></a><a href='#L383'>383</a>
+<a name='L384'></a><a href='#L384'>384</a>
+<a name='L385'></a><a href='#L385'>385</a>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a>
+<a name='L393'></a><a href='#L393'>393</a>
+<a name='L394'></a><a href='#L394'>394</a>
+<a name='L395'></a><a href='#L395'>395</a>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a>
+<a name='L406'></a><a href='#L406'>406</a>
+<a name='L407'></a><a href='#L407'>407</a>
+<a name='L408'></a><a href='#L408'>408</a>
+<a name='L409'></a><a href='#L409'>409</a>
+<a name='L410'></a><a href='#L410'>410</a>
+<a name='L411'></a><a href='#L411'>411</a>
+<a name='L412'></a><a href='#L412'>412</a>
+<a name='L413'></a><a href='#L413'>413</a>
+<a name='L414'></a><a href='#L414'>414</a>
+<a name='L415'></a><a href='#L415'>415</a>
+<a name='L416'></a><a href='#L416'>416</a>
+<a name='L417'></a><a href='#L417'>417</a>
+<a name='L418'></a><a href='#L418'>418</a>
+<a name='L419'></a><a href='#L419'>419</a>
+<a name='L420'></a><a href='#L420'>420</a>
+<a name='L421'></a><a href='#L421'>421</a>
+<a name='L422'></a><a href='#L422'>422</a>
+<a name='L423'></a><a href='#L423'>423</a>
+<a name='L424'></a><a href='#L424'>424</a>
+<a name='L425'></a><a href='#L425'>425</a>
+<a name='L426'></a><a href='#L426'>426</a>
+<a name='L427'></a><a href='#L427'>427</a>
+<a name='L428'></a><a href='#L428'>428</a>
+<a name='L429'></a><a href='#L429'>429</a>
+<a name='L430'></a><a href='#L430'>430</a>
+<a name='L431'></a><a href='#L431'>431</a>
+<a name='L432'></a><a href='#L432'>432</a>
+<a name='L433'></a><a href='#L433'>433</a>
+<a name='L434'></a><a href='#L434'>434</a>
+<a name='L435'></a><a href='#L435'>435</a>
+<a name='L436'></a><a href='#L436'>436</a>
+<a name='L437'></a><a href='#L437'>437</a>
+<a name='L438'></a><a href='#L438'>438</a>
+<a name='L439'></a><a href='#L439'>439</a>
+<a name='L440'></a><a href='#L440'>440</a>
+<a name='L441'></a><a href='#L441'>441</a>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a>
+<a name='L447'></a><a href='#L447'>447</a>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a>
+<a name='L450'></a><a href='#L450'>450</a>
+<a name='L451'></a><a href='#L451'>451</a>
+<a name='L452'></a><a href='#L452'>452</a>
+<a name='L453'></a><a href='#L453'>453</a>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a>
+<a name='L463'></a><a href='#L463'>463</a>
+<a name='L464'></a><a href='#L464'>464</a>
+<a name='L465'></a><a href='#L465'>465</a>
+<a name='L466'></a><a href='#L466'>466</a>
+<a name='L467'></a><a href='#L467'>467</a>
+<a name='L468'></a><a href='#L468'>468</a>
+<a name='L469'></a><a href='#L469'>469</a>
+<a name='L470'></a><a href='#L470'>470</a>
+<a name='L471'></a><a href='#L471'>471</a>
+<a name='L472'></a><a href='#L472'>472</a>
+<a name='L473'></a><a href='#L473'>473</a>
+<a name='L474'></a><a href='#L474'>474</a>
+<a name='L475'></a><a href='#L475'>475</a>
+<a name='L476'></a><a href='#L476'>476</a>
+<a name='L477'></a><a href='#L477'>477</a>
+<a name='L478'></a><a href='#L478'>478</a>
+<a name='L479'></a><a href='#L479'>479</a>
+<a name='L480'></a><a href='#L480'>480</a>
+<a name='L481'></a><a href='#L481'>481</a>
+<a name='L482'></a><a href='#L482'>482</a>
+<a name='L483'></a><a href='#L483'>483</a>
+<a name='L484'></a><a href='#L484'>484</a>
+<a name='L485'></a><a href='#L485'>485</a>
+<a name='L486'></a><a href='#L486'>486</a>
+<a name='L487'></a><a href='#L487'>487</a>
+<a name='L488'></a><a href='#L488'>488</a>
+<a name='L489'></a><a href='#L489'>489</a>
+<a name='L490'></a><a href='#L490'>490</a>
+<a name='L491'></a><a href='#L491'>491</a>
+<a name='L492'></a><a href='#L492'>492</a>
+<a name='L493'></a><a href='#L493'>493</a>
+<a name='L494'></a><a href='#L494'>494</a>
+<a name='L495'></a><a href='#L495'>495</a>
+<a name='L496'></a><a href='#L496'>496</a>
+<a name='L497'></a><a href='#L497'>497</a>
+<a name='L498'></a><a href='#L498'>498</a>
+<a name='L499'></a><a href='#L499'>499</a>
+<a name='L500'></a><a href='#L500'>500</a>
+<a name='L501'></a><a href='#L501'>501</a>
+<a name='L502'></a><a href='#L502'>502</a>
+<a name='L503'></a><a href='#L503'>503</a>
+<a name='L504'></a><a href='#L504'>504</a>
+<a name='L505'></a><a href='#L505'>505</a>
+<a name='L506'></a><a href='#L506'>506</a>
+<a name='L507'></a><a href='#L507'>507</a>
+<a name='L508'></a><a href='#L508'>508</a>
+<a name='L509'></a><a href='#L509'>509</a>
+<a name='L510'></a><a href='#L510'>510</a>
+<a name='L511'></a><a href='#L511'>511</a>
+<a name='L512'></a><a href='#L512'>512</a>
+<a name='L513'></a><a href='#L513'>513</a>
+<a name='L514'></a><a href='#L514'>514</a>
+<a name='L515'></a><a href='#L515'>515</a>
+<a name='L516'></a><a href='#L516'>516</a>
+<a name='L517'></a><a href='#L517'>517</a>
+<a name='L518'></a><a href='#L518'>518</a>
+<a name='L519'></a><a href='#L519'>519</a>
+<a name='L520'></a><a href='#L520'>520</a>
+<a name='L521'></a><a href='#L521'>521</a>
+<a name='L522'></a><a href='#L522'>522</a>
+<a name='L523'></a><a href='#L523'>523</a>
+<a name='L524'></a><a href='#L524'>524</a>
+<a name='L525'></a><a href='#L525'>525</a>
+<a name='L526'></a><a href='#L526'>526</a>
+<a name='L527'></a><a href='#L527'>527</a>
+<a name='L528'></a><a href='#L528'>528</a>
+<a name='L529'></a><a href='#L529'>529</a>
+<a name='L530'></a><a href='#L530'>530</a>
+<a name='L531'></a><a href='#L531'>531</a>
+<a name='L532'></a><a href='#L532'>532</a>
+<a name='L533'></a><a href='#L533'>533</a>
+<a name='L534'></a><a href='#L534'>534</a>
+<a name='L535'></a><a href='#L535'>535</a>
+<a name='L536'></a><a href='#L536'>536</a>
+<a name='L537'></a><a href='#L537'>537</a>
+<a name='L538'></a><a href='#L538'>538</a>
+<a name='L539'></a><a href='#L539'>539</a>
+<a name='L540'></a><a href='#L540'>540</a>
+<a name='L541'></a><a href='#L541'>541</a>
+<a name='L542'></a><a href='#L542'>542</a>
+<a name='L543'></a><a href='#L543'>543</a>
+<a name='L544'></a><a href='#L544'>544</a>
+<a name='L545'></a><a href='#L545'>545</a>
+<a name='L546'></a><a href='#L546'>546</a>
+<a name='L547'></a><a href='#L547'>547</a>
+<a name='L548'></a><a href='#L548'>548</a>
+<a name='L549'></a><a href='#L549'>549</a>
+<a name='L550'></a><a href='#L550'>550</a>
+<a name='L551'></a><a href='#L551'>551</a>
+<a name='L552'></a><a href='#L552'>552</a>
+<a name='L553'></a><a href='#L553'>553</a>
+<a name='L554'></a><a href='#L554'>554</a>
+<a name='L555'></a><a href='#L555'>555</a>
+<a name='L556'></a><a href='#L556'>556</a>
+<a name='L557'></a><a href='#L557'>557</a>
+<a name='L558'></a><a href='#L558'>558</a>
+<a name='L559'></a><a href='#L559'>559</a>
+<a name='L560'></a><a href='#L560'>560</a>
+<a name='L561'></a><a href='#L561'>561</a>
+<a name='L562'></a><a href='#L562'>562</a>
+<a name='L563'></a><a href='#L563'>563</a>
+<a name='L564'></a><a href='#L564'>564</a>
+<a name='L565'></a><a href='#L565'>565</a>
+<a name='L566'></a><a href='#L566'>566</a>
+<a name='L567'></a><a href='#L567'>567</a>
+<a name='L568'></a><a href='#L568'>568</a>
+<a name='L569'></a><a href='#L569'>569</a>
+<a name='L570'></a><a href='#L570'>570</a>
+<a name='L571'></a><a href='#L571'>571</a>
+<a name='L572'></a><a href='#L572'>572</a>
+<a name='L573'></a><a href='#L573'>573</a>
+<a name='L574'></a><a href='#L574'>574</a>
+<a name='L575'></a><a href='#L575'>575</a>
+<a name='L576'></a><a href='#L576'>576</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { 
+  Send, 
+  ArrowLeft, 
+  Users, 
+  Volume, 
+  VolumeX, 
+  Shield, 
+  Clock,
+  BarChart3,
+  Smile,
+  AlertTriangle,
+  Ban,
+  Trash2
+} from 'lucide-react';
+import { useApp } from '../context/AppContext';
+import { formatTime, getTimeRemaining } from '../utils/helpers';
+import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+&nbsp;
+const ChatRoom = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const [message, setMessage] = <span class="cstat-no" title="statement not covered" >useState('');</span>
+  const [showParticipants, setShowParticipants] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
+  const [showPollForm, setShowPollForm] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
+  const [pollQuestion, setPollQuestion] = <span class="cstat-no" title="statement not covered" >useState('');</span>
+  const [pollOptions, setPollOptions] = <span class="cstat-no" title="statement not covered" >useState(['', '']);</span>
+  const [selectedUser, setSelectedUser] = <span class="cstat-no" title="statement not covered" >useState(null);</span>
+  const [showModerationPanel, setShowModerationPanel] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
+  const messagesEndRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
+  const { roomId } = <span class="cstat-no" title="statement not covered" >useParams();</span>
+  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
+  
+  const { 
+    user, 
+    currentRoom, 
+    leaveRoom, 
+    sendMessage, 
+    silenceUser,
+    addReaction,
+    createPoll,
+    votePoll,
+    endRoom,
+    rooms
+  } = <span class="cstat-no" title="statement not covered" >useApp();</span>
+  
+  // Find the room from the URL parameter
+  const room = <span class="cstat-no" title="statement not covered" >rooms.find(<span class="fstat-no" title="function not covered" >r </span>=&gt; <span class="cstat-no" title="statement not covered" >r.id === roomId)</span>;</span>
+  
+  // If room not found, redirect to dashboard
+  const userRole = <span class="cstat-no" title="statement not covered" >user?.role;</span>
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!room &amp;&amp; rooms.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >      navigate(userRole === 'teacher' ? '/teacher' : '/student');</span>
+    }
+  }, [room, rooms, navigate, userRole]);
+&nbsp;
+  // Create a ref to store the previous message length
+  const prevMessagesLength = <span class="cstat-no" title="statement not covered" >useRef(0);</span>
+&nbsp;
+  // Scroll to bottom when new messages arrive
+  const scrollToBottom = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(b</span>ehavior = <span class="branch-0 cbranch-no" title="branch not covered" >'smooth')</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    messagesEndRef.current?.scrollIntoView({ behavior });</span>
+  }, []);
+&nbsp;
+  // Scroll to bottom when new messages are added
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (currentRoom?.messages) {</span>
+      const currentLength = <span class="cstat-no" title="statement not covered" >currentRoom.messages.length;</span>
+      // Only scroll if new messages were added (not removed)
+<span class="cstat-no" title="statement not covered" >      if (currentLength &gt; prevMessagesLength.current) {</span>
+        // Use 'auto' for initial load, 'smooth' for subsequent updates
+        const behavior = <span class="cstat-no" title="statement not covered" >prevMessagesLength.current === 0 ? 'auto' : 'smooth';</span>
+<span class="cstat-no" title="statement not covered" >        scrollToBottom(behavior);</span>
+      }
+<span class="cstat-no" title="statement not covered" >      prevMessagesLength.current = currentLength;</span>
+    }
+  }, [currentRoom?.messages, scrollToBottom]);
+  
+  // Initial scroll to bottom
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const timer = <span class="cstat-no" title="statement not covered" >setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      scrollToBottom('auto');</span>
+    }, 100);
+<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >clearTimeout(timer);</span></span>
+  }, [scrollToBottom]);
+&nbsp;
+  const [lastError, setLastError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
+  const [showError, setShowError] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
+&nbsp;
+  const handleSendMessage = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!message.trim()) <span class="cstat-no" title="statement not covered" >return;</span></span>
+    
+<span class="cstat-no" title="statement not covered" >    try {</span>
+      const success = <span class="cstat-no" title="statement not covered" >sendMessage(message);</span>
+<span class="cstat-no" title="statement not covered" >      if (success) {</span>
+<span class="cstat-no" title="statement not covered" >        setMessage('');</span>
+<span class="cstat-no" title="statement not covered" >        setShowError(false);</span>
+      }
+    } catch (error) {
+<span class="cstat-no" title="statement not covered" >      /* eslint-disable */console.error(...oo_tx(`1961</span>053435_101_6_101_52_11`,'Error sending message:', error));
+<span class="cstat-no" title="statement not covered" >      setLastError(error.message || 'Message could not be sent. Please try again.');</span>
+<span class="cstat-no" title="statement not covered" >      setShowError(true);</span>
+      
+      // Auto-hide error after 5 seconds
+<span class="cstat-no" title="statement not covered" >      setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        setShowError(false);</span>
+      }, 5000);
+    }
+  };
+  
+  // Handle pressing Enter to send message
+  const handleKeyDown = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (e.key === 'Enter' &amp;&amp; !e.shiftKey) {</span>
+<span class="cstat-no" title="statement not covered" >      e.preventDefault();</span>
+<span class="cstat-no" title="statement not covered" >      handleSendMessage();</span>
+    }
+  };
+&nbsp;
+  const handleSilence = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(u</span>serId, duration) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    silenceUser(userId, duration);</span>
+<span class="cstat-no" title="statement not covered" >    setSelectedUser(null);</span>
+<span class="cstat-no" title="statement not covered" >    setShowModerationPanel(false);</span>
+  };
+&nbsp;
+  const handleCreatePoll = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const validOptions = <span class="cstat-no" title="statement not covered" >pollOptions.filter(<span class="fstat-no" title="function not covered" >op</span>t =&gt; <span class="cstat-no" title="statement not covered" >opt.trim())</span>;</span>
+<span class="cstat-no" title="statement not covered" >    if (!pollQuestion.trim() || validOptions.length &lt; 2) <span class="cstat-no" title="statement not covered" >return;</span></span>
+    
+<span class="cstat-no" title="statement not covered" >    createPoll(pollQuestion, validOptions);</span>
+<span class="cstat-no" title="statement not covered" >    setPollQuestion('');</span>
+<span class="cstat-no" title="statement not covered" >    setPollOptions(['', '']);</span>
+<span class="cstat-no" title="statement not covered" >    setShowPollForm(false);</span>
+  };
+&nbsp;
+  // Memoize currentRoom.id to prevent unnecessary re-renders
+  const currentRoomId = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >currentRoom?.id,</span> [currentRoom?.id]);</span>
+&nbsp;
+  const handleEndClass = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (window.confirm('Are you sure you want to end this class? This will close the room for all participants.')) {</span>
+<span class="cstat-no" title="statement not covered" >      if (currentRoomId) {</span>
+<span class="cstat-no" title="statement not covered" >        endRoom(currentRoomId);</span>
+        // Redirect teacher back to dashboard after ending class
+<span class="cstat-no" title="statement not covered" >        navigate('/teacher');</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        toast.error('No active room found', {</span>
+          position: 'top-center',
+          autoClose: 2000,
+        });
+      }
+    }
+  }, [currentRoomId, endRoom, navigate]);
+&nbsp;
+  const reactions = <span class="cstat-no" title="statement not covered" >['👍', '👎', '❤️', '😂', '😮', '🤔'];</span>
+&nbsp;
+  const isUserSilenced = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(u</span>serId) =&gt; {</span>
+    const participant = <span class="cstat-no" title="statement not covered" >room?.participants.find(<span class="fstat-no" title="function not covered" >p </span>=&gt; <span class="cstat-no" title="statement not covered" >p.id === userId)</span>;</span>
+<span class="cstat-no" title="statement not covered" >    return participant?.silencedUntil &amp;&amp; new Date() &lt; participant.silencedUntil;</span>
+  };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (!room) <span class="cstat-no" title="statement not covered" >return null;</span></span>
+&nbsp;
+  const activePoll = <span class="cstat-no" title="statement not covered" >room.polls.find(<span class="fstat-no" title="function not covered" >po</span>ll =&gt; <span class="cstat-no" title="statement not covered" >poll.active)</span>;</span>
+  const currentUserSilenced = <span class="cstat-no" title="statement not covered" >user &amp;&amp; isUserSilenced(user.id);</span>
+  
+  // Handle copy room code
+  const handleCopyCode = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (currentRoom?.code) {</span>
+<span class="cstat-no" title="statement not covered" >      navigator.clipboard.writeText(currentRoom.code);</span>
+<span class="cstat-no" title="statement not covered" >      setCopiedCode(currentRoom.code);</span>
+<span class="cstat-no" title="statement not covered" >      toast.success('Room code copied to clipboard!', {</span>
+        position: 'top-center',
+        autoClose: 2000,
+      });
+<span class="cstat-no" title="statement not covered" >      setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setCopiedCode(''),</span> 2000);</span>
+    }
+  }, [currentRoom?.code]);
+&nbsp;
+  // Handle leave room
+  const handleLeaveRoom = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    leaveRoom();</span>
+<span class="cstat-no" title="statement not covered" >    navigate(user?.role === 'teacher' ? '/teacher' : '/student');</span>
+  };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex flex-col"&gt;
+      {/* Header */}
+      &lt;div className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-white/20 p-4"&gt;
+        &lt;div className="max-w-6xl mx-auto flex items-center justify-between"&gt;
+          &lt;div className="flex items-center space-x-4"&gt;
+            &lt;button
+              onClick={handleLeaveRoom}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            &gt;
+              &lt;ArrowLeft className="w-5 h-5" /&gt;
+            &lt;/button&gt;
+            &lt;div&gt;
+              &lt;h1 className="text-xl font-bold text-gray-800"&gt;{room.name}&lt;/h1&gt;
+              &lt;p className="text-sm text-gray-600"&gt;Room Code: {room.code}&lt;/p&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          
+          &lt;div className="flex items-center space-x-3"&gt;
+            {user?.role === 'teacher' &amp;&amp; (
+              &lt;&gt;
+                &lt;button
+                  onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowPollForm(true)}</span>
+                  className="flex items-center space-x-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
+                &gt;
+                  &lt;BarChart3 className="w-4 h-4" /&gt;
+                  &lt;span&gt;Poll&lt;/span&gt;
+                &lt;/button&gt;
+                &lt;button
+                  onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowModerationPanel(!showModerationPanel)}</span>
+                  className="flex items-center space-x-2 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-colors"
+                &gt;
+                  &lt;Shield className="w-4 h-4" /&gt;
+                  &lt;span&gt;Moderate&lt;/span&gt;
+                &lt;/button&gt;
+                {user.id === room.teacherId &amp;&amp; (
+                  &lt;button
+                    onClick={handleEndClass}
+                    className="flex items-center space-x-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                  &gt;
+                    &lt;Trash2 className="w-4 h-4" /&gt;
+                    &lt;span&gt;End Room&lt;/span&gt;
+                  &lt;/button&gt;
+                )}
+              &lt;/&gt;
+            )}
+            &lt;button
+              onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowParticipants(!showParticipants)}</span>
+              className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+            &gt;
+              &lt;Users className="w-4 h-4" /&gt;
+              &lt;span&gt;{room.participants.length}&lt;/span&gt;
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+&nbsp;
+      &lt;div className="flex-1 flex"&gt;
+        {/* Main Chat Area */}
+        &lt;div className="flex-1 flex flex-col"&gt;
+          {/* Active Poll */}
+          {activePoll &amp;&amp; (
+            &lt;div className="bg-green-50 border-b border-green-200 p-4"&gt;
+              &lt;div className="max-w-4xl mx-auto"&gt;
+                &lt;h3 className="font-semibold text-green-800 mb-3"&gt;{activePoll.question}&lt;/h3&gt;
+                &lt;div className="grid grid-cols-1 md:grid-cols-2 gap-2"&gt;
+                  {activePoll.options.map(<span class="fstat-no" title="function not covered" >(o</span>ption, index) =&gt; {
+                    const votes = <span class="cstat-no" title="statement not covered" >activePoll.votes[option] || [];</span>
+                    const percentage = <span class="cstat-no" title="statement not covered" >room.participants.length &gt; 1 </span>
+                      ? Math.round((votes.length / (room.participants.length - 1)) * 100)
+                      : 0;
+                    const userVoted = <span class="cstat-no" title="statement not covered" >user &amp;&amp; votes.includes(user.id);</span>
+                    
+<span class="cstat-no" title="statement not covered" >                    return (</span>
+                      &lt;button
+                        key={index}
+                        onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >votePoll(activePoll.id, option)}</span>
+                        className={`p-3 rounded-lg border-2 text-left transition-all ${
+                          userVoted
+                            ? 'bg-green-100 border-green-500'
+                            : 'bg-white border-green-200 hover:border-green-400'
+                        }`}
+                      &gt;
+                        &lt;div className="flex justify-between items-center"&gt;
+                          &lt;span className="font-medium"&gt;{option}&lt;/span&gt;
+                          &lt;span className="text-sm text-gray-600"&gt;{votes.length} votes&lt;/span&gt;
+                        &lt;/div&gt;
+                        &lt;div className="w-full bg-gray-200 rounded-full h-2 mt-2"&gt;
+                          &lt;div
+                            className="bg-green-500 h-2 rounded-full transition-all duration-300"
+                            style={{ width: `${percentage}%` }}
+                          /&gt;
+                        &lt;/div&gt;
+                      &lt;/button&gt;
+                    );
+                  })}
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          )}
+&nbsp;
+          {/* Messages */}
+          &lt;div className="flex-1 overflow-y-auto p-4"&gt;
+            &lt;div className="max-w-4xl mx-auto space-y-4"&gt;
+              {room.messages.map(<span class="fstat-no" title="function not covered" >(m</span>sg) =&gt; (
+<span class="cstat-no" title="statement not covered" >                &lt;div key={msg.id} className="bg-white/60 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-white/20"&gt;</span>
+                  &lt;div className="flex items-start justify-between mb-2"&gt;
+                    &lt;div className="flex items-center space-x-2"&gt;
+                      &lt;div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center"&gt;
+                        &lt;span className="text-white text-sm font-bold"&gt;
+                          {msg.username.charAt(0)}
+                        &lt;/span&gt;
+                      &lt;/div&gt;
+                      &lt;span className="font-medium text-gray-800"&gt;{msg.username}&lt;/span&gt;
+                      {user?.role === 'teacher' &amp;&amp; msg.userId !== user.id &amp;&amp; (
+                        &lt;button
+                          onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >                            setSelectedUser(msg.userId);</span>
+<span class="cstat-no" title="statement not covered" >                            setShowModerationPanel(true);</span>
+                          }}
+                          className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                        &gt;
+                          &lt;Shield className="w-4 h-4 text-gray-500" /&gt;
+                        &lt;/button&gt;
+                      )}
+                    &lt;/div&gt;
+                    &lt;span className="text-xs text-gray-500"&gt;{formatTime(msg.timestamp)}&lt;/span&gt;
+                  &lt;/div&gt;
+                  
+                  &lt;p className="text-gray-700 mb-3"&gt;{msg.content}&lt;/p&gt;
+                  
+                  {/* Reactions */}
+                  &lt;div className="flex items-center space-x-2"&gt;
+                    &lt;div className="flex space-x-1"&gt;
+                      {reactions.map(<span class="fstat-no" title="function not covered" >(e</span>moji) =&gt; {
+                        const reactionUsers = <span class="cstat-no" title="statement not covered" >msg.reactions[emoji] || [];</span>
+                        const userReacted = <span class="cstat-no" title="statement not covered" >user &amp;&amp; reactionUsers.includes(user.id);</span>
+                        
+<span class="cstat-no" title="statement not covered" >                        return (</span>
+                          &lt;button
+                            key={emoji}
+                            onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >addReaction(msg.id, emoji)}</span>
+                            className={`px-2 py-1 rounded-lg text-sm transition-all ${
+                              userReacted
+                                ? 'bg-blue-100 border border-blue-300'
+                                : 'bg-gray-100 hover:bg-gray-200 border border-transparent'
+                            }`}
+                          &gt;
+                            {emoji} {reactionUsers.length &gt; 0 &amp;&amp; reactionUsers.length}
+                          &lt;/button&gt;
+                        );
+                      })}
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              ))}
+              &lt;div ref={messagesEndRef} /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+&nbsp;
+          {/* Message Input */}
+          &lt;div className="bg-white/80 backdrop-blur-sm border-t border-white/20 p-4"&gt;
+            &lt;div className="max-w-4xl mx-auto"&gt;
+              {currentUserSilenced ? (
+                &lt;div className="flex items-center justify-center space-x-2 text-red-600 py-3"&gt;
+                  &lt;VolumeX className="w-5 h-5" /&gt;
+                  &lt;span&gt;You are silenced until {user?.silencedUntil &amp;&amp; formatTime(user.silencedUntil)}&lt;/span&gt;
+                &lt;/div&gt;
+              ) : (
+                &lt;div className="flex flex-col p-4 border-t border-gray-200 dark:border-gray-700"&gt;
+                  {/* Error message */}
+                  {showError &amp;&amp; (
+                    &lt;div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-2 mx-4 rounded" role="alert"&gt;
+                      &lt;div className="flex items-center"&gt;
+                        &lt;AlertTriangle className="w-5 h-5 mr-2" /&gt;
+                        &lt;p&gt;{lastError}&lt;/p&gt;
+                      &lt;/div&gt;
+                    &lt;/div&gt;
+                  )}
+                  
+                  &lt;div className="text-xs text-gray-500 dark:text-gray-400 mb-1 text-right"&gt;
+                    {message.length}/500
+                  &lt;/div&gt;
+                  
+                  &lt;div className="flex items-center"&gt;
+                    &lt;input
+                      type="text"
+                      value={message}
+                      onChange={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >setMessage(e.target.value.slice(0, 500))}</span>
+                      onKeyDown={handleKeyDown}
+                      placeholder="Type your message..."
+                      className="flex-1 p-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                      maxLength={500}
+                      disabled={user?.silencedUntil &amp;&amp; new Date() &lt; new Date(user.silencedUntil)}
+                    /&gt;
+                    &lt;button
+                      onClick={handleSendMessage}
+                      disabled={!message.trim() || (user?.silencedUntil &amp;&amp; new Date() &lt; new Date(user.silencedUntil))}
+                      className={`p-2 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
+                        !message.trim() || (user?.silencedUntil &amp;&amp; new Date() &lt; new Date(user.silencedUntil))
+                          ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed'
+                          : 'bg-purple-600 hover:bg-purple-700 text-white'
+                      }`}
+                      title={user?.silencedUntil &amp;&amp; new Date() &lt; new Date(user.silencedUntil) 
+                        ? `You are silenced until ${new Date(user.silencedUntil).toLocaleTimeString()}` 
+                        : 'Send message'}
+                    &gt;
+                      &lt;Send className="w-5 h-5" /&gt;
+                    &lt;/button&gt;
+                  &lt;/div&gt;
+                  
+                  {/* Silenced notice */}
+                  {user?.silencedUntil &amp;&amp; new Date() &lt; new Date(user.silencedUntil) &amp;&amp; (
+                    &lt;div className="mt-2 text-sm text-yellow-600 dark:text-yellow-400 flex items-center"&gt;
+                      &lt;VolumeX className="w-4 h-4 mr-1" /&gt;
+                      &lt;span&gt;You are silenced until {new Date(user.silencedUntil).toLocaleTimeString()}&lt;/span&gt;
+                    &lt;/div&gt;
+                  )}
+                &lt;/div&gt;
+              )}
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+&nbsp;
+        {/* Participants Sidebar */}
+        {showParticipants &amp;&amp; room &amp;&amp; (
+          &lt;div className="w-80 bg-white/70 backdrop-blur-sm border-l border-white/20 p-4"&gt;
+            &lt;h3 className="font-semibold text-gray-800 mb-4"&gt;Participants ({room.participants.length})&lt;/h3&gt;
+            &lt;div className="space-y-2"&gt;
+              {room.participants.map(<span class="fstat-no" title="function not covered" >(p</span>articipant) =&gt; (
+<span class="cstat-no" title="statement not covered" >                &lt;div key={participant.id} className="flex items-center justify-between p-3 bg-white/50 rounded-lg"&gt;</span>
+                  &lt;div className="flex items-center space-x-3"&gt;
+                    &lt;div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center"&gt;
+                      &lt;span className="text-white text-sm font-bold"&gt;
+                        {participant.anonymousName?.charAt(0) || 'T'}
+                      &lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;div&gt;
+                      &lt;div className="font-medium text-gray-800"&gt;
+                        {participant.anonymousName}
+                        {participant.role === 'teacher' &amp;&amp; ' (Teacher)'}
+                      &lt;/div&gt;
+                      {participant.violations &gt; 0 &amp;&amp; (
+                        &lt;div className="text-xs text-yellow-600"&gt;
+                          {participant.violations} violation{participant.violations &gt; 1 ? 's' : ''}
+                        &lt;/div&gt;
+                      )}
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                  
+                  &lt;div className="flex items-center space-x-1"&gt;
+                    {participant.banned &amp;&amp; &lt;Ban className="w-4 h-4 text-red-500" /&gt;}
+                    {isUserSilenced(participant.id) &amp;&amp; &lt;VolumeX className="w-4 h-4 text-orange-500" /&gt;}
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              ))}
+            &lt;/div&gt;
+          &lt;/div&gt;
+        )}
+      &lt;/div&gt;
+&nbsp;
+      {/* Poll Creation Modal */}
+      {showPollForm &amp;&amp; (
+        &lt;div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"&gt;
+          &lt;div className="bg-white rounded-2xl p-6 w-full max-w-md"&gt;
+            &lt;h3 className="text-xl font-bold text-gray-800 mb-4"&gt;Create Poll&lt;/h3&gt;
+            
+            &lt;div className="mb-4"&gt;
+              &lt;label className="block text-sm font-medium text-gray-700 mb-2"&gt;Question&lt;/label&gt;
+              &lt;input
+                type="text"
+                value={pollQuestion}
+                onChange={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >setPollQuestion(e.target.value)}</span>
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                placeholder="Enter your question"
+              /&gt;
+            &lt;/div&gt;
+&nbsp;
+            &lt;div className="mb-6"&gt;
+              &lt;label className="block text-sm font-medium text-gray-700 mb-2"&gt;Options&lt;/label&gt;
+              {pollOptions.map(<span class="fstat-no" title="function not covered" >(o</span>ption, index) =&gt; (
+<span class="cstat-no" title="statement not covered" >                &lt;input</span>
+                  key={index}
+                  type="text"
+                  value={option}
+                  onChange={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; {
+                    const newOptions = <span class="cstat-no" title="statement not covered" >[...pollOptions];</span>
+<span class="cstat-no" title="statement not covered" >                    newOptions[index] = e.target.value;</span>
+<span class="cstat-no" title="statement not covered" >                    setPollOptions(newOptions);</span>
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none mb-2"
+                  placeholder={`Option ${index + 1}`}
+                /&gt;
+              ))}
+              &lt;button
+                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setPollOptions([...pollOptions, ''])}</span>
+                className="text-blue-500 text-sm hover:text-blue-600"
+              &gt;
+                + Add Option
+              &lt;/button&gt;
+            &lt;/div&gt;
+&nbsp;
+            &lt;div className="flex space-x-3"&gt;
+              &lt;button
+                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowPollForm(false)}</span>
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              &gt;
+                Cancel
+              &lt;/button&gt;
+              &lt;button
+                onClick={handleCreatePoll}
+                className="flex-1 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
+              &gt;
+                Create Poll
+              &lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      )}
+&nbsp;
+      {/* Moderation Panel */}
+      {showModerationPanel &amp;&amp; selectedUser &amp;&amp; (
+        &lt;div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"&gt;
+          &lt;div className="bg-white rounded-2xl p-6 w-full max-w-md"&gt;
+            &lt;h3 className="text-xl font-bold text-gray-800 mb-4"&gt;Moderate User&lt;/h3&gt;
+            
+            &lt;div className="space-y-3 mb-6"&gt;
+              &lt;button
+                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handleSilence(selectedUser, 10)}</span>
+                className="w-full flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200 rounded-lg hover:bg-yellow-100 transition-colors"
+              &gt;
+                &lt;span&gt;Silence for 10 minutes&lt;/span&gt;
+                &lt;Clock className="w-4 h-4 text-yellow-600" /&gt;
+              &lt;/button&gt;
+              
+              &lt;button
+                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handleSilence(selectedUser, 20)}</span>
+                className="w-full flex items-center justify-between p-3 bg-orange-50 border border-orange-200 rounded-lg hover:bg-orange-100 transition-colors"
+              &gt;
+                &lt;span&gt;Silence for 20 minutes&lt;/span&gt;
+                &lt;Clock className="w-4 h-4 text-orange-600" /&gt;
+              &lt;/button&gt;
+              
+              &lt;button
+                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handleSilence(selectedUser, 30)}</span>
+                className="w-full flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition-colors"
+              &gt;
+                &lt;span&gt;Silence for 30 minutes&lt;/span&gt;
+                &lt;Clock className="w-4 h-4 text-red-600" /&gt;
+              &lt;/button&gt;
+              
+              &lt;button
+                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handleSilence(selectedUser, 60)}</span>
+                className="w-full flex items-center justify-between p-3 bg-red-100 border border-red-300 rounded-lg hover:bg-red-200 transition-colors"
+              &gt;
+                &lt;span&gt;Silence for 1 hour&lt;/span&gt;
+                &lt;AlertTriangle className="w-4 h-4 text-red-700" /&gt;
+              &lt;/button&gt;
+              
+              &lt;button
+                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handleSilence(selectedUser, 1440)}</span>
+                className="w-full flex items-center justify-between p-3 bg-red-200 border border-red-400 rounded-lg hover:bg-red-300 transition-colors"
+              &gt;
+                &lt;span&gt;Silence for 24 hours&lt;/span&gt;
+                &lt;Ban className="w-4 h-4 text-red-800" /&gt;
+              &lt;/button&gt;
+            &lt;/div&gt;
+&nbsp;
+            &lt;button
+              onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >                setSelectedUser(null);</span>
+<span class="cstat-no" title="statement not covered" >                setShowModerationPanel(false);</span>
+              }}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            &gt;
+              Cancel
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+};
+&nbsp;
+export default ChatRoom;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+/* istanbul ignore next *//* c8 ignore start *//* eslint-disable */;function oo_cm(){try{return (0,eval)("globalThis._console_ninja") || (0,eval)("/* https://github.com/wallabyjs/console-ninja#how-does-it-work */'use strict';var _0x153e6c=_0x2f64;(function(_0x76c63f,_0x38e815){var _0x57f0bb=_0x2f64,_0x25303b=_0x76c63f();while(!![]){try{var _0x5f316a=parseInt(_0x57f0bb(0x1b8))/0x1*(-parseInt(_0x57f0bb(0x1ca))/0x2)+parseInt(_0x57f0bb(0x219))/0x3+parseInt(_0x57f0bb(0x1ae))/0x4*(-parseInt(_0x57f0bb(0x260))/0x5)+parseInt(_0x57f0bb(0x1f9))/0x6+-parseInt(_0x57f0bb(0x231))/0x7+parseInt(_0x57f0bb(0x1ee))/0x8*(-parseInt(_0x57f0bb(0x18a))/0x9)+-parseInt(_0x57f0bb(0x251))/0xa*(-parseInt(_0x57f0bb(0x24c))/0xb);if(_0x5f316a===_0x38e815)break;else _0x25303b['push'](_0x25303b['shift']());}catch(_0x522ff3){_0x25303b['push'](_0x25303b['shift']());}}}(_0x7e37,0xb061d));var G=Object['create'],V=Object[_0x153e6c(0x1a2)],ee=Object[_0x153e6c(0x236)],te=Object[_0x153e6c(0x1d6)],ne=Object[_0x153e6c(0x25d)],re=Object[_0x153e6c(0x1eb)]['hasOwnProperty'],ie=(_0x215f5c,_0x4e0202,_0xd25b82,_0x2e276d)=&gt;{var _0x4aafef=_0x153e6c;if(_0x4e0202&amp;&amp;typeof _0x4e0202==_0x4aafef(0x278)||typeof _0x4e0202==_0x4aafef(0x270)){for(let _0x295819 of te(_0x4e0202))!re[_0x4aafef(0x214)](_0x215f5c,_0x295819)&amp;&amp;_0x295819!==_0xd25b82&amp;&amp;V(_0x215f5c,_0x295819,{'get':()=&gt;_0x4e0202[_0x295819],'enumerable':!(_0x2e276d=ee(_0x4e0202,_0x295819))||_0x2e276d[_0x4aafef(0x1fe)]});}return _0x215f5c;},j=(_0x40fffd,_0x1e3ce3,_0x542866)=&gt;(_0x542866=_0x40fffd!=null?G(ne(_0x40fffd)):{},ie(_0x1e3ce3||!_0x40fffd||!_0x40fffd[_0x153e6c(0x1be)]?V(_0x542866,'default',{'value':_0x40fffd,'enumerable':!0x0}):_0x542866,_0x40fffd)),q=class{constructor(_0x33eb18,_0x1c07f5,_0x255b1c,_0x41480c,_0x37366e,_0x3d10ca){var _0x388cf8=_0x153e6c,_0x3bdd07,_0x3c5f71,_0x6e782f,_0x214269;this[_0x388cf8(0x246)]=_0x33eb18,this[_0x388cf8(0x1f2)]=_0x1c07f5,this[_0x388cf8(0x213)]=_0x255b1c,this[_0x388cf8(0x249)]=_0x41480c,this[_0x388cf8(0x26d)]=_0x37366e,this[_0x388cf8(0x1c2)]=_0x3d10ca,this[_0x388cf8(0x21c)]=!0x0,this['_allowedToConnectOnSend']=!0x0,this[_0x388cf8(0x196)]=!0x1,this['_connecting']=!0x1,this[_0x388cf8(0x233)]=((_0x3c5f71=(_0x3bdd07=_0x33eb18[_0x388cf8(0x274)])==null?void 0x0:_0x3bdd07[_0x388cf8(0x183)])==null?void 0x0:_0x3c5f71[_0x388cf8(0x262)])==='edge',this[_0x388cf8(0x223)]=!((_0x214269=(_0x6e782f=this[_0x388cf8(0x246)][_0x388cf8(0x274)])==null?void 0x0:_0x6e782f[_0x388cf8(0x1fd)])!=null&amp;&amp;_0x214269[_0x388cf8(0x198)])&amp;&amp;!this[_0x388cf8(0x233)],this['_WebSocketClass']=null,this['_connectAttemptCount']=0x0,this[_0x388cf8(0x19f)]=0x14,this[_0x388cf8(0x1d4)]=_0x388cf8(0x226),this['_sendErrorMessage']=(this[_0x388cf8(0x223)]?_0x388cf8(0x191):_0x388cf8(0x209))+this[_0x388cf8(0x1d4)];}async[_0x153e6c(0x1f3)](){var _0x5d1738=_0x153e6c,_0x31990d,_0x4b48a4;if(this[_0x5d1738(0x20a)])return this[_0x5d1738(0x20a)];let _0xa2edec;if(this[_0x5d1738(0x223)]||this[_0x5d1738(0x233)])_0xa2edec=this['global'][_0x5d1738(0x20b)];else{if((_0x31990d=this[_0x5d1738(0x246)][_0x5d1738(0x274)])!=null&amp;&amp;_0x31990d[_0x5d1738(0x1e6)])_0xa2edec=(_0x4b48a4=this['global'][_0x5d1738(0x274)])==null?void 0x0:_0x4b48a4[_0x5d1738(0x1e6)];else try{let _0x1a7809=await import(_0x5d1738(0x20d));_0xa2edec=(await import((await import(_0x5d1738(0x220)))[_0x5d1738(0x1d3)](_0x1a7809['join'](this[_0x5d1738(0x249)],_0x5d1738(0x229)))['toString']()))['default'];}catch{try{_0xa2edec=require(require(_0x5d1738(0x20d))['join'](this['nodeModules'],'ws'));}catch{throw new Error(_0x5d1738(0x26a));}}}return this[_0x5d1738(0x20a)]=_0xa2edec,_0xa2edec;}['_connectToHostNow'](){var _0x52289b=_0x153e6c;this[_0x52289b(0x197)]||this[_0x52289b(0x196)]||this[_0x52289b(0x1fb)]&gt;=this[_0x52289b(0x19f)]||(this[_0x52289b(0x184)]=!0x1,this[_0x52289b(0x197)]=!0x0,this[_0x52289b(0x1fb)]++,this[_0x52289b(0x1ed)]=new Promise((_0x218252,_0x2a39a0)=&gt;{var _0x2b89fb=_0x52289b;this[_0x2b89fb(0x1f3)]()['then'](_0x81b344=&gt;{var _0x32db5a=_0x2b89fb;let _0xf50c86=new _0x81b344(_0x32db5a(0x188)+(!this[_0x32db5a(0x223)]&amp;&amp;this['dockerizedApp']?_0x32db5a(0x189):this['host'])+':'+this['port']);_0xf50c86['onerror']=()=&gt;{var _0x2c53fb=_0x32db5a;this[_0x2c53fb(0x21c)]=!0x1,this[_0x2c53fb(0x1bb)](_0xf50c86),this[_0x2c53fb(0x23a)](),_0x2a39a0(new Error('logger\\x20websocket\\x20error'));},_0xf50c86[_0x32db5a(0x261)]=()=&gt;{var _0x4a9d85=_0x32db5a;this['_inBrowser']||_0xf50c86[_0x4a9d85(0x1a8)]&amp;&amp;_0xf50c86['_socket'][_0x4a9d85(0x25e)]&amp;&amp;_0xf50c86[_0x4a9d85(0x1a8)][_0x4a9d85(0x25e)](),_0x218252(_0xf50c86);},_0xf50c86[_0x32db5a(0x20e)]=()=&gt;{var _0x107dfa=_0x32db5a;this['_allowedToConnectOnSend']=!0x0,this[_0x107dfa(0x1bb)](_0xf50c86),this[_0x107dfa(0x23a)]();},_0xf50c86[_0x32db5a(0x26f)]=_0x52dc18=&gt;{var _0x1dab7c=_0x32db5a;try{if(!(_0x52dc18!=null&amp;&amp;_0x52dc18[_0x1dab7c(0x1a7)])||!this[_0x1dab7c(0x1c2)])return;let _0x2228c7=JSON[_0x1dab7c(0x269)](_0x52dc18[_0x1dab7c(0x1a7)]);this[_0x1dab7c(0x1c2)](_0x2228c7[_0x1dab7c(0x1aa)],_0x2228c7[_0x1dab7c(0x24e)],this[_0x1dab7c(0x246)],this['_inBrowser']);}catch{}};})['then'](_0x32f12e=&gt;(this['_connected']=!0x0,this['_connecting']=!0x1,this[_0x2b89fb(0x184)]=!0x1,this['_allowedToSend']=!0x0,this[_0x2b89fb(0x1fb)]=0x0,_0x32f12e))[_0x2b89fb(0x273)](_0x585788=&gt;(this[_0x2b89fb(0x196)]=!0x1,this[_0x2b89fb(0x197)]=!0x1,console[_0x2b89fb(0x268)]('logger\\x20failed\\x20to\\x20connect\\x20to\\x20host,\\x20see\\x20'+this['_webSocketErrorDocsLink']),_0x2a39a0(new Error('failed\\x20to\\x20connect\\x20to\\x20host:\\x20'+(_0x585788&amp;&amp;_0x585788[_0x2b89fb(0x1fc)])))));}));}[_0x153e6c(0x1bb)](_0x5de99f){var _0x3da762=_0x153e6c;this[_0x3da762(0x196)]=!0x1,this[_0x3da762(0x197)]=!0x1;try{_0x5de99f[_0x3da762(0x20e)]=null,_0x5de99f['onerror']=null,_0x5de99f[_0x3da762(0x261)]=null;}catch{}try{_0x5de99f[_0x3da762(0x254)]&lt;0x2&amp;&amp;_0x5de99f[_0x3da762(0x1f8)]();}catch{}}[_0x153e6c(0x23a)](){var _0x2e9e9c=_0x153e6c;clearTimeout(this[_0x2e9e9c(0x25b)]),!(this['_connectAttemptCount']&gt;=this['_maxConnectAttemptCount'])&amp;&amp;(this[_0x2e9e9c(0x25b)]=setTimeout(()=&gt;{var _0x42fa57=_0x2e9e9c,_0x5d4e66;this[_0x42fa57(0x196)]||this[_0x42fa57(0x197)]||(this[_0x42fa57(0x1b7)](),(_0x5d4e66=this[_0x42fa57(0x1ed)])==null||_0x5d4e66[_0x42fa57(0x273)](()=&gt;this['_attemptToReconnectShortly']()));},0x1f4),this[_0x2e9e9c(0x25b)]['unref']&amp;&amp;this['_reconnectTimeout'][_0x2e9e9c(0x25e)]());}async[_0x153e6c(0x187)](_0xe61471){var _0x41fa05=_0x153e6c;try{if(!this[_0x41fa05(0x21c)])return;this[_0x41fa05(0x184)]&amp;&amp;this[_0x41fa05(0x1b7)](),(await this['_ws'])['send'](JSON[_0x41fa05(0x277)](_0xe61471));}catch(_0x154329){this['_extendedWarning']?console[_0x41fa05(0x268)](this[_0x41fa05(0x264)]+':\\x20'+(_0x154329&amp;&amp;_0x154329[_0x41fa05(0x1fc)])):(this[_0x41fa05(0x22f)]=!0x0,console[_0x41fa05(0x268)](this[_0x41fa05(0x264)]+':\\x20'+(_0x154329&amp;&amp;_0x154329[_0x41fa05(0x1fc)]),_0xe61471)),this[_0x41fa05(0x21c)]=!0x1,this[_0x41fa05(0x23a)]();}}};function H(_0x91df35,_0x26231b,_0x2a7a3f,_0x183253,_0x5d76b1,_0x5ab5ba,_0x5caded,_0x22c84b=oe){var _0x19f762=_0x153e6c;let _0x3128f6=_0x2a7a3f[_0x19f762(0x205)](',')[_0x19f762(0x247)](_0xc99715=&gt;{var _0x1ca2a1=_0x19f762,_0x9ba5c3,_0x44f093,_0x70fdc9,_0x243698;try{if(!_0x91df35[_0x1ca2a1(0x232)]){let _0x5e6668=((_0x44f093=(_0x9ba5c3=_0x91df35[_0x1ca2a1(0x274)])==null?void 0x0:_0x9ba5c3[_0x1ca2a1(0x1fd)])==null?void 0x0:_0x44f093[_0x1ca2a1(0x198)])||((_0x243698=(_0x70fdc9=_0x91df35[_0x1ca2a1(0x274)])==null?void 0x0:_0x70fdc9['env'])==null?void 0x0:_0x243698[_0x1ca2a1(0x262)])==='edge';(_0x5d76b1==='next.js'||_0x5d76b1==='remix'||_0x5d76b1===_0x1ca2a1(0x204)||_0x5d76b1===_0x1ca2a1(0x1bd))&amp;&amp;(_0x5d76b1+=_0x5e6668?_0x1ca2a1(0x193):_0x1ca2a1(0x248)),_0x91df35[_0x1ca2a1(0x232)]={'id':+new Date(),'tool':_0x5d76b1},_0x5caded&amp;&amp;_0x5d76b1&amp;&amp;!_0x5e6668&amp;&amp;console[_0x1ca2a1(0x21b)]('%c\\x20Console\\x20Ninja\\x20extension\\x20is\\x20connected\\x20to\\x20'+(_0x5d76b1[_0x1ca2a1(0x255)](0x0)[_0x1ca2a1(0x1bc)]()+_0x5d76b1[_0x1ca2a1(0x1c8)](0x1))+',','background:\\x20rgb(30,30,30);\\x20color:\\x20rgb(255,213,92)',_0x1ca2a1(0x1d7));}let _0x5bb5c2=new q(_0x91df35,_0x26231b,_0xc99715,_0x183253,_0x5ab5ba,_0x22c84b);return _0x5bb5c2[_0x1ca2a1(0x187)][_0x1ca2a1(0x19a)](_0x5bb5c2);}catch(_0x13d47d){return console[_0x1ca2a1(0x268)](_0x1ca2a1(0x1d1),_0x13d47d&amp;&amp;_0x13d47d[_0x1ca2a1(0x1fc)]),()=&gt;{};}});return _0x47e805=&gt;_0x3128f6['forEach'](_0x37ea17=&gt;_0x37ea17(_0x47e805));}function oe(_0x54a00e,_0xaf8042,_0x3153a4,_0x32fcc3){var _0x20a28d=_0x153e6c;_0x32fcc3&amp;&amp;_0x54a00e==='reload'&amp;&amp;_0x3153a4[_0x20a28d(0x1b3)][_0x20a28d(0x20c)]();}function B(_0x15db85){var _0x6b4def=_0x153e6c,_0x3c77e8,_0x58af73;let _0x937c0d=function(_0x459cba,_0x2d2f17){return _0x2d2f17-_0x459cba;},_0x58805a;if(_0x15db85['performance'])_0x58805a=function(){var _0x5d35a7=_0x2f64;return _0x15db85['performance'][_0x5d35a7(0x21f)]();};else{if(_0x15db85[_0x6b4def(0x274)]&amp;&amp;_0x15db85[_0x6b4def(0x274)]['hrtime']&amp;&amp;((_0x58af73=(_0x3c77e8=_0x15db85['process'])==null?void 0x0:_0x3c77e8[_0x6b4def(0x183)])==null?void 0x0:_0x58af73[_0x6b4def(0x262)])!==_0x6b4def(0x192))_0x58805a=function(){var _0xb35907=_0x6b4def;return _0x15db85['process'][_0xb35907(0x22a)]();},_0x937c0d=function(_0x2b9b0,_0x499de8){return 0x3e8*(_0x499de8[0x0]-_0x2b9b0[0x0])+(_0x499de8[0x1]-_0x2b9b0[0x1])/0xf4240;};else try{let {performance:_0x3e466a}=require('perf_hooks');_0x58805a=function(){var _0x1cf09f=_0x6b4def;return _0x3e466a[_0x1cf09f(0x21f)]();};}catch{_0x58805a=function(){return+new Date();};}}return{'elapsed':_0x937c0d,'timeStamp':_0x58805a,'now':()=&gt;Date[_0x6b4def(0x21f)]()};}function X(_0xdc4c93,_0x23f0c4,_0x5a7e32){var _0x1bd66d=_0x153e6c,_0x2d8f66,_0x4113d5,_0x1b1eae,_0xa4d98a,_0x4ee6c9;if(_0xdc4c93['_consoleNinjaAllowedToStart']!==void 0x0)return _0xdc4c93['_consoleNinjaAllowedToStart'];let _0x274296=((_0x4113d5=(_0x2d8f66=_0xdc4c93['process'])==null?void 0x0:_0x2d8f66[_0x1bd66d(0x1fd)])==null?void 0x0:_0x4113d5[_0x1bd66d(0x198)])||((_0xa4d98a=(_0x1b1eae=_0xdc4c93['process'])==null?void 0x0:_0x1b1eae[_0x1bd66d(0x183)])==null?void 0x0:_0xa4d98a['NEXT_RUNTIME'])===_0x1bd66d(0x192);function _0x45d77c(_0xaa8d45){var _0x294306=_0x1bd66d;if(_0xaa8d45['startsWith']('/')&amp;&amp;_0xaa8d45[_0x294306(0x256)]('/')){let _0x5bfba4=new RegExp(_0xaa8d45['slice'](0x1,-0x1));return _0x36719f=&gt;_0x5bfba4['test'](_0x36719f);}else{if(_0xaa8d45[_0x294306(0x224)]('*')||_0xaa8d45[_0x294306(0x224)]('?')){let _0x46465c=new RegExp('^'+_0xaa8d45['replace'](/\\./g,String[_0x294306(0x200)](0x5c)+'.')[_0x294306(0x21a)](/\\*/g,'.*')[_0x294306(0x21a)](/\\?/g,'.')+String[_0x294306(0x200)](0x24));return _0x6518c8=&gt;_0x46465c[_0x294306(0x23d)](_0x6518c8);}else return _0x2e2504=&gt;_0x2e2504===_0xaa8d45;}}let _0x2f845d=_0x23f0c4[_0x1bd66d(0x247)](_0x45d77c);return _0xdc4c93['_consoleNinjaAllowedToStart']=_0x274296||!_0x23f0c4,!_0xdc4c93['_consoleNinjaAllowedToStart']&amp;&amp;((_0x4ee6c9=_0xdc4c93['location'])==null?void 0x0:_0x4ee6c9[_0x1bd66d(0x1c9)])&amp;&amp;(_0xdc4c93[_0x1bd66d(0x182)]=_0x2f845d[_0x1bd66d(0x228)](_0x1276c1=&gt;_0x1276c1(_0xdc4c93['location'][_0x1bd66d(0x1c9)]))),_0xdc4c93[_0x1bd66d(0x182)];}function J(_0x41e16d,_0xf72fa8,_0x178b4f,_0x509b27){var _0x17d19c=_0x153e6c;_0x41e16d=_0x41e16d,_0xf72fa8=_0xf72fa8,_0x178b4f=_0x178b4f,_0x509b27=_0x509b27;let _0x2e9b81=B(_0x41e16d),_0x526f92=_0x2e9b81[_0x17d19c(0x276)],_0xaeb030=_0x2e9b81[_0x17d19c(0x225)];class _0x433247{constructor(){var _0x54823f=_0x17d19c;this[_0x54823f(0x19b)]=/^(?!(?:do|if|in|for|let|new|try|var|case|else|enum|eval|false|null|this|true|void|with|break|catch|class|const|super|throw|while|yield|delete|export|import|public|return|static|switch|typeof|default|extends|finally|package|private|continue|debugger|function|arguments|interface|protected|implements|instanceof)$)[_$a-zA-Z\\xA0-\\uFFFF][_$a-zA-Z0-9\\xA0-\\uFFFF]*$/,this[_0x54823f(0x1e1)]=/^(0|[1-9][0-9]*)$/,this[_0x54823f(0x1c4)]=/'([^\\\\']|\\\\')*'/,this[_0x54823f(0x253)]=_0x41e16d[_0x54823f(0x1e2)],this['_HTMLAllCollection']=_0x41e16d['HTMLAllCollection'],this['_getOwnPropertyDescriptor']=Object[_0x54823f(0x236)],this[_0x54823f(0x1ab)]=Object['getOwnPropertyNames'],this['_Symbol']=_0x41e16d[_0x54823f(0x1d9)],this[_0x54823f(0x212)]=RegExp['prototype'][_0x54823f(0x26e)],this['_dateToString']=Date['prototype']['toString'];}[_0x17d19c(0x241)](_0x191e11,_0x562f09,_0x282214,_0x19c1d3){var _0x1f8566=_0x17d19c,_0x4c6014=this,_0x5af275=_0x282214['autoExpand'];function _0x83b867(_0x13ff8b,_0x2afca9,_0x238352){var _0x583ee7=_0x2f64;_0x2afca9[_0x583ee7(0x1a0)]='unknown',_0x2afca9[_0x583ee7(0x190)]=_0x13ff8b[_0x583ee7(0x1fc)],_0x10894d=_0x238352[_0x583ee7(0x198)][_0x583ee7(0x1b4)],_0x238352[_0x583ee7(0x198)][_0x583ee7(0x1b4)]=_0x2afca9,_0x4c6014['_treeNodePropertiesBeforeFullValue'](_0x2afca9,_0x238352);}let _0x14ed89;_0x41e16d[_0x1f8566(0x1ac)]&amp;&amp;(_0x14ed89=_0x41e16d[_0x1f8566(0x1ac)][_0x1f8566(0x190)],_0x14ed89&amp;&amp;(_0x41e16d[_0x1f8566(0x1ac)]['error']=function(){}));try{try{_0x282214[_0x1f8566(0x1b0)]++,_0x282214[_0x1f8566(0x242)]&amp;&amp;_0x282214[_0x1f8566(0x18f)]['push'](_0x562f09);var _0xd62d06,_0xa90867,_0x41e3c3,_0x501c12,_0x1bf4c5=[],_0x1b7964=[],_0x16754e,_0xe6a95a=this[_0x1f8566(0x195)](_0x562f09),_0x40968a=_0xe6a95a==='array',_0x2b268c=!0x1,_0xa433b0=_0xe6a95a==='function',_0x450afa=this[_0x1f8566(0x1f6)](_0xe6a95a),_0x38527d=this[_0x1f8566(0x185)](_0xe6a95a),_0x2f320c=_0x450afa||_0x38527d,_0x35c393={},_0xc62305=0x0,_0x1b235=!0x1,_0x10894d,_0xa08a68=/^(([1-9]{1}[0-9]*)|0)$/;if(_0x282214[_0x1f8566(0x252)]){if(_0x40968a){if(_0xa90867=_0x562f09[_0x1f8566(0x24f)],_0xa90867&gt;_0x282214[_0x1f8566(0x1a1)]){for(_0x41e3c3=0x0,_0x501c12=_0x282214[_0x1f8566(0x1a1)],_0xd62d06=_0x41e3c3;_0xd62d06&lt;_0x501c12;_0xd62d06++)_0x1b7964[_0x1f8566(0x1d5)](_0x4c6014[_0x1f8566(0x1cd)](_0x1bf4c5,_0x562f09,_0xe6a95a,_0xd62d06,_0x282214));_0x191e11[_0x1f8566(0x22e)]=!0x0;}else{for(_0x41e3c3=0x0,_0x501c12=_0xa90867,_0xd62d06=_0x41e3c3;_0xd62d06&lt;_0x501c12;_0xd62d06++)_0x1b7964['push'](_0x4c6014[_0x1f8566(0x1cd)](_0x1bf4c5,_0x562f09,_0xe6a95a,_0xd62d06,_0x282214));}_0x282214[_0x1f8566(0x1a4)]+=_0x1b7964[_0x1f8566(0x24f)];}if(!(_0xe6a95a===_0x1f8566(0x235)||_0xe6a95a===_0x1f8566(0x1e2))&amp;&amp;!_0x450afa&amp;&amp;_0xe6a95a!==_0x1f8566(0x22b)&amp;&amp;_0xe6a95a!==_0x1f8566(0x22c)&amp;&amp;_0xe6a95a!==_0x1f8566(0x1c3)){var _0x502844=_0x19c1d3[_0x1f8566(0x1bf)]||_0x282214[_0x1f8566(0x1bf)];if(this[_0x1f8566(0x222)](_0x562f09)?(_0xd62d06=0x0,_0x562f09[_0x1f8566(0x206)](function(_0x9a01c9){var _0x48a113=_0x1f8566;if(_0xc62305++,_0x282214[_0x48a113(0x1a4)]++,_0xc62305&gt;_0x502844){_0x1b235=!0x0;return;}if(!_0x282214[_0x48a113(0x265)]&amp;&amp;_0x282214[_0x48a113(0x242)]&amp;&amp;_0x282214[_0x48a113(0x1a4)]&gt;_0x282214[_0x48a113(0x259)]){_0x1b235=!0x0;return;}_0x1b7964['push'](_0x4c6014[_0x48a113(0x1cd)](_0x1bf4c5,_0x562f09,_0x48a113(0x1b6),_0xd62d06++,_0x282214,function(_0x5282c0){return function(){return _0x5282c0;};}(_0x9a01c9)));})):this[_0x1f8566(0x1d8)](_0x562f09)&amp;&amp;_0x562f09[_0x1f8566(0x206)](function(_0xeedd86,_0x25a4fe){var _0x23b5e1=_0x1f8566;if(_0xc62305++,_0x282214[_0x23b5e1(0x1a4)]++,_0xc62305&gt;_0x502844){_0x1b235=!0x0;return;}if(!_0x282214[_0x23b5e1(0x265)]&amp;&amp;_0x282214[_0x23b5e1(0x242)]&amp;&amp;_0x282214['autoExpandPropertyCount']&gt;_0x282214[_0x23b5e1(0x259)]){_0x1b235=!0x0;return;}var _0x599a1b=_0x25a4fe[_0x23b5e1(0x26e)]();_0x599a1b[_0x23b5e1(0x24f)]&gt;0x64&amp;&amp;(_0x599a1b=_0x599a1b[_0x23b5e1(0x210)](0x0,0x64)+_0x23b5e1(0x1f7)),_0x1b7964[_0x23b5e1(0x1d5)](_0x4c6014['_addProperty'](_0x1bf4c5,_0x562f09,_0x23b5e1(0x267),_0x599a1b,_0x282214,function(_0xcd7af7){return function(){return _0xcd7af7;};}(_0xeedd86)));}),!_0x2b268c){try{for(_0x16754e in _0x562f09)if(!(_0x40968a&amp;&amp;_0xa08a68['test'](_0x16754e))&amp;&amp;!this['_blacklistedProperty'](_0x562f09,_0x16754e,_0x282214)){if(_0xc62305++,_0x282214[_0x1f8566(0x1a4)]++,_0xc62305&gt;_0x502844){_0x1b235=!0x0;break;}if(!_0x282214[_0x1f8566(0x265)]&amp;&amp;_0x282214[_0x1f8566(0x242)]&amp;&amp;_0x282214['autoExpandPropertyCount']&gt;_0x282214[_0x1f8566(0x259)]){_0x1b235=!0x0;break;}_0x1b7964[_0x1f8566(0x1d5)](_0x4c6014[_0x1f8566(0x1e7)](_0x1bf4c5,_0x35c393,_0x562f09,_0xe6a95a,_0x16754e,_0x282214));}}catch{}if(_0x35c393[_0x1f8566(0x208)]=!0x0,_0xa433b0&amp;&amp;(_0x35c393['_p_name']=!0x0),!_0x1b235){var _0x50bcc5=[][_0x1f8566(0x1cf)](this[_0x1f8566(0x1ab)](_0x562f09))[_0x1f8566(0x1cf)](this['_getOwnPropertySymbols'](_0x562f09));for(_0xd62d06=0x0,_0xa90867=_0x50bcc5[_0x1f8566(0x24f)];_0xd62d06&lt;_0xa90867;_0xd62d06++)if(_0x16754e=_0x50bcc5[_0xd62d06],!(_0x40968a&amp;&amp;_0xa08a68[_0x1f8566(0x23d)](_0x16754e[_0x1f8566(0x26e)]()))&amp;&amp;!this[_0x1f8566(0x1ba)](_0x562f09,_0x16754e,_0x282214)&amp;&amp;!_0x35c393[_0x1f8566(0x26b)+_0x16754e[_0x1f8566(0x26e)]()]){if(_0xc62305++,_0x282214[_0x1f8566(0x1a4)]++,_0xc62305&gt;_0x502844){_0x1b235=!0x0;break;}if(!_0x282214[_0x1f8566(0x265)]&amp;&amp;_0x282214['autoExpand']&amp;&amp;_0x282214[_0x1f8566(0x1a4)]&gt;_0x282214[_0x1f8566(0x259)]){_0x1b235=!0x0;break;}_0x1b7964[_0x1f8566(0x1d5)](_0x4c6014['_addObjectProperty'](_0x1bf4c5,_0x35c393,_0x562f09,_0xe6a95a,_0x16754e,_0x282214));}}}}}if(_0x191e11[_0x1f8566(0x1a0)]=_0xe6a95a,_0x2f320c?(_0x191e11['value']=_0x562f09[_0x1f8566(0x18b)](),this[_0x1f8566(0x18c)](_0xe6a95a,_0x191e11,_0x282214,_0x19c1d3)):_0xe6a95a===_0x1f8566(0x199)?_0x191e11[_0x1f8566(0x1c1)]=this[_0x1f8566(0x25f)][_0x1f8566(0x214)](_0x562f09):_0xe6a95a===_0x1f8566(0x1c3)?_0x191e11[_0x1f8566(0x1c1)]=_0x562f09[_0x1f8566(0x26e)]():_0xe6a95a==='RegExp'?_0x191e11['value']=this[_0x1f8566(0x212)]['call'](_0x562f09):_0xe6a95a==='symbol'&amp;&amp;this[_0x1f8566(0x1d0)]?_0x191e11['value']=this[_0x1f8566(0x1d0)][_0x1f8566(0x1eb)][_0x1f8566(0x26e)][_0x1f8566(0x214)](_0x562f09):!_0x282214[_0x1f8566(0x252)]&amp;&amp;!(_0xe6a95a===_0x1f8566(0x235)||_0xe6a95a===_0x1f8566(0x1e2))&amp;&amp;(delete _0x191e11['value'],_0x191e11[_0x1f8566(0x1b1)]=!0x0),_0x1b235&amp;&amp;(_0x191e11[_0x1f8566(0x250)]=!0x0),_0x10894d=_0x282214[_0x1f8566(0x198)][_0x1f8566(0x1b4)],_0x282214[_0x1f8566(0x198)][_0x1f8566(0x1b4)]=_0x191e11,this[_0x1f8566(0x202)](_0x191e11,_0x282214),_0x1b7964[_0x1f8566(0x24f)]){for(_0xd62d06=0x0,_0xa90867=_0x1b7964['length'];_0xd62d06&lt;_0xa90867;_0xd62d06++)_0x1b7964[_0xd62d06](_0xd62d06);}_0x1bf4c5[_0x1f8566(0x24f)]&amp;&amp;(_0x191e11[_0x1f8566(0x1bf)]=_0x1bf4c5);}catch(_0x21a195){_0x83b867(_0x21a195,_0x191e11,_0x282214);}this[_0x1f8566(0x1ce)](_0x562f09,_0x191e11),this[_0x1f8566(0x221)](_0x191e11,_0x282214),_0x282214[_0x1f8566(0x198)][_0x1f8566(0x1b4)]=_0x10894d,_0x282214[_0x1f8566(0x1b0)]--,_0x282214['autoExpand']=_0x5af275,_0x282214[_0x1f8566(0x242)]&amp;&amp;_0x282214[_0x1f8566(0x18f)][_0x1f8566(0x186)]();}finally{_0x14ed89&amp;&amp;(_0x41e16d['console'][_0x1f8566(0x190)]=_0x14ed89);}return _0x191e11;}[_0x17d19c(0x1e8)](_0x484bb4){return Object['getOwnPropertySymbols']?Object['getOwnPropertySymbols'](_0x484bb4):[];}['_isSet'](_0x361b52){var _0x5eea95=_0x17d19c;return!!(_0x361b52&amp;&amp;_0x41e16d[_0x5eea95(0x1b6)]&amp;&amp;this[_0x5eea95(0x257)](_0x361b52)===_0x5eea95(0x1f4)&amp;&amp;_0x361b52[_0x5eea95(0x206)]);}['_blacklistedProperty'](_0x1a6270,_0x128a15,_0x4a447d){var _0x492f03=_0x17d19c;return _0x4a447d['noFunctions']?typeof _0x1a6270[_0x128a15]==_0x492f03(0x270):!0x1;}[_0x17d19c(0x195)](_0x49fd79){var _0x3fb0f8=_0x17d19c,_0x45d97b='';return _0x45d97b=typeof _0x49fd79,_0x45d97b===_0x3fb0f8(0x278)?this[_0x3fb0f8(0x257)](_0x49fd79)===_0x3fb0f8(0x258)?_0x45d97b=_0x3fb0f8(0x26c):this[_0x3fb0f8(0x257)](_0x49fd79)===_0x3fb0f8(0x1f0)?_0x45d97b=_0x3fb0f8(0x199):this[_0x3fb0f8(0x257)](_0x49fd79)===_0x3fb0f8(0x18e)?_0x45d97b=_0x3fb0f8(0x1c3):_0x49fd79===null?_0x45d97b='null':_0x49fd79[_0x3fb0f8(0x24a)]&amp;&amp;(_0x45d97b=_0x49fd79[_0x3fb0f8(0x24a)]['name']||_0x45d97b):_0x45d97b===_0x3fb0f8(0x1e2)&amp;&amp;this[_0x3fb0f8(0x230)]&amp;&amp;_0x49fd79 instanceof this[_0x3fb0f8(0x230)]&amp;&amp;(_0x45d97b=_0x3fb0f8(0x25a)),_0x45d97b;}[_0x17d19c(0x257)](_0x232865){var _0x17e615=_0x17d19c;return Object[_0x17e615(0x1eb)][_0x17e615(0x26e)][_0x17e615(0x214)](_0x232865);}[_0x17d19c(0x1f6)](_0x3e4a05){var _0x560287=_0x17d19c;return _0x3e4a05===_0x560287(0x19c)||_0x3e4a05==='string'||_0x3e4a05===_0x560287(0x1ad);}[_0x17d19c(0x185)](_0x479cf3){var _0x538fd4=_0x17d19c;return _0x479cf3==='Boolean'||_0x479cf3==='String'||_0x479cf3===_0x538fd4(0x1d2);}['_addProperty'](_0xa1f1bb,_0x26836b,_0x42182b,_0x5363c2,_0x1a22f1,_0x23352c){var _0x3a135c=this;return function(_0x4e85a0){var _0x42cc78=_0x2f64,_0x142063=_0x1a22f1[_0x42cc78(0x198)][_0x42cc78(0x1b4)],_0x43e5c5=_0x1a22f1[_0x42cc78(0x198)][_0x42cc78(0x1a9)],_0x1a447b=_0x1a22f1[_0x42cc78(0x198)]['parent'];_0x1a22f1[_0x42cc78(0x198)][_0x42cc78(0x217)]=_0x142063,_0x1a22f1[_0x42cc78(0x198)][_0x42cc78(0x1a9)]=typeof _0x5363c2==_0x42cc78(0x1ad)?_0x5363c2:_0x4e85a0,_0xa1f1bb[_0x42cc78(0x1d5)](_0x3a135c[_0x42cc78(0x237)](_0x26836b,_0x42182b,_0x5363c2,_0x1a22f1,_0x23352c)),_0x1a22f1['node'][_0x42cc78(0x217)]=_0x1a447b,_0x1a22f1[_0x42cc78(0x198)][_0x42cc78(0x1a9)]=_0x43e5c5;};}['_addObjectProperty'](_0x46c50f,_0x2d7b50,_0x5d2033,_0x569eee,_0x50f506,_0x124139,_0xc8dd77){var _0x3a213f=_0x17d19c,_0x3890d8=this;return _0x2d7b50[_0x3a213f(0x26b)+_0x50f506[_0x3a213f(0x26e)]()]=!0x0,function(_0x59bae4){var _0x1f2fc5=_0x3a213f,_0x322537=_0x124139['node'][_0x1f2fc5(0x1b4)],_0x3ef61d=_0x124139['node'][_0x1f2fc5(0x1a9)],_0x1b1aea=_0x124139[_0x1f2fc5(0x198)]['parent'];_0x124139[_0x1f2fc5(0x198)][_0x1f2fc5(0x217)]=_0x322537,_0x124139[_0x1f2fc5(0x198)][_0x1f2fc5(0x1a9)]=_0x59bae4,_0x46c50f[_0x1f2fc5(0x1d5)](_0x3890d8['_property'](_0x5d2033,_0x569eee,_0x50f506,_0x124139,_0xc8dd77)),_0x124139[_0x1f2fc5(0x198)][_0x1f2fc5(0x217)]=_0x1b1aea,_0x124139['node']['index']=_0x3ef61d;};}[_0x17d19c(0x237)](_0x29c4ee,_0x51d53f,_0x163454,_0x354744,_0x3670fd){var _0x42604c=_0x17d19c,_0x156018=this;_0x3670fd||(_0x3670fd=function(_0x2e396d,_0x159f64){return _0x2e396d[_0x159f64];});var _0x4d16fd=_0x163454[_0x42604c(0x26e)](),_0x45fc97=_0x354744[_0x42604c(0x1ec)]||{},_0x212b15=_0x354744[_0x42604c(0x252)],_0x4bf8ab=_0x354744[_0x42604c(0x265)];try{var _0x489718=this[_0x42604c(0x1d8)](_0x29c4ee),_0x2ed967=_0x4d16fd;_0x489718&amp;&amp;_0x2ed967[0x0]==='\\x27'&amp;&amp;(_0x2ed967=_0x2ed967[_0x42604c(0x1c8)](0x1,_0x2ed967['length']-0x2));var _0x3edbc5=_0x354744['expressionsToEvaluate']=_0x45fc97['_p_'+_0x2ed967];_0x3edbc5&amp;&amp;(_0x354744[_0x42604c(0x252)]=_0x354744['depth']+0x1),_0x354744[_0x42604c(0x265)]=!!_0x3edbc5;var _0x47cc2f=typeof _0x163454==_0x42604c(0x275),_0x278007={'name':_0x47cc2f||_0x489718?_0x4d16fd:this[_0x42604c(0x1c0)](_0x4d16fd)};if(_0x47cc2f&amp;&amp;(_0x278007[_0x42604c(0x275)]=!0x0),!(_0x51d53f===_0x42604c(0x26c)||_0x51d53f==='Error')){var _0x50f384=this['_getOwnPropertyDescriptor'](_0x29c4ee,_0x163454);if(_0x50f384&amp;&amp;(_0x50f384['set']&amp;&amp;(_0x278007[_0x42604c(0x1e0)]=!0x0),_0x50f384[_0x42604c(0x1cb)]&amp;&amp;!_0x3edbc5&amp;&amp;!_0x354744['resolveGetters']))return _0x278007[_0x42604c(0x23b)]=!0x0,this[_0x42604c(0x1a6)](_0x278007,_0x354744),_0x278007;}var _0x53a3e7;try{_0x53a3e7=_0x3670fd(_0x29c4ee,_0x163454);}catch(_0x22cc99){return _0x278007={'name':_0x4d16fd,'type':_0x42604c(0x23f),'error':_0x22cc99[_0x42604c(0x1fc)]},this['_processTreeNodeResult'](_0x278007,_0x354744),_0x278007;}var _0x35eda6=this[_0x42604c(0x195)](_0x53a3e7),_0x557ec7=this[_0x42604c(0x1f6)](_0x35eda6);if(_0x278007[_0x42604c(0x1a0)]=_0x35eda6,_0x557ec7)this[_0x42604c(0x1a6)](_0x278007,_0x354744,_0x53a3e7,function(){var _0x236800=_0x42604c;_0x278007['value']=_0x53a3e7[_0x236800(0x18b)](),!_0x3edbc5&amp;&amp;_0x156018['_capIfString'](_0x35eda6,_0x278007,_0x354744,{});});else{var _0x424bd9=_0x354744[_0x42604c(0x242)]&amp;&amp;_0x354744[_0x42604c(0x1b0)]&lt;_0x354744[_0x42604c(0x1cc)]&amp;&amp;_0x354744[_0x42604c(0x18f)][_0x42604c(0x24b)](_0x53a3e7)&lt;0x0&amp;&amp;_0x35eda6!=='function'&amp;&amp;_0x354744['autoExpandPropertyCount']&lt;_0x354744['autoExpandLimit'];_0x424bd9||_0x354744[_0x42604c(0x1b0)]&lt;_0x212b15||_0x3edbc5?(this[_0x42604c(0x241)](_0x278007,_0x53a3e7,_0x354744,_0x3edbc5||{}),this[_0x42604c(0x1ce)](_0x53a3e7,_0x278007)):this[_0x42604c(0x1a6)](_0x278007,_0x354744,_0x53a3e7,function(){var _0x2d5644=_0x42604c;_0x35eda6===_0x2d5644(0x235)||_0x35eda6===_0x2d5644(0x1e2)||(delete _0x278007[_0x2d5644(0x1c1)],_0x278007[_0x2d5644(0x1b1)]=!0x0);});}return _0x278007;}finally{_0x354744[_0x42604c(0x1ec)]=_0x45fc97,_0x354744[_0x42604c(0x252)]=_0x212b15,_0x354744[_0x42604c(0x265)]=_0x4bf8ab;}}[_0x17d19c(0x18c)](_0x5e55e3,_0x18b5b9,_0x5a924f,_0x233fff){var _0x5dfc74=_0x17d19c,_0x343bde=_0x233fff['strLength']||_0x5a924f[_0x5dfc74(0x266)];if((_0x5e55e3===_0x5dfc74(0x194)||_0x5e55e3===_0x5dfc74(0x22b))&amp;&amp;_0x18b5b9[_0x5dfc74(0x1c1)]){let _0x2d6b8c=_0x18b5b9[_0x5dfc74(0x1c1)][_0x5dfc74(0x24f)];_0x5a924f[_0x5dfc74(0x19e)]+=_0x2d6b8c,_0x5a924f[_0x5dfc74(0x19e)]&gt;_0x5a924f[_0x5dfc74(0x1ef)]?(_0x18b5b9['capped']='',delete _0x18b5b9[_0x5dfc74(0x1c1)]):_0x2d6b8c&gt;_0x343bde&amp;&amp;(_0x18b5b9[_0x5dfc74(0x1b1)]=_0x18b5b9[_0x5dfc74(0x1c1)]['substr'](0x0,_0x343bde),delete _0x18b5b9[_0x5dfc74(0x1c1)]);}}[_0x17d19c(0x1d8)](_0x26f7d0){return!!(_0x26f7d0&amp;&amp;_0x41e16d['Map']&amp;&amp;this['_objectToString'](_0x26f7d0)==='[object\\x20Map]'&amp;&amp;_0x26f7d0['forEach']);}[_0x17d19c(0x1c0)](_0x164f41){var _0x23527f=_0x17d19c;if(_0x164f41['match'](/^\\d+$/))return _0x164f41;var _0x4ea542;try{_0x4ea542=JSON[_0x23527f(0x277)](''+_0x164f41);}catch{_0x4ea542='\\x22'+this[_0x23527f(0x257)](_0x164f41)+'\\x22';}return _0x4ea542[_0x23527f(0x20f)](/^\"([a-zA-Z_][a-zA-Z_0-9]*)\"$/)?_0x4ea542=_0x4ea542[_0x23527f(0x1c8)](0x1,_0x4ea542['length']-0x2):_0x4ea542=_0x4ea542['replace'](/'/g,'\\x5c\\x27')[_0x23527f(0x21a)](/\\\\\"/g,'\\x22')['replace'](/(^\"|\"$)/g,'\\x27'),_0x4ea542;}[_0x17d19c(0x1a6)](_0x2d59f4,_0x2f72a1,_0x62425b,_0x56073a){var _0xaa5bf6=_0x17d19c;this['_treeNodePropertiesBeforeFullValue'](_0x2d59f4,_0x2f72a1),_0x56073a&amp;&amp;_0x56073a(),this[_0xaa5bf6(0x1ce)](_0x62425b,_0x2d59f4),this[_0xaa5bf6(0x221)](_0x2d59f4,_0x2f72a1);}['_treeNodePropertiesBeforeFullValue'](_0x5e4ab9,_0x220824){var _0x10105c=_0x17d19c;this[_0x10105c(0x23e)](_0x5e4ab9,_0x220824),this[_0x10105c(0x263)](_0x5e4ab9,_0x220824),this['_setNodeExpressionPath'](_0x5e4ab9,_0x220824),this['_setNodePermissions'](_0x5e4ab9,_0x220824);}[_0x17d19c(0x23e)](_0x4616da,_0x4ebc9f){}[_0x17d19c(0x263)](_0x4992f5,_0x7a6c57){}[_0x17d19c(0x207)](_0x1a2b7b,_0x224ecb){}[_0x17d19c(0x1b9)](_0x19933a){var _0x2489a1=_0x17d19c;return _0x19933a===this[_0x2489a1(0x253)];}['_treeNodePropertiesAfterFullValue'](_0x495a34,_0x205449){var _0x2de81d=_0x17d19c;this[_0x2de81d(0x207)](_0x495a34,_0x205449),this['_setNodeExpandableState'](_0x495a34),_0x205449['sortProps']&amp;&amp;this['_sortProps'](_0x495a34),this[_0x2de81d(0x1df)](_0x495a34,_0x205449),this[_0x2de81d(0x201)](_0x495a34,_0x205449),this[_0x2de81d(0x1c7)](_0x495a34);}[_0x17d19c(0x1ce)](_0x1f376b,_0x1eca16){var _0x544bd1=_0x17d19c;try{_0x1f376b&amp;&amp;typeof _0x1f376b[_0x544bd1(0x24f)]==_0x544bd1(0x1ad)&amp;&amp;(_0x1eca16[_0x544bd1(0x24f)]=_0x1f376b[_0x544bd1(0x24f)]);}catch{}if(_0x1eca16[_0x544bd1(0x1a0)]===_0x544bd1(0x1ad)||_0x1eca16[_0x544bd1(0x1a0)]==='Number'){if(isNaN(_0x1eca16['value']))_0x1eca16[_0x544bd1(0x1ff)]=!0x0,delete _0x1eca16['value'];else switch(_0x1eca16[_0x544bd1(0x1c1)]){case Number[_0x544bd1(0x1de)]:_0x1eca16[_0x544bd1(0x1e5)]=!0x0,delete _0x1eca16['value'];break;case Number[_0x544bd1(0x18d)]:_0x1eca16['negativeInfinity']=!0x0,delete _0x1eca16[_0x544bd1(0x1c1)];break;case 0x0:this['_isNegativeZero'](_0x1eca16['value'])&amp;&amp;(_0x1eca16[_0x544bd1(0x1da)]=!0x0);break;}}else _0x1eca16[_0x544bd1(0x1a0)]==='function'&amp;&amp;typeof _0x1f376b['name']==_0x544bd1(0x194)&amp;&amp;_0x1f376b[_0x544bd1(0x239)]&amp;&amp;_0x1eca16[_0x544bd1(0x239)]&amp;&amp;_0x1f376b['name']!==_0x1eca16[_0x544bd1(0x239)]&amp;&amp;(_0x1eca16[_0x544bd1(0x19d)]=_0x1f376b['name']);}[_0x17d19c(0x1fa)](_0x56f27d){var _0x33fdad=_0x17d19c;return 0x1/_0x56f27d===Number[_0x33fdad(0x18d)];}[_0x17d19c(0x25c)](_0x20ca85){var _0x4caef2=_0x17d19c;!_0x20ca85[_0x4caef2(0x1bf)]||!_0x20ca85[_0x4caef2(0x1bf)][_0x4caef2(0x24f)]||_0x20ca85[_0x4caef2(0x1a0)]===_0x4caef2(0x26c)||_0x20ca85[_0x4caef2(0x1a0)]===_0x4caef2(0x267)||_0x20ca85['type']===_0x4caef2(0x1b6)||_0x20ca85['props']['sort'](function(_0xa2ebe4,_0xe934db){var _0x47268e=_0x4caef2,_0x543543=_0xa2ebe4['name'][_0x47268e(0x1c6)](),_0x31d4b1=_0xe934db['name'][_0x47268e(0x1c6)]();return _0x543543&lt;_0x31d4b1?-0x1:_0x543543&gt;_0x31d4b1?0x1:0x0;});}['_addFunctionsNode'](_0x590ad9,_0x36b733){var _0x3768ee=_0x17d19c;if(!(_0x36b733[_0x3768ee(0x1b2)]||!_0x590ad9[_0x3768ee(0x1bf)]||!_0x590ad9['props'][_0x3768ee(0x24f)])){for(var _0x8f1921=[],_0x8e4a54=[],_0x3deffb=0x0,_0x4f09f1=_0x590ad9[_0x3768ee(0x1bf)][_0x3768ee(0x24f)];_0x3deffb&lt;_0x4f09f1;_0x3deffb++){var _0x2f5212=_0x590ad9[_0x3768ee(0x1bf)][_0x3deffb];_0x2f5212[_0x3768ee(0x1a0)]==='function'?_0x8f1921[_0x3768ee(0x1d5)](_0x2f5212):_0x8e4a54['push'](_0x2f5212);}if(!(!_0x8e4a54[_0x3768ee(0x24f)]||_0x8f1921['length']&lt;=0x1)){_0x590ad9[_0x3768ee(0x1bf)]=_0x8e4a54;var _0x29e7d6={'functionsNode':!0x0,'props':_0x8f1921};this[_0x3768ee(0x23e)](_0x29e7d6,_0x36b733),this[_0x3768ee(0x207)](_0x29e7d6,_0x36b733),this[_0x3768ee(0x1af)](_0x29e7d6),this['_setNodePermissions'](_0x29e7d6,_0x36b733),_0x29e7d6['id']+='\\x20f',_0x590ad9[_0x3768ee(0x1bf)][_0x3768ee(0x1e4)](_0x29e7d6);}}}[_0x17d19c(0x201)](_0x4c9f3b,_0x58d806){}['_setNodeExpandableState'](_0x4e0b07){}[_0x17d19c(0x1a3)](_0x3a9c3e){var _0x28f20c=_0x17d19c;return Array[_0x28f20c(0x244)](_0x3a9c3e)||typeof _0x3a9c3e==_0x28f20c(0x278)&amp;&amp;this['_objectToString'](_0x3a9c3e)===_0x28f20c(0x258);}['_setNodePermissions'](_0x2027c7,_0x43a273){}[_0x17d19c(0x1c7)](_0x5c9a2d){var _0x46e84d=_0x17d19c;delete _0x5c9a2d[_0x46e84d(0x240)],delete _0x5c9a2d[_0x46e84d(0x1e9)],delete _0x5c9a2d[_0x46e84d(0x1a5)];}[_0x17d19c(0x238)](_0x4e46b6,_0xc9bc99){}}let _0x92d2f3=new _0x433247(),_0x33af12={'props':0x64,'elements':0x64,'strLength':0x400*0x32,'totalStrLength':0x400*0x32,'autoExpandLimit':0x1388,'autoExpandMaxDepth':0xa},_0x34f3eb={'props':0x5,'elements':0x5,'strLength':0x100,'totalStrLength':0x100*0x3,'autoExpandLimit':0x1e,'autoExpandMaxDepth':0x2};function _0x506114(_0x52d83e,_0x37934b,_0x32d7b9,_0x28d03b,_0xbfcb85,_0x4105fa){var _0x50da68=_0x17d19c;let _0x32f43f,_0x554cc2;try{_0x554cc2=_0xaeb030(),_0x32f43f=_0x178b4f[_0x37934b],!_0x32f43f||_0x554cc2-_0x32f43f['ts']&gt;0x1f4&amp;&amp;_0x32f43f[_0x50da68(0x215)]&amp;&amp;_0x32f43f[_0x50da68(0x1e3)]/_0x32f43f[_0x50da68(0x215)]&lt;0x64?(_0x178b4f[_0x37934b]=_0x32f43f={'count':0x0,'time':0x0,'ts':_0x554cc2},_0x178b4f['hits']={}):_0x554cc2-_0x178b4f[_0x50da68(0x234)]['ts']&gt;0x32&amp;&amp;_0x178b4f[_0x50da68(0x234)][_0x50da68(0x215)]&amp;&amp;_0x178b4f['hits'][_0x50da68(0x1e3)]/_0x178b4f[_0x50da68(0x234)]['count']&lt;0x64&amp;&amp;(_0x178b4f[_0x50da68(0x234)]={});let _0x267dc6=[],_0x535017=_0x32f43f[_0x50da68(0x1ea)]||_0x178b4f[_0x50da68(0x234)]['reduceLimits']?_0x34f3eb:_0x33af12,_0x1882f4=_0xc49df0=&gt;{var _0x7da2d5=_0x50da68;let _0x22f4fa={};return _0x22f4fa[_0x7da2d5(0x1bf)]=_0xc49df0[_0x7da2d5(0x1bf)],_0x22f4fa[_0x7da2d5(0x1a1)]=_0xc49df0[_0x7da2d5(0x1a1)],_0x22f4fa[_0x7da2d5(0x266)]=_0xc49df0['strLength'],_0x22f4fa[_0x7da2d5(0x1ef)]=_0xc49df0['totalStrLength'],_0x22f4fa['autoExpandLimit']=_0xc49df0['autoExpandLimit'],_0x22f4fa['autoExpandMaxDepth']=_0xc49df0[_0x7da2d5(0x1cc)],_0x22f4fa[_0x7da2d5(0x211)]=!0x1,_0x22f4fa[_0x7da2d5(0x1b2)]=!_0xf72fa8,_0x22f4fa[_0x7da2d5(0x252)]=0x1,_0x22f4fa['level']=0x0,_0x22f4fa[_0x7da2d5(0x21d)]=_0x7da2d5(0x218),_0x22f4fa[_0x7da2d5(0x1dd)]=_0x7da2d5(0x23c),_0x22f4fa[_0x7da2d5(0x242)]=!0x0,_0x22f4fa[_0x7da2d5(0x18f)]=[],_0x22f4fa['autoExpandPropertyCount']=0x0,_0x22f4fa[_0x7da2d5(0x271)]=!0x0,_0x22f4fa[_0x7da2d5(0x19e)]=0x0,_0x22f4fa[_0x7da2d5(0x198)]={'current':void 0x0,'parent':void 0x0,'index':0x0},_0x22f4fa;};for(var _0x557b48=0x0;_0x557b48&lt;_0xbfcb85[_0x50da68(0x24f)];_0x557b48++)_0x267dc6[_0x50da68(0x1d5)](_0x92d2f3['serialize']({'timeNode':_0x52d83e===_0x50da68(0x1e3)||void 0x0},_0xbfcb85[_0x557b48],_0x1882f4(_0x535017),{}));if(_0x52d83e==='trace'||_0x52d83e===_0x50da68(0x190)){let _0x3b7ce6=Error[_0x50da68(0x1b5)];try{Error[_0x50da68(0x1b5)]=0x1/0x0,_0x267dc6[_0x50da68(0x1d5)](_0x92d2f3['serialize']({'stackNode':!0x0},new Error()['stack'],_0x1882f4(_0x535017),{'strLength':0x1/0x0}));}finally{Error['stackTraceLimit']=_0x3b7ce6;}}return{'method':_0x50da68(0x21b),'version':_0x509b27,'args':[{'ts':_0x32d7b9,'session':_0x28d03b,'args':_0x267dc6,'id':_0x37934b,'context':_0x4105fa}]};}catch(_0x217116){return{'method':_0x50da68(0x21b),'version':_0x509b27,'args':[{'ts':_0x32d7b9,'session':_0x28d03b,'args':[{'type':_0x50da68(0x23f),'error':_0x217116&amp;&amp;_0x217116[_0x50da68(0x1fc)]}],'id':_0x37934b,'context':_0x4105fa}]};}finally{try{if(_0x32f43f&amp;&amp;_0x554cc2){let _0x5b4701=_0xaeb030();_0x32f43f['count']++,_0x32f43f[_0x50da68(0x1e3)]+=_0x526f92(_0x554cc2,_0x5b4701),_0x32f43f['ts']=_0x5b4701,_0x178b4f[_0x50da68(0x234)]['count']++,_0x178b4f[_0x50da68(0x234)][_0x50da68(0x1e3)]+=_0x526f92(_0x554cc2,_0x5b4701),_0x178b4f[_0x50da68(0x234)]['ts']=_0x5b4701,(_0x32f43f[_0x50da68(0x215)]&gt;0x32||_0x32f43f[_0x50da68(0x1e3)]&gt;0x64)&amp;&amp;(_0x32f43f[_0x50da68(0x1ea)]=!0x0),(_0x178b4f[_0x50da68(0x234)][_0x50da68(0x215)]&gt;0x3e8||_0x178b4f[_0x50da68(0x234)][_0x50da68(0x1e3)]&gt;0x12c)&amp;&amp;(_0x178b4f[_0x50da68(0x234)][_0x50da68(0x1ea)]=!0x0);}}catch{}}}return _0x506114;}function _0x2f64(_0xc123ed,_0x373a6a){var _0x7e3707=_0x7e37();return _0x2f64=function(_0x2f646f,_0x39d0ab){_0x2f646f=_0x2f646f-0x182;var _0x2ebbff=_0x7e3707[_0x2f646f];return _0x2ebbff;},_0x2f64(_0xc123ed,_0x373a6a);}function _0x7e37(){var _0x2ceb2a=['prototype','expressionsToEvaluate','_ws','24GbScfZ','totalStrLength','[object\\x20Date]','','host','getWebSocketClass','[object\\x20Set]','49899','_isPrimitiveType','...','close','8135382phFLIs','_isNegativeZero','_connectAttemptCount','message','versions','enumerable','nan','fromCharCode','_addLoadNode','_treeNodePropertiesBeforeFullValue','1.0.0','astro','split','forEach','_setNodeLabel','_p_length','Console\\x20Ninja\\x20failed\\x20to\\x20send\\x20logs,\\x20restarting\\x20the\\x20process\\x20may\\x20help;\\x20also\\x20see\\x20','_WebSocketClass','WebSocket','reload','path','onclose','match','slice','sortProps','_regExpToString','port','call','count',\"/Users/arpitsarang/.trae/extensions/wallabyjs.console-ninja-1.0.454-universal/node_modules\",'parent','root_exp_id','1622841bmQylM','replace','log','_allowedToSend','expId','disabledTrace','now','url','_treeNodePropertiesAfterFullValue','_isSet','_inBrowser','includes','timeStamp','https://tinyurl.com/37x8b79t','_console_ninja','some','ws/index.js','hrtime','String','Buffer','trace','cappedElements','_extendedWarning','_HTMLAllCollection','5843131NdmwSP','_console_ninja_session','_inNextEdge','hits','null','getOwnPropertyDescriptor','_property','_setNodeExpressionPath','name','_attemptToReconnectShortly','getter','root_exp','test','_setNodeId','unknown','_hasSymbolPropertyOnItsPath','serialize','autoExpand','1751458515924','isArray','127.0.0.1','global','map','\\x20browser','nodeModules','constructor','indexOf','7257855QYQRVY','disabledLog','args','length','cappedProps','20iRHXFh','depth','_undefined','readyState','charAt','endsWith','_objectToString','[object\\x20Array]','autoExpandLimit','HTMLAllCollection','_reconnectTimeout','_sortProps','getPrototypeOf','unref','_dateToString','1497470hNfbwD','onopen','NEXT_RUNTIME','_setNodeQueryPath','_sendErrorMessage','isExpressionToEvaluate','strLength','Map','warn','parse','failed\\x20to\\x20find\\x20and\\x20load\\x20WebSocket','_p_','array','dockerizedApp','toString','onmessage','function','resolveGetters',[\"localhost\",\"127.0.0.1\",\"example.cypress.io\",\"Arpits-MacBook-Pro.local\",\"192.168.119.228\"],'catch','process','symbol','elapsed','stringify','object','_consoleNinjaAllowedToStart','env','_allowedToConnectOnSend','_isPrimitiveWrapperType','pop','send','ws://','gateway.docker.internal','2886876RUuqkL','valueOf','_capIfString','NEGATIVE_INFINITY','[object\\x20BigInt]','autoExpandPreviousObjects','error','Console\\x20Ninja\\x20failed\\x20to\\x20send\\x20logs,\\x20refreshing\\x20the\\x20page\\x20may\\x20help;\\x20also\\x20see\\x20','edge','\\x20server','string','_type','_connected','_connecting','node','date','bind','_keyStrRegExp','boolean','funcName','allStrLength','_maxConnectAttemptCount','type','elements','defineProperty','_isArray','autoExpandPropertyCount','_hasMapOnItsPath','_processTreeNodeResult','data','_socket','index','method','_getOwnPropertyNames','console','number','4ZvFqOQ','_setNodeExpandableState','level','capped','noFunctions','location','current','stackTraceLimit','Set','_connectToHostNow','29xOCwxZ','_isUndefined','_blacklistedProperty','_disposeWebsocket','toUpperCase','angular','__es'+'Module','props','_propertyName','value','eventReceivedCallback','bigint','_quotedRegExp','jest','toLowerCase','_cleanNode','substr','hostname','27412DFayIi','get','autoExpandMaxDepth','_addProperty','_additionalMetadata','concat','_Symbol','logger\\x20failed\\x20to\\x20connect\\x20to\\x20host','Number','pathToFileURL','_webSocketErrorDocsLink','push','getOwnPropertyNames','see\\x20https://tinyurl.com/2vt8jxzw\\x20for\\x20more\\x20info.','_isMap','Symbol','negativeZero','coverage','origin','rootExpression','POSITIVE_INFINITY','_addFunctionsNode','setter','_numberRegExp','undefined','time','unshift','positiveInfinity','_WebSocket','_addObjectProperty','_getOwnPropertySymbols','_hasSetOnItsPath','reduceLimits'];_0x7e37=function(){return _0x2ceb2a;};return _0x7e37();}((_0x17e495,_0x339e19,_0x1ff378,_0x136b64,_0xc67da3,_0x396395,_0x76aa16,_0x9927b1,_0x3f290b,_0xbb61d,_0x37a6de)=&gt;{var _0x29882f=_0x153e6c;if(_0x17e495[_0x29882f(0x227)])return _0x17e495[_0x29882f(0x227)];if(!X(_0x17e495,_0x9927b1,_0xc67da3))return _0x17e495[_0x29882f(0x227)]={'consoleLog':()=&gt;{},'consoleTrace':()=&gt;{},'consoleTime':()=&gt;{},'consoleTimeEnd':()=&gt;{},'autoLog':()=&gt;{},'autoLogMany':()=&gt;{},'autoTraceMany':()=&gt;{},'coverage':()=&gt;{},'autoTrace':()=&gt;{},'autoTime':()=&gt;{},'autoTimeEnd':()=&gt;{}},_0x17e495['_console_ninja'];let _0x2cfb74=B(_0x17e495),_0x5991d7=_0x2cfb74['elapsed'],_0x18478b=_0x2cfb74[_0x29882f(0x225)],_0x470716=_0x2cfb74[_0x29882f(0x21f)],_0x6be82c={'hits':{},'ts':{}},_0xdbbc1a=J(_0x17e495,_0x3f290b,_0x6be82c,_0x396395),_0x3c8832=_0x4edcc7=&gt;{_0x6be82c['ts'][_0x4edcc7]=_0x18478b();},_0x409842=(_0x4a82f5,_0x1cfe95)=&gt;{var _0x387c3a=_0x29882f;let _0x58a5e2=_0x6be82c['ts'][_0x1cfe95];if(delete _0x6be82c['ts'][_0x1cfe95],_0x58a5e2){let _0x47ade6=_0x5991d7(_0x58a5e2,_0x18478b());_0x5e2966(_0xdbbc1a(_0x387c3a(0x1e3),_0x4a82f5,_0x470716(),_0x485c83,[_0x47ade6],_0x1cfe95));}},_0x507cd2=_0x428e5=&gt;{var _0x502e81=_0x29882f,_0x17e901;return _0xc67da3==='next.js'&amp;&amp;_0x17e495[_0x502e81(0x1dc)]&amp;&amp;((_0x17e901=_0x428e5==null?void 0x0:_0x428e5['args'])==null?void 0x0:_0x17e901['length'])&amp;&amp;(_0x428e5[_0x502e81(0x24e)][0x0][_0x502e81(0x1dc)]=_0x17e495[_0x502e81(0x1dc)]),_0x428e5;};_0x17e495[_0x29882f(0x227)]={'consoleLog':(_0x2706be,_0x474503)=&gt;{var _0x24bdf6=_0x29882f;_0x17e495[_0x24bdf6(0x1ac)]['log'][_0x24bdf6(0x239)]!==_0x24bdf6(0x24d)&amp;&amp;_0x5e2966(_0xdbbc1a(_0x24bdf6(0x21b),_0x2706be,_0x470716(),_0x485c83,_0x474503));},'consoleTrace':(_0x52d15d,_0xfb798a)=&gt;{var _0x271ff3=_0x29882f,_0x225898,_0x259b6e;_0x17e495[_0x271ff3(0x1ac)][_0x271ff3(0x21b)][_0x271ff3(0x239)]!==_0x271ff3(0x21e)&amp;&amp;((_0x259b6e=(_0x225898=_0x17e495[_0x271ff3(0x274)])==null?void 0x0:_0x225898[_0x271ff3(0x1fd)])!=null&amp;&amp;_0x259b6e[_0x271ff3(0x198)]&amp;&amp;(_0x17e495['_ninjaIgnoreNextError']=!0x0),_0x5e2966(_0x507cd2(_0xdbbc1a(_0x271ff3(0x22d),_0x52d15d,_0x470716(),_0x485c83,_0xfb798a))));},'consoleError':(_0x4310a2,_0x4e6173)=&gt;{var _0x417011=_0x29882f;_0x17e495['_ninjaIgnoreNextError']=!0x0,_0x5e2966(_0x507cd2(_0xdbbc1a(_0x417011(0x190),_0x4310a2,_0x470716(),_0x485c83,_0x4e6173)));},'consoleTime':_0x1b9671=&gt;{_0x3c8832(_0x1b9671);},'consoleTimeEnd':(_0x35dd13,_0xe4c285)=&gt;{_0x409842(_0xe4c285,_0x35dd13);},'autoLog':(_0x15f1d7,_0x194e8e)=&gt;{var _0x1b894d=_0x29882f;_0x5e2966(_0xdbbc1a(_0x1b894d(0x21b),_0x194e8e,_0x470716(),_0x485c83,[_0x15f1d7]));},'autoLogMany':(_0x4a38cf,_0x3e60af)=&gt;{var _0x57aeeb=_0x29882f;_0x5e2966(_0xdbbc1a(_0x57aeeb(0x21b),_0x4a38cf,_0x470716(),_0x485c83,_0x3e60af));},'autoTrace':(_0x29db23,_0x3fbda0)=&gt;{_0x5e2966(_0x507cd2(_0xdbbc1a('trace',_0x3fbda0,_0x470716(),_0x485c83,[_0x29db23])));},'autoTraceMany':(_0x34c0bd,_0x328e27)=&gt;{_0x5e2966(_0x507cd2(_0xdbbc1a('trace',_0x34c0bd,_0x470716(),_0x485c83,_0x328e27)));},'autoTime':(_0x5443e4,_0x3e0262,_0x2c2a0f)=&gt;{_0x3c8832(_0x2c2a0f);},'autoTimeEnd':(_0x2b1686,_0x1cd247,_0x3c146c)=&gt;{_0x409842(_0x1cd247,_0x3c146c);},'coverage':_0x478cc7=&gt;{var _0x1605f1=_0x29882f;_0x5e2966({'method':_0x1605f1(0x1db),'version':_0x396395,'args':[{'id':_0x478cc7}]});}};let _0x5e2966=H(_0x17e495,_0x339e19,_0x1ff378,_0x136b64,_0xc67da3,_0xbb61d,_0x37a6de),_0x485c83=_0x17e495[_0x29882f(0x232)];return _0x17e495['_console_ninja'];})(globalThis,_0x153e6c(0x245),_0x153e6c(0x1f5),_0x153e6c(0x216),_0x153e6c(0x1c5),_0x153e6c(0x203),_0x153e6c(0x243),_0x153e6c(0x272),'',_0x153e6c(0x1f1),'1');");}catch(e){}};/* istanbul ignore next */function oo_oo(/**@type{any}**/i,/**@type{any}**/...v){try{oo_cm().consoleLog(i, v);}catch(e){} return v};/* istanbul ignore next */function oo_tr(/**@type{any}**/i,/**@type{any}**/...v){try{oo_cm().consoleTrace(i, v);}catch(e){} return v};/* istanbul ignore next */function oo_tx(/**@type{any}**/i,/**@type{any}**/...v){try{oo_cm().consoleError(i, v);}catch(e){} return v};/* istanbul ignore next */function oo_ts(/**@type{any}**/v){try{oo_cm().consoleTime(v);}catch(e){} return v;};/* istanbul ignore next */function oo_te(/**@type{any}**/v, /**@type{any}**/i){try{oo_cm().consoleTimeEnd(v, i);}catch(e){} return v;};/*eslint unicorn/no-abusive-eslint-disable:,eslint-comments/disable-enable-pair:,eslint-comments/no-unlimited-disable:,eslint-comments/no-aggregating-enable:,eslint-comments/no-duplicate-disable:,eslint-comments/no-unused-disable:,eslint-comments/no-unused-enable:,*/</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2025-07-02T12:15:17.299Z
+            </div>
+        <script src="../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../sorter.js"></script>
+        <script src="../../block-navigation.js"></script>
+    </body>
+</html>
+    

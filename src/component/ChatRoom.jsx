@@ -11,7 +11,8 @@ import {
   Smile,
   AlertTriangle,
   Ban,
-  Trash2
+  Trash2,
+  X
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { formatTime, getTimeRemaining } from '../utils/helpers';
@@ -27,6 +28,7 @@ const ChatRoom = () => {
   const [pollOptions, setPollOptions] = useState(['', '']);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showModerationPanel, setShowModerationPanel] = useState(false);
+  const [copiedCode, setCopiedCode] = useState('');
   const messagesEndRef = useRef(null);
   const { roomId } = useParams();
   const navigate = useNavigate();
@@ -40,6 +42,7 @@ const ChatRoom = () => {
     addReaction,
     createPoll,
     votePoll,
+    closePoll,
     endRoom,
     rooms
   } = useApp();
@@ -205,10 +208,10 @@ const ChatRoom = () => {
               <>
                 <button
                   onClick={() => setShowPollForm(true)}
-                  className="flex items-center space-x-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
+                  className="flex items-center space-x-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg transform hover:scale-105"
                 >
                   <BarChart3 className="w-4 h-4" />
-                  <span>Poll</span>
+                  <span>Create Poll</span>
                 </button>
                 <button
                   onClick={() => setShowModerationPanel(!showModerationPanel)}
@@ -243,42 +246,44 @@ const ChatRoom = () => {
         {/* Main Chat Area */}
         <div className="flex-1 flex flex-col">
           {/* Active Poll */}
-          {activePoll && (
-            <div className="bg-green-50 border-b border-green-200 p-4">
-              <div className="max-w-4xl mx-auto">
-                <h3 className="font-semibold text-green-800 mb-3">{activePoll.question}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {activePoll.options.map((option, index) => {
-                    const votes = activePoll.votes[option] || [];
-                    const percentage = room.participants.length > 1 
-                      ? Math.round((votes.length / (room.participants.length - 1)) * 100)
-                      : 0;
-                    const userVoted = user && votes.includes(user.id);
-                    
+          {activePoll && !activePoll.closedAt && (
+            <div className="flex flex-col items-center justify-center py-12">
+              <div className="relative w-full max-w-md bg-secondary-100 rounded-3xl shadow-xl p-8 flex flex-col items-center">
+                <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex items-center justify-center w-20 h-20 bg-secondary-200 rounded-full shadow-md border-4 border-secondary-100">
+                  <span className="text-4xl">🗳️</span>
+                </div>
+                <h2 className="mt-12 mb-8 text-2xl font-extrabold text-white text-center drop-shadow">{activePoll.question}</h2>
+                <div className="w-full flex flex-col gap-4 mb-8">
+                  {activePoll.options.map((option, idx) => {
+                    const userVoted = user && (activePoll.votes[option] || []).includes(user.id);
                     return (
                       <button
-                        key={index}
+                        key={option}
                         onClick={() => votePoll(activePoll.id, option)}
-                        className={`p-3 rounded-lg border-2 text-left transition-all ${
-                          userVoted
-                            ? 'bg-green-100 border-green-500'
-                            : 'bg-white border-green-200 hover:border-green-400'
-                        }`}
+                        disabled={!user || user.role === 'teacher'}
+                        className={`w-full py-3 rounded-xl text-lg font-semibold transition-all border-2 flex items-center justify-between px-6 ${userVoted ? 'bg-white text-secondary-700 border-secondary-400' : 'bg-secondary-200 text-white border-secondary-200 hover:bg-secondary-300 hover:border-secondary-400'} ${!user || user.role === 'teacher' ? 'opacity-60 cursor-not-allowed' : 'hover:scale-105'}`}
                       >
-                        <div className="flex justify-between items-center">
-                          <span className="font-medium">{option}</span>
-                          <span className="text-sm text-gray-600">{votes.length} votes</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-                          <div
-                            className="bg-green-500 h-2 rounded-full transition-all duration-300"
-                            style={{ width: `${percentage}%` }}
-                          />
-                        </div>
+                        <span>{option}</span>
+                        {userVoted && <span className="ml-2 text-secondary-500 font-bold">Selected ✓</span>}
                       </button>
                     );
                   })}
                 </div>
+                {/* End Poll button for teacher */}
+                {user?.role === 'teacher' && (
+                  <button
+                    onClick={() => closePoll(activePoll.id)}
+                    className="w-full mb-4 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-700 text-white font-bold text-lg shadow-md hover:from-red-600 hover:to-red-800 transition-all"
+                  >
+                    End Poll
+                  </button>
+                )}
+                <button
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-secondary-500 to-primary-500 text-white font-bold text-lg shadow-md hover:from-secondary-600 hover:to-primary-600 transition-all"
+                  disabled
+                >
+                  Vote
+                </button>
               </div>
             </div>
           )}
@@ -286,7 +291,10 @@ const ChatRoom = () => {
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4">
             <div className="max-w-4xl mx-auto space-y-4">
-              {room.messages.map((msg) => (
+              {room.messages?.map((msg) => {
+                // Ensure reactions exists to prevent TypeError
+                if (!msg.reactions) msg.reactions = {};
+                return (
                 <div key={msg.id} className="bg-white/60 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-white/20">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center space-x-2">
@@ -317,7 +325,7 @@ const ChatRoom = () => {
                   <div className="flex items-center space-x-2">
                     <div className="flex space-x-1">
                       {reactions.map((emoji) => {
-                        const reactionUsers = msg.reactions[emoji] || [];
+                        const reactionUsers = msg.reactions?.[emoji] || [];
                         const userReacted = user && reactionUsers.includes(user.id);
                         
                         return (
@@ -337,7 +345,7 @@ const ChatRoom = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              )})}
               <div ref={messagesEndRef} />
             </div>
           </div>
@@ -445,58 +453,110 @@ const ChatRoom = () => {
 
       {/* Poll Creation Modal */}
       {showPollForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-md">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Create Poll</h3>
-            
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Question</label>
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 flex flex-col items-center relative">
+            <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex items-center justify-center w-20 h-20 bg-secondary-100 rounded-full shadow-md border-4 border-white">
+              <span className="text-4xl">🗳️</span>
+            </div>
+            <h2 className="mt-12 mb-2 text-2xl font-extrabold text-gray-900 text-center">Create your first poll!</h2>
+            <p className="mb-6 text-gray-500 text-center">Add poll options: <span className="font-medium">2-4 options, Short and Sweet</span></p>
+            <div className="w-full mb-4">
+              <label className="block text-gray-700 font-semibold mb-1">Question</label>
               <input
                 type="text"
                 value={pollQuestion}
                 onChange={(e) => setPollQuestion(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                placeholder="Enter your question"
+                className="w-full px-4 py-3 rounded-xl bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-secondary-400 outline-none text-base mb-2"
+                placeholder="What would you like to ask?"
+                maxLength={100}
               />
             </div>
-
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Options</label>
+            <div className="w-full mb-6">
               {pollOptions.map((option, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  value={option}
-                  onChange={(e) => {
-                    const newOptions = [...pollOptions];
-                    newOptions[index] = e.target.value;
-                    setPollOptions(newOptions);
-                  }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none mb-2"
-                  placeholder={`Option ${index + 1}`}
-                />
+                <div key={index} className="flex items-center mb-3">
+                  <input
+                    type="text"
+                    value={option}
+                    onChange={(e) => {
+                      const newOptions = [...pollOptions];
+                      newOptions[index] = e.target.value;
+                      setPollOptions(newOptions);
+                    }}
+                    className="flex-1 px-4 py-3 rounded-xl bg-gray-100 border border-gray-200 focus:ring-2 focus:ring-secondary-400 outline-none text-base mr-2"
+                    placeholder={`Option ${index + 1}`}
+                    maxLength={50}
+                  />
+                  {pollOptions.length > 2 && (
+                    <button
+                      onClick={() => {
+                        const newOptions = [...pollOptions];
+                        newOptions.splice(index, 1);
+                        setPollOptions(newOptions);
+                      }}
+                      className="text-gray-400 hover:text-red-500 p-2 rounded-full hover:bg-red-50 transition-colors"
+                      title="Remove option"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  )}
+                </div>
               ))}
+              {pollOptions.length < 4 && (
+                <button
+                  onClick={() => setPollOptions([...pollOptions, ''])}
+                  className="w-full mt-2 py-2 rounded-xl bg-secondary-50 text-secondary-700 font-semibold hover:bg-secondary-100 transition-colors"
+                >
+                  + Add Option
+                </button>
+              )}
+            </div>
+            <button
+              onClick={handleCreatePoll}
+              disabled={!pollQuestion.trim() || pollOptions.filter(o => o.trim()).length < 2}
+              className={`w-full py-3 rounded-xl text-lg font-bold shadow-md transition-all ${!pollQuestion.trim() || pollOptions.filter(o => o.trim()).length < 2
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-gradient-to-r from-secondary-500 to-primary-500 text-white hover:from-secondary-600 hover:to-primary-600'}`}
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Poll Results Section */}
+      {activePoll && activePoll.closedAt && (
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="w-full max-w-md bg-secondary-800 rounded-3xl shadow-xl p-8 flex flex-col items-center">
+            <div className="flex items-center justify-between w-full mb-6">
+              <span className="text-secondary-200 font-bold text-lg">{Object.values(activePoll.votes).flat().length} votes</span>
               <button
-                onClick={() => setPollOptions([...pollOptions, ''])}
-                className="text-blue-500 text-sm hover:text-blue-600"
+                onClick={() => setShowPollForm(true)}
+                className="px-4 py-2 rounded-xl bg-secondary-600 text-white font-semibold hover:bg-secondary-700 transition-colors"
               >
-                + Add Option
+                Create new poll
               </button>
             </div>
-
-            <div className="flex space-x-3">
-              <button
-                onClick={() => setShowPollForm(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleCreatePoll}
-                className="flex-1 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
-              >
-                Create Poll
-              </button>
+            <h2 className="mb-8 text-2xl font-extrabold text-white text-center drop-shadow">{activePoll.question}</h2>
+            <div className="w-full flex flex-col gap-4">
+              {activePoll.options.map((option, idx) => {
+                const votes = activePoll.votes[option] || [];
+                const maxVotes = Math.max(...activePoll.options.map(opt => (activePoll.votes[opt] || []).length));
+                const isWinner = votes.length === maxVotes && maxVotes > 0;
+                return (
+                  <div key={option} className={`w-full rounded-xl px-6 py-3 flex items-center justify-between ${isWinner ? 'bg-secondary-500 text-white' : 'bg-secondary-200 text-secondary-800'}`}>
+                    <span className="font-semibold">{option}</span>
+                    <div className="flex items-center gap-2">
+                      <div className="h-4 w-24 bg-secondary-100 rounded-full overflow-hidden mr-2">
+                        <div
+                          className="h-4 bg-primary-400 rounded-full transition-all duration-500"
+                          style={{ width: `${(votes.length / Math.max(1, Object.values(activePoll.votes).flat().length)) * 100}%` }}
+                        />
+                      </div>
+                      <span className="font-bold">{votes.length}</span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

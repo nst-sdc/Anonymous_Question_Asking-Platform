@@ -791,6 +791,59 @@ export const AppProvider = ({ children }) => {
     }
   }, [user, currentRoom]);
 
+  // Close a poll (teacher only)
+  const closePoll = useCallback((pollId) => {
+    try {
+      if (!user || user.role !== 'teacher' || !currentRoom) {
+        throw new Error('Only teachers can close polls');
+      }
+
+      // Find the poll
+      const pollIndex = currentRoom.polls.findIndex(p => p.id === pollId);
+      if (pollIndex === -1) {
+        throw new Error('Poll not found');
+      }
+
+      // Update the poll to inactive
+      const updatedPolls = [...currentRoom.polls];
+      updatedPolls[pollIndex] = {
+        ...updatedPolls[pollIndex],
+        active: false,
+        closedAt: new Date().toISOString()
+      };
+
+      // Add system message about closed poll
+      const pollMessage = {
+        id: uuidv4(),
+        content: `📊 Poll closed: ${updatedPolls[pollIndex].question}`,
+        userId: 'system',
+        username: 'System',
+        userRole: 'system',
+        timestamp: new Date().toISOString(),
+        isSystemMessage: true,
+        pollId: pollId
+      };
+
+      // Update the room
+      const updatedRoom = {
+        ...currentRoom,
+        polls: updatedPolls,
+        messages: [...currentRoom.messages, pollMessage],
+        updatedAt: new Date().toISOString(),
+        lastActivity: new Date().toISOString()
+      };
+
+      setRooms(prev => prev.map(r => r.id === currentRoom.id ? updatedRoom : r));
+      setCurrentRoom(updatedRoom);
+      setError(null);
+      return true;
+    } catch (error) {
+      console.error('Close poll error:', error);
+      setError(error.message || 'Failed to close poll. Please try again.');
+      return false;
+    }
+  }, [user, currentRoom]);
+
   // Vote on a poll
   const votePoll = useCallback((pollId, option) => {
     try {
@@ -994,6 +1047,7 @@ const hasUserVoted = useCallback((poll, userId) => {
     silenceUser,
     addReaction,
     createPoll,
+    closePoll,
     votePoll,
     
     // Utility functions

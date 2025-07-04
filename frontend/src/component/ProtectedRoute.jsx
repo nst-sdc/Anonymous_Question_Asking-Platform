@@ -1,0 +1,15 @@
+import React, { Children } from "react";
+import { Navigate } from "react-router-dom";
+import { useApp } from '../context/AppContext';
+
+const ProtectedRoute = ({children, allowedRole}) => {
+  const { user } = useApp();
+
+  if (!user || (allowedRole && user.role !== allowedRole)) {
+    return <Navigate to="/" />;
+  }
+
+  return children;
+};
+
+export default ProtectedRoute;

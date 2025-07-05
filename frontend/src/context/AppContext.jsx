@@ -154,41 +154,10 @@ export const AppProvider = ({ children }) => {
         throw new Error('Room name cannot be empty');
       }
       
-      // Check if teacher already has a room
-      const existingRoom = rooms.find(room => room.teacherId === user.id);
-      if (existingRoom) {
-        // Reactivate the existing room if it was ended
-        if (!existingRoom.isActive) {
-          const updatedRoom = {
-            ...existingRoom,
-            isActive: true,
-            participants: [...existingRoom.participants],
-            updatedAt: new Date().toISOString()
-          };
-          
-          const isTeacherInRoom = updatedRoom.participants.some(p => p.id === user.id);
-          if (!isTeacherInRoom) {
-            updatedRoom.participants.push({
-              ...user,
-              isOnline: true,
-              lastActive: new Date().toISOString()
-            });
-          } else {
-            updatedRoom.participants = updatedRoom.participants.map(p => 
-              p.id === user.id 
-                ? { ...p, isOnline: true, lastActive: new Date().toISOString() }
-                : p
-            );
-          }
-          
-          setRooms(prev => prev.map(r => r.id === updatedRoom.id ? updatedRoom : r));
-          setCurrentRoom(updatedRoom);
-          return updatedRoom.code;
-        }
-        
-        // If room is active, just return its code
-        setCurrentRoom(existingRoom);
-        return existingRoom.code;
+      // A teacher can only have one active room at a time.
+      const activeRoom = rooms.find(room => room.teacherId === user.id && room.isActive);
+      if (activeRoom) {
+        throw new Error('You already have an active classroom. Please end it before creating a new one.');
       }
 
       // Generate a unique room code
@@ -225,16 +194,16 @@ export const AppProvider = ({ children }) => {
       setRooms(prev => [...prev, newRoom]);
       setCurrentRoom(newRoom);
       setError(null);
-      return code;
+      return newRoom;
     } catch (error) {
       console.error('Create room error:', error);
       setError(error.message || 'Failed to create room. Please try again.');
-      return '';
+      throw error;
     }
   }, [user, rooms]);
 
   // Join a room with validation and error handling
-  const joinRoom = useCallback((code) => {
+  const joinRoom = useCallback(async (roomCode) => {
     try {
       if (!user) {
         throw new Error('You must be logged in to join a room');
@@ -401,44 +370,40 @@ export const AppProvider = ({ children }) => {
   }, [user, currentRoom, rooms]);
 
   // End a room (teacher only)
-  const endRoom = useCallback((roomId) => {
-    try {
-      const roomToEnd = rooms.find(r => r.id === roomId);
-      
-      if (!user || user.role !== 'teacher' || !roomToEnd || roomToEnd.teacherId !== user.id) {
-        throw new Error('You do not have permission to end this room');
-      }
-
-      if (window.confirm(`Are you sure you want to end the room "${roomToEnd.name}"? This action is permanent.`)) {
-        // Mark room as inactive instead of deleting it
-        const updatedRoom = {
-          ...roomToEnd,
-          isActive: false,
-          endedAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        };
-
-        setRooms(prev => prev.map(r => r.id === roomId ? updatedRoom : r));
-        
-        // If user is in the room they're ending, navigate them out
-        if (currentRoom?.id === roomId) {
-          setCurrentRoom(null);
-        }
-        
-        setError(null);
-        return true;
-      }
-      
-      return false;
-    } catch (error) {
-      console.error('End room error:', error);
-      setError(error.message || 'Failed to end room. Please try again.');
-      return false;
+  const endRoom = useCallback(async (roomId) => {
+    if (!user || user.role !== 'teacher') {
+      throw new Error('Only teachers can end a classroom.');
     }
-  }, [user, rooms, currentRoom]);
+
+    try {
+      const updatedRooms = rooms.map(room => {
+        if (room.id === roomId && room.teacherId === user.id) {
+          return {
+            ...room,
+            isActive: false,
+            endedAt: new Date().toISOString(),
+          };
+        }
+        return room;
+      });
+
+      // Persist changes immediately to localStorage to prevent race conditions
+      saveState('chat-rooms', updatedRooms);
+      setRooms(updatedRooms);
+
+      if (currentRoom?.id === roomId) {
+        setCurrentRoom(null);
+        saveState('current-room', null); // Also persist this change
+      }
+      return true;
+    } catch (error) {
+      console.error('Failed to end room:', error);
+      throw new Error('An error occurred while ending the classroom.');
+    }
+  }, [user, currentRoom]);
 
   // Send a message with validation and error handling
-  const sendMessage = useCallback((content) => {
+  const sendMessage = useCallback((content, replyTo = null) => {
     try {
       if (!user || !currentRoom) {
         throw new Error('You must be in a room to send messages');
@@ -524,7 +489,8 @@ export const AppProvider = ({ children }) => {
         userRole: user.role,
         timestamp: new Date().toISOString(),
         reactions: {},
-        isEdited: false
+        isEdited: false,
+        replyTo,
       };
 
       const updatedRoom = {
@@ -543,7 +509,7 @@ export const AppProvider = ({ children }) => {
       setError(error.message || 'Failed to send message. Please try again.');
       return false;
     }
-  }, [user, currentRoom, leaveRoom]);
+  }, [user, currentRoom, leaveRoom, setUser, setRooms, setCurrentRoom, setError]);
 
   // Silence or ban a user (teacher only)
   const silenceUser = useCallback((userId, duration) => {

@@ -11,6 +11,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { LoadingOverlay } from './components/LoadingSpinner';
 import { useEffect, useState } from 'react';
 import { AlertTriangle, Moon, Sun } from 'lucide-react';
+import ProtectedRoute from './component/ProtectedRoute';
 import './App.css';
 
 // Component to show mock socket warning
@@ -128,14 +129,19 @@ function App() {
                   </ErrorBoundary>
                 } />
                 <Route path="/teacher" element={
-                  <ErrorBoundary>
-                    <TeacherDashboard />
-                  </ErrorBoundary>
+                  <ProtectedRoute allowedRole={'teacher'}>
+                    <ErrorBoundary>
+                      <TeacherDashboard />
+                    </ErrorBoundary>
+                  </ProtectedRoute>
+                  
                 } />
                 <Route path="/student" element={
-                  <ErrorBoundary>
-                    <StudentDashboard />
-                  </ErrorBoundary>
+                  <ProtectedRoute allowedRole={'student'}>
+                    <ErrorBoundary>
+                      <StudentDashboard />
+                    </ErrorBoundary>
+                  </ProtectedRoute>
                 } />
                 <Route path="/chat/:roomId" element={
                   <ErrorBoundary>

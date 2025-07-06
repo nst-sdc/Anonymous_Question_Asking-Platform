@@ -60,4 +60,4 @@ Thumbs.db
 
 # Frontend build artifacts
 /frontend/dist
-/frontend/coverage
+/frontend/coveragenode_modules/

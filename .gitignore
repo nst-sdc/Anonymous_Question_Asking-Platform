@@ -51,6 +51,15 @@ yarn-error.log*
 *.log
 .vercel_build_output
 
+# Lockfiles
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
 # System Files
 .DS_Store
 Thumbs.db
+
+# Frontend build artifacts
+/frontend/dist
+/frontend/coveragenode_modules/

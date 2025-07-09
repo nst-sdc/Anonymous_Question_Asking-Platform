@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { useSocket } from './SocketContext';
 import { generateAnonymousName, checkProfanity } from '../utils/helpers';
 
 // Context for global state management
@@ -42,6 +43,7 @@ const saveState = (key, value) => {
 
 // Main AppProvider component
 export const AppProvider = ({ children }) => {
+  const { socket, isConnected } = useSocket();
   // State management with localStorage persistence
   const [user, setUser] = useState(() => loadState('chat-user', null));
   const [currentRoom, setCurrentRoom] = useState(() => loadState('current-room', null));
@@ -62,6 +64,58 @@ export const AppProvider = ({ children }) => {
     saveState('chat-rooms', rooms);
     // Don't set isLoading here as it might cause issues with frequent room updates
   }, [rooms]);
+
+  // Socket event listeners
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleRoomData = (data) => {
+      console.log('Received roomData:', data);
+      if (data && data.room) {
+        // The backend sends { room: { roomId, users, messages } }
+        // We need to find the full room object from our local state
+        const roomFromState = rooms.find(r => r.code === data.room.roomId);
+        if (roomFromState) {
+          setCurrentRoom({
+            ...roomFromState,
+            participants: data.room.users,
+            messages: data.room.messages,
+          });
+        } else {
+          // If the room is not in local state (e.g., student joining),
+          // we might need to fetch room details or create a placeholder.
+          // For now, we'll just set what we have.
+          setCurrentRoom({
+            id: data.room.roomId, // Note: This might not be the UUID id
+            code: data.room.roomId,
+            name: 'Classroom', // Placeholder name
+            participants: data.room.users,
+            messages: data.room.messages,
+          });
+        }
+      }
+    };
+
+    socket.on('roomData', handleRoomData);
+
+    // Auto-rejoin room on socket reconnection
+    if (isConnected && user && currentRoom) {
+      console.log(`🟡 Reconnecting to room: ${currentRoom.name}`);
+      socket.emit('joinRoom', { 
+        roomId: currentRoom.code, 
+        user: {
+          id: user.id,
+          name: user.anonymousName,
+          role: user.role
+        } 
+      });
+      console.log('✅ joinRoom event emitted on reconnect.');
+    }
+
+    return () => {
+      socket.off('roomData', handleRoomData);
+    };
+  }, [socket, isConnected, user, currentRoom, rooms]);
 
   // Login function with validation and error handling
   const login = useCallback((role, username) => {
@@ -203,125 +257,26 @@ export const AppProvider = ({ children }) => {
   }, [user, rooms]);
 
   // Join a room with validation and error handling
-  const joinRoom = useCallback(async (roomCode) => {
-    try {
-      if (!user) {
-        throw new Error('You must be logged in to join a room');
-      }
-
-      if (user.banned) {
-        throw new Error('Your account has been banned from joining rooms');
-      }
-
-      // If teacher is trying to rejoin their own room, find it by teacherId
-      if (user.role === 'teacher') {
-        const teacherRoom = rooms.find(r => r.teacherId === user.id);
-        if (teacherRoom) {
-          // If teacher is already in the room, just update their status
-          const isTeacherInRoom = teacherRoom.participants.some(p => p.id === user.id);
-          if (isTeacherInRoom) {
-            const updatedRoom = {
-              ...teacherRoom,
-              participants: teacherRoom.participants.map(p => 
-                p.id === user.id 
-                  ? { ...p, isOnline: true, lastActive: new Date().toISOString() }
-                  : p
-              ),
-              updatedAt: new Date().toISOString()
-            };
-            
-            setRooms(prev => prev.map(r => r.id === updatedRoom.id ? updatedRoom : r));
-            setCurrentRoom(updatedRoom);
-            setError(null);
-            return true;
-          }
-          
-          // If teacher is not in the room but it's their room, add them back
-          const updatedRoom = {
-            ...teacherRoom,
-            participants: [
-              ...teacherRoom.participants,
-              {
-                ...user,
-                isOnline: true,
-                lastActive: new Date().toISOString()
-              }
-            ],
-            updatedAt: new Date().toISOString()
-          };
-          
-          setRooms(prev => prev.map(r => r.id === updatedRoom.id ? updatedRoom : r));
-          setCurrentRoom(updatedRoom);
-          setError(null);
-          return true;
-        }
-      }
-
-      const room = rooms.find(r => r.code === code);
-      if (!room) {
-        throw new Error('Room not found. Please check the code and try again.');
-      }
-
-      // Check if room is active
-      if (!room.isActive) {
-        throw new Error('This room has been ended by the teacher');
-      }
-
-      // Check if user is already in this room
-      const isUserInRoom = room.participants.some(p => p.id === user.id);
-      if (isUserInRoom) {
-        // Update user's online status
-        const updatedRoom = {
-          ...room,
-          participants: room.participants.map(p => 
-            p.id === user.id 
-              ? { ...p, isOnline: true, lastActive: new Date().toISOString() }
-              : p
-          ),
-          updatedAt: new Date().toISOString()
-        };
-        
-        setRooms(prev => prev.map(r => r.id === room.id ? updatedRoom : r));
-        setCurrentRoom(updatedRoom);
-        setError(null);
-        return true;
-      }
-
-      // Check if user is already in another room
-      const userInOtherRoom = rooms.some(r => 
-        r.id !== room.id && 
-        r.participants.some(p => p.id === user.id)
-      );
-
-      if (userInOtherRoom) {
-        throw new Error('You are already in another room. Please leave it first.');
-      }
-
-      // Add user to the room
-      const updatedRoom = {
-        ...room,
-        participants: [
-          ...room.participants,
-          {
-            ...user,
-            isOnline: true,
-            lastActive: new Date().toISOString()
-          }
-        ],
-        updatedAt: new Date().toISOString(),
-        participantCount: (room.participantCount || room.participants.length) + 1
-      };
-
-      setRooms(prev => prev.map(r => r.id === room.id ? updatedRoom : r));
-      setCurrentRoom(updatedRoom);
-      setError(null);
-      return true;
-    } catch (error) {
-      console.error('Join room error:', error);
-      setError(error.message || 'Failed to join room. Please try again.');
+  const joinRoom = useCallback((roomCode) => {
+    if (!socket || !isConnected || !user) {
+      console.error('Cannot join room: socket not connected or user not logged in.');
+      setError('Cannot join room. Please check your connection and try again.');
       return false;
     }
-  }, [user, rooms]);
+    
+    console.log(`Attempting to join room with code: ${roomCode}`);
+    socket.emit('joinRoom', { 
+      roomId: roomCode, 
+      user: {
+        name: user.anonymousName,
+        role: user.role,
+        id: user.id
+      } 
+    });
+
+    // The 'roomData' event from the server will update the current room state.
+    return true;
+  }, [socket, isConnected, user, rooms]);
 
   // Leave the current room with cleanup
   const leaveRoom = useCallback(() => {
@@ -976,32 +931,26 @@ const hasUserVoted = useCallback((poll, userId) => {
   // Check if user is online
   const isUserOnline = useCallback((user) => {
     if (!user) return false;
-    
+
     // If user has lastActive, check if it was within last 5 minutes
     if (user.lastActive) {
-      try {
-        const lastActive = new Date(user.lastActive);
-        if (isNaN(lastActive.getTime())) return false;
-        const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
-        return lastActive > fiveMinutesAgo;
-      } catch (e) {
-        console.error('Error checking user online status:', e);
-        return false;
-      }
+      const lastActiveDate = new Date(user.lastActive);
+      const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+      return lastActiveDate > fiveMinutesAgo;
     }
-    
-    return user.isOnline === true;
+
+    return !!user.isOnline;
   }, []);
 
-  // Context value
   const contextValue = {
-    // State
+    socket,
+    isConnected,
     user,
     currentRoom,
     rooms,
     isLoading,
     error,
-    
+
     // Actions
     login,
     logout,
@@ -1015,7 +964,7 @@ const hasUserVoted = useCallback((poll, userId) => {
     createPoll,
     closePoll,
     votePoll,
-    
+
     // Utility functions
     getRoomById,
     getRoomMessages,
@@ -1028,7 +977,7 @@ const hasUserVoted = useCallback((poll, userId) => {
     getUserById,
     formatTimestamp,
     isUserOnline,
-    
+
     // Constants
     MAX_MESSAGE_LENGTH: 1000,
     MAX_POLL_OPTIONS: 10,
@@ -1036,9 +985,9 @@ const hasUserVoted = useCallback((poll, userId) => {
     MAX_POLL_OPTION_LENGTH: 100,
     MAX_USERNAME_LENGTH: 30,
     MAX_ROOM_NAME_LENGTH: 50,
-    
+
     // Error handling
-    clearError: () => setError(null)
+    clearError: () => setError(null),
   };
 
   return (

@@ -277,6 +277,7 @@ const ChatRoom = () => {
       <div className="flex-1 flex flex-col bg-bg-main">
         <div className="bg-card/80 backdrop-blur-sm border-b border-border p-3 sm:p-4 flex items-center justify-between z-10">
           <div className="flex items-center gap-3">
+
             <button onClick={handleLeaveRoom} className="p-2 hover:bg-bg-hover rounded-full transition-colors flex items-center justify-center"><ArrowLeft className="w-5 h-5" /></button>
             <div>
               <h2 className="font-bold text-lg text-text truncate">{currentRoom?.name}</h2>

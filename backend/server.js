@@ -1,8 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 const path = require('path');
+const { supabase } = require('./database');
 
 // Create Express app
 const app = express();
@@ -22,137 +24,120 @@ const io = new Server(server, {
   transports: ["websocket", "polling"]
 });
 
-// Store active rooms and users
-const rooms = new Map();
-const users = new Map();
-
 // Socket.IO connection handler
 io.on('connection', (socket) => {
   console.log(`New client connected: ${socket.id}`);
-  
-  // Handle joining a room
-  socket.on('joinRoom', ({ roomId, user }) => {
+
+  socket.on('joinRoom', async ({ roomId, user }) => {
     try {
-      // Add user to the room
       socket.join(roomId);
-      
-      // Initialize room if it doesn't exist
-      if (!rooms.has(roomId)) {
-        rooms.set(roomId, {
-          id: roomId,
-          users: new Map(),
-          messages: [],
-          questions: [],
-          polls: []
-        });
+      console.log(`${user.name} joined room: ${roomId}`);
+
+      // Ensure the room exists before adding a user
+      const { error: roomError } = await supabase
+        .from('rooms')
+        .upsert({ room_id: roomId }, { onConflict: 'room_id' });
+
+      if (roomError) {
+        console.error('Supabase error creating room:', roomError);
+        throw roomError;
       }
-      
-      const room = rooms.get(roomId);
-      
-      // Add user to the room
-      room.users.set(socket.id, {
-        id: socket.id,
-        ...user,
-        joinedAt: new Date()
-      });
-      
-      // Store user info
-      users.set(socket.id, {
-        ...user,
-        roomId,
-        socketId: socket.id
-      });
-      
-      // Notify room about new user
-      socket.to(roomId).emit('userJoined', {
-        user: {
-          id: socket.id,
-          ...user
-        },
-        users: Array.from(room.users.values())
-      });
-      
+
+      // Insert user into Supabase
+      const { data: newUser, error: userError } = await supabase
+        .from('users')
+        .insert({ ...user, socket_id: socket.id, room_id: roomId })
+        .select()
+        .single();
+
+      if (userError) {
+        console.error('Supabase error inserting user:', userError);
+        throw userError;
+      }
+      console.log('✅ User inserted:', newUser);
+
+      // Get all users in the room
+      const { data: users, error: usersError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('room_id', roomId);
+
+      if (usersError) throw usersError;
+
+      // Notify other users in the room
+      socket.to(roomId).emit('userJoined', { user: newUser, users });
+
       // Send room data to the new user
-      socket.emit('roomData', {
-        room: {
-          ...room,
-          users: Array.from(room.users.values()),
-          messages: room.messages.slice(-50) // Send last 50 messages
-        }
-      });
-      
-      console.log(`User ${user.name} joined room ${roomId}`);
-      
+      const { data: messages, error: messagesError } = await supabase
+        .from('messages')
+        .select('*')
+        .eq('room_id', roomId)
+        .order('timestamp', { ascending: true });
+
+      if (messagesError) throw messagesError;
+
+      socket.emit('roomData', { room: { roomId, users, messages } });
     } catch (error) {
-      console.error('Error joining room:', error);
+      console.error('Error in joinRoom:', error);
       socket.emit('error', { message: 'Failed to join room' });
     }
   });
-  
-  // Handle new message
-  socket.on('sendMessage', ({ roomId, message, user }) => {
+
+  socket.on('sendMessage', async ({ roomId, message, user }) => {
     try {
-      const room = rooms.get(roomId);
-      if (!room) return;
-      
       const newMessage = {
-        id: Date.now().toString(),
         text: message.text,
-        user: {
-          id: user.id,
-          name: user.name,
-          role: user.role
-        },
-        timestamp: new Date()
+        user_id: user.id,
+        user_name: user.name,
+        user_role: user.role,
+        room_id: roomId,
       };
-      
-      // Store message
-      room.messages.push(newMessage);
-      
-      // Broadcast to room
-      io.to(roomId).emit('newMessage', newMessage);
-      
+
+      const { data, error } = await supabase
+        .from('messages')
+        .insert(newMessage)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Supabase error inserting message:', error);
+        throw error;
+      }
+      console.log('✅ Message inserted:', data);
+
+      io.to(roomId).emit('newMessage', data);
     } catch (error) {
       console.error('Error sending message:', error);
       socket.emit('error', { message: 'Failed to send message' });
     }
   });
-  
-  // Handle disconnection
-  socket.on('disconnect', () => {
-    console.log(`Client disconnected: ${socket.id}`);
-    
-    const user = users.get(socket.id);
-    if (!user) return;
-    
-    const { roomId } = user;
-    const room = rooms.get(roomId);
-    
-    if (room) {
-      // Remove user from room
-      room.users.delete(socket.id);
-      
-      // Notify room if there are still users
-      if (room.users.size > 0) {
-        socket.to(roomId).emit('userLeft', {
-          userId: socket.id,
-          users: Array.from(room.users.values())
-        });
-      } else {
-        // Remove empty room after a delay
-        setTimeout(() => {
-          if (rooms.has(roomId) && rooms.get(roomId).users.size === 0) {
-            rooms.delete(roomId);
-            console.log(`Room ${roomId} removed (empty)`);
-          }
-        }, 60000); // 1 minute delay
+
+  socket.on('disconnect', async () => {
+    try {
+      const { data: user, error } = await supabase
+        .from('users')
+        .delete()
+        .eq('socket_id', socket.id)
+        .select()
+        .single();
+
+      if (error || !user) {
+        return console.log(`No user found with socket ID ${socket.id} to disconnect.`);
       }
+
+      console.log(`User ${user.name} disconnected`);
+
+      const { data: users } = await supabase
+        .from('users')
+        .select('*')
+        .eq('room_id', user.room_id);
+
+      io.to(user.room_id).emit('userLeft', { userId: socket.id, users: users || [] });
+    } catch (error) {
+      console.error('Error on disconnect:', error);
     }
-    
-    // Remove user from users map
-    users.delete(socket.id);
   });
-  
+
   // Handle errors
   socket.on('error', (error) => {
     console.error('Socket error:', error);
@@ -160,13 +145,34 @@ io.on('connection', (socket) => {
 });
 
 // Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-    rooms: rooms.size,
-    users: users.size
-  });
+app.get('/health', async (req, res) => {
+  try {
+    const { count: roomCount, error: roomError } = await supabase
+      .from('rooms')
+      .select('*', { count: 'exact', head: true });
+
+    const { count: userCount, error: userError } = await supabase
+      .from('users')
+      .select('*', { count: 'exact', head: true });
+
+    if (roomError || userError) {
+      throw roomError || userError;
+    }
+
+    res.status(200).json({
+      status: 'ok',
+      dbState: 'connected', // Assuming if no error, we are connected
+      timestamp: new Date().toISOString(),
+      rooms: roomCount,
+      users: userCount,
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      status: 'error', 
+      message: 'Health check failed', 
+      error: error.message 
+    });
+  }
 });
 
 // Start server

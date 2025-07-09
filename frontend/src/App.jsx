@@ -116,8 +116,8 @@ function App() {
       </button>
 
     <ErrorBoundary>
-      <AppProvider>
-        <SocketProvider>
+      <SocketProvider>
+        <AppProvider>
           <MockSocketWarning />
           <Router>
             <ErrorBoundary>
@@ -160,8 +160,8 @@ function App() {
               />
             </ErrorBoundary>
           </Router>
-        </SocketProvider>
-      </AppProvider>
+        </AppProvider>
+      </SocketProvider>
     </ErrorBoundary>
     </div> );
 }

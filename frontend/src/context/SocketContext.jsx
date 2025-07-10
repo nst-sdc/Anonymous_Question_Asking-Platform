@@ -71,30 +71,27 @@ export const SocketProvider = ({ children }) => {
         reconnectionDelay: 1000,
       });
 
-      const onConnect = () => {
-        console.log('Connected to Socket.IO server');
+      socketIo.on('connect', () => {
+        console.log('✅ Socket connected with ID:', socketIo.id);
         setIsConnected(true);
         setIsMock(false);
-      };
+      });
 
-      const onDisconnect = () => {
+      socketIo.on('disconnect', () => {
         console.log('Disconnected from Socket.IO server');
         setIsConnected(false);
-      };
+      });
 
-      const onConnectError = (error) => {
-        console.error('Socket connection error:', error);
+      socketIo.on('connect_error', (error) => {
+        console.error('❌ Connection error:', error.message);
+        setIsConnected(false);
         // Fall back to mock socket if real connection fails
         if (!isMock) {
           console.log('Falling back to mock socket');
           setIsMock(true);
-          setIsConnected(true);
+          setIsConnected(true); 
         }
-      };
-
-      socketIo.on('connect', onConnect);
-      socketIo.on('disconnect', onDisconnect);
-      socketIo.on('connect_error', onConnectError);
+      });
 
       return socketIo;
     } catch (error) {

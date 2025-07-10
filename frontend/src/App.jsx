@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { AppProvider } from './context/AppContext';
 import { SocketProvider, useSocket } from './context/SocketContext';
 import { ToastContainer, toast } from 'react-toastify';
@@ -117,57 +117,29 @@ function App() {
       </button>
 
     <ErrorBoundary>
-      <AppProvider>
-        <SocketProvider>
+      <SocketProvider>
+        <AppProvider>
           <MockSocketWarning />
-          <Router>
-            <ErrorBoundary>
-              <Routes>
-                <Route path="/" element={
-                  <ErrorBoundary>
-                    <AuthScreen />
-                  </ErrorBoundary>
-                } />
-                <Route path="/teacher" element={
-                  <ProtectedRoute allowedRole={'teacher'}>
-                    <ErrorBoundary>
-                      <TeacherDashboard />
-                    </ErrorBoundary>
-                  </ProtectedRoute>
-                  
-                } />
-                <Route path="/student" element={
-                  <ProtectedRoute allowedRole={'student'}>
-                    <ErrorBoundary>
-                      <StudentDashboard />
-                    </ErrorBoundary>
-                  </ProtectedRoute>
-                } />
-                <Route path="/chat/:roomId" element={
-                  <ErrorBoundary>
-                    <ChatRoom />
-                  </ErrorBoundary>
-                } />
-              </Routes>
-
-              <ToastContainer
-                position="top-bottom"
-                autoClose={3000}
-                hideProgressBar={false}
-                newestOnTop
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme={dark ? 'dark' : 'light'}
-                role="alert"
-                aria-live="assertive"
-              />
-            </ErrorBoundary>
-          </Router>
-        </SocketProvider>
-      </AppProvider>
+          <Routes>
+            <Route path="/" element={<AuthScreen />} />
+            <Route path="/teacher" element={<ProtectedRoute allowedRole={'teacher'}><TeacherDashboard /></ProtectedRoute>} />
+            <Route path="/student" element={<ProtectedRoute allowedRole={'student'}><StudentDashboard /></ProtectedRoute>} />
+            <Route path="/chat/:roomId" element={<ProtectedRoute><ChatRoom /></ProtectedRoute>} />
+          </Routes>
+          <ToastContainer
+            position="bottom-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme={dark ? 'dark' : 'light'}
+          />
+        </AppProvider>
+      </SocketProvider>
     </ErrorBoundary>
     </div> );
 }

@@ -28,6 +28,7 @@ const TeacherDashboard = () => {
     joinRoom,
     endRoom,
     isLoading,
+    currentRoom,
     MAX_ROOM_NAME_LENGTH = 50,
   } = useApp();
 
@@ -59,19 +60,19 @@ const TeacherDashboard = () => {
     }
   }, [roomName, createRoom, MAX_ROOM_NAME_LENGTH, navigate]);
 
-  const handleJoinRoom = useCallback(async (roomCode) => {
+  const handleJoinRoom = useCallback((roomCode) => {
     try {
-      const success = await joinRoom(roomCode);
-      if (success) {
-        const roomToJoin = rooms.find(r => r.code === roomCode);
-        if (roomToJoin) {
-          navigate(`/chat/${roomToJoin.id}`);
-        }
-      }
+      joinRoom(roomCode);
     } catch (err) {
       toast.error(err.message || 'Failed to join room');
     }
-  }, [joinRoom, navigate, rooms]);
+  }, [joinRoom]);
+
+  useEffect(() => {
+    if (currentRoom && currentRoom.id) {
+      navigate(`/chat/${currentRoom.id}`);
+    }
+  }, [currentRoom, navigate]);
 
   const handleEndRoom = useCallback(async (roomId) => {
     if (window.confirm('Are you sure you want to end this classroom? This action cannot be undone.')) {

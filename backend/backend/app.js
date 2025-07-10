@@ -1,43 +1,30 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config(); // Load .env variables
+require('./database'); // Initialize Supabase
+
 const app = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: process.env.CLIENT_URL || 'http://localhost:5173',
   credentials: true
 }));
 app.use(express.json());
 
+// Routes
 app.use('/api/rooms', require('./routes/roomRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 
-
-// Default route
+// Health check
 app.get('/', (req, res) => {
-  res.send('API is running...');
+  res.send('✅ API is running with Supabase');
 });
-
-// Connect to DB (this part requires a .env file or hardcoded URI)
-// Replace the old mongoose.connect(...) chain with a dedicated async connection function:
-
-const connectDB = async () => {
-  try {
-    await mongoose.connect(
-      process.env.MONGO_URI || 'mongodb://localhost:27017/anonymous-qa-platform'
-    );
-    console.log('MongoDB connected successfully');
-  } catch (error) {
-    console.error('MongoDB connection failed:', error.message);
-    process.exit(1);
-  }
-};
-
-connectDB();
 
 // Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🚀 Server is running on port ${PORT}`);
+});
 
 module.exports = app;

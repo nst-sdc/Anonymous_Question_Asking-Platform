@@ -34,6 +34,12 @@ const TeacherDashboard = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (currentRoom) {
+      navigate(`/chat/${currentRoom.id}`);
+    }
+  }, [currentRoom, navigate]);
+
   const handleCreateRoom = useCallback(async () => {
     if (!roomName.trim()) {
       setError('Room name cannot be empty');

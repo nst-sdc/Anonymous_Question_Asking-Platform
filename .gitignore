@@ -65,3 +65,4 @@ Thumbs.db
 /frontend/coveragenode_modules/
 node_modules/
 .vite/
+node_modules/

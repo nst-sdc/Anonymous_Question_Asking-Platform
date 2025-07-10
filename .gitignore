@@ -63,3 +63,5 @@ Thumbs.db
 # Frontend build artifacts
 /frontend/dist
 /frontend/coveragenode_modules/
+node_modules/
+.vite/

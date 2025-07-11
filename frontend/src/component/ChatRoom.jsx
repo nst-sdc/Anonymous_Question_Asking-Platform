@@ -322,10 +322,10 @@ const ChatRoom = () => {
         </div>
 
         {/* Participants Sidebar */}
-        {showParticipants && room && (
+        {showParticipants && currentRoom && (
           <ParticipantsSidebar 
-            participant={room.participants}
-            room={room}
+            participant={currentRoom.participants}
+            room={currentRoom}
             isUserSilenced={isUserSilenced}
           />
         )}

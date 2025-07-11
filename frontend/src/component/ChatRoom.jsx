@@ -18,6 +18,8 @@ import { formatTime } from '../utils/helpers';
 import { useParams, useNavigate } from 'react-router-dom';
 import PollDisplay from './PollDisplay';
 import Message from './Message';
+import PollForm from './PollForm';
+import ModerationPanel from './ModerationPanel';
 
 const ChatRoom = () => {
   const [message, setMessage] = useState('');

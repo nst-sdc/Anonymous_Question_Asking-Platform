@@ -1,5 +1,6 @@
 import React from 'react'
 import { formatTime } from '../utils/helpers';
+import { Shield } from 'lucide-react';
 
 // Accept messages, user details, reactions, addreaction, onModerateUSer and messagesend reference
 const MessageCard = ({messages, user, reactions, addReaction, onModerateUser, messagesEndRef}) => {

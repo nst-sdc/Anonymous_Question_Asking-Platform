@@ -1,24 +1,84 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { 
-  Send, 
-  ArrowLeft, 
-  Users, 
-  Volume, 
-  VolumeX, 
-  Shield, 
-  Clock,
+import {
+  Send,
+  ArrowLeft,
+  Users,
+  Shield,
   BarChart3,
-  Smile,
-  AlertTriangle,
-  Ban,
+  X,
+  MessageSquare, // For reply button
+  Clock,
   Trash2,
-  X
+  Copy,
+  LogOut,
+  Check, // For poll vote indicator
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import { formatTime, getTimeRemaining } from '../utils/helpers';
+import { formatTime } from '../utils/helpers';
 import { useParams, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
+// Poll Component to display active poll
+const PollDisplay = ({ poll, room }) => {
+  const { user, votePoll, closePoll, getPollResults, isRoomOwner, getUserVote } = useApp();
+
+  if (!poll || !poll.active) return null;
+
+  const results = getPollResults(poll);
+  const userVote = getUserVote(poll, user.id);
+  const canVote = !userVote;
+  const isOwner = isRoomOwner(room);
+
+  return (
+    <div className="bg-card border border-border rounded-xl p-4 my-4 shadow-md animate-fade-in">
+      <div className="flex justify-between items-center mb-3">
+        <h3 className="font-bold text-lg text-text flex items-center gap-2">
+          <BarChart3 className="w-5 h-5 text-primary" />
+          {poll.question}
+        </h3>
+        {isOwner && (
+          <button
+            onClick={() => closePoll(poll.id)}
+            className="text-sm font-semibold text-red-500 hover:text-red-700 transition-colors"
+          >
+            Close Poll
+          </button>
+        )}
+      </div>
+      <div className="space-y-2">
+        {poll.options.map((option) => {
+          const result = results.find(r => r.option === option) || { votes: 0, percentage: 0 };
+          const isVotedOption = userVote === option;
+
+          return (
+            <div key={option}>
+              {canVote ? (
+                <button
+                  onClick={() => votePoll(poll.id, option)}
+                  className="w-full text-left p-3 rounded-lg bg-bg-hover hover:bg-border hover:shadow-md transition-all font-medium"
+                >
+                  {option}
+                </button>
+              ) : (
+                <div className={`relative w-full p-3 rounded-lg bg-bg-hover overflow-hidden border-2 ${isVotedOption ? 'border-primary' : 'border-transparent'}`}>
+                  <div
+                    className="absolute top-0 left-0 h-full bg-primary/20 transition-all duration-500"
+                    style={{ width: `${result.percentage}%` }}
+                  ></div>
+                  <div className="relative flex justify-between font-semibold">
+                    <span className="flex items-center">{option} {isVotedOption && <Check className="w-4 h-4 ml-2 text-primary" />}</span>
+                    <span>{result.percentage}% ({result.votes})</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <p className="text-xs text-text-secondary mt-3 text-right">{poll.totalVotes || 0} total votes</p>
+    </div>
+  );
+};
+
 
 import MessageCard from './MessageCard';
 import PollForm from './PollForm';
@@ -33,91 +93,80 @@ const ChatRoom = () => {
   const [pollOptions, setPollOptions] = useState(['', '']);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showModerationPanel, setShowModerationPanel] = useState(false);
-  const [copiedCode, setCopiedCode] = useState('');
+  const [replyTo, setReplyTo] = useState(null);
+  const [copied, setCopied] = useState(false);
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
   const { roomId } = useParams();
   const navigate = useNavigate();
-  
+
   const { 
     user, 
     currentRoom, 
     leaveRoom, 
     sendMessage, 
     silenceUser,
-    addReaction,
     createPoll,
-    votePoll,
-    closePoll,
+    rooms,
     endRoom,
-    rooms
+    getActivePoll
   } = useApp();
-  
-  // Find the room from the URL parameter
-  const room = rooms.find(r => r.id === roomId);
-  
-  // If room not found, redirect to dashboard
+
+  const activePoll = useMemo(() => {
+    if (!currentRoom) return null;
+    return getActivePoll(currentRoom.id);
+  }, [currentRoom, getActivePoll]);
+
   const userRole = user?.role;
   useEffect(() => {
-    if (!room && rooms.length > 0) {
+    if (!currentRoom && rooms.length > 0) {
       navigate(userRole === 'teacher' ? '/teacher' : '/student');
     }
-  }, [room, rooms, navigate, userRole]);
+  }, [currentRoom, rooms, navigate, userRole]);
 
-  // Create a ref to store the previous message length
-  const prevMessagesLength = useRef(0);
-
-  // Scroll to bottom when new messages arrive
-  const scrollToBottom = useCallback((behavior = 'smooth') => {
-    messagesEndRef.current?.scrollIntoView({ behavior });
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  // Scroll to bottom when new messages are added
   useEffect(() => {
-    if (currentRoom?.messages) {
-      const currentLength = currentRoom.messages.length;
-      // Only scroll if new messages were added (not removed)
-      if (currentLength > prevMessagesLength.current) {
-        // Use 'auto' for initial load, 'smooth' for subsequent updates
-        const behavior = prevMessagesLength.current === 0 ? 'auto' : 'smooth';
-        scrollToBottom(behavior);
-      }
-      prevMessagesLength.current = currentLength;
-    }
+    scrollToBottom();
   }, [currentRoom?.messages, scrollToBottom]);
-  
-  // Initial scroll to bottom
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      scrollToBottom('auto');
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [scrollToBottom]);
 
-  const [lastError, setLastError] = useState('');
-  const [showError, setShowError] = useState(false);
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.style.height = 'auto';
+      const scrollHeight = inputRef.current.scrollHeight;
+      const maxHeight = 144; // Approx 6 rows
+      inputRef.current.style.height = `${Math.min(scrollHeight, maxHeight)}px`;
+      inputRef.current.style.overflowY = scrollHeight > maxHeight ? 'auto' : 'hidden';
+    }
+  }, [message]);
+
+  const handleSetReply = (message) => {
+    setReplyTo(message);
+    inputRef.current?.focus();
+  };
+
+  const handleCopy = () => {
+    if (!currentRoom?.code) return;
+    navigator.clipboard.writeText(currentRoom.code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleSendMessage = async () => {
     if (!message.trim()) return;
-    
     try {
-      const success = sendMessage(message);
+      const success = sendMessage(message, replyTo ? replyTo.id : null);
       if (success) {
         setMessage('');
-        setShowError(false);
+        setReplyTo(null);
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      setLastError(error.message || 'Message could not be sent. Please try again.');
-      setShowError(true);
-      
-      // Auto-hide error after 5 seconds
-      setTimeout(() => {
-        setShowError(false);
-      }, 5000);
     }
   };
   
-  // Handle pressing Enter to send message
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -127,160 +176,79 @@ const ChatRoom = () => {
 
   const handleSilence = (userId, duration) => {
     silenceUser(userId, duration);
-    setSelectedUser(null);
     setShowModerationPanel(false);
   };
 
   const handleCreatePoll = () => {
     const validOptions = pollOptions.filter(opt => opt.trim());
     if (!pollQuestion.trim() || validOptions.length < 2) return;
-    
     createPoll(pollQuestion, validOptions);
     setPollQuestion('');
     setPollOptions(['', '']);
     setShowPollForm(false);
   };
 
-  // Memoize currentRoom.id to prevent unnecessary re-renders
-  const currentRoomId = useMemo(() => currentRoom?.id, [currentRoom?.id]);
+  const handleShowModeration = (userId) => {
+      setSelectedUser(userId);
+      setShowModerationPanel(true);
+  }
 
-  const handleEndClass = useCallback(() => {
-    if (window.confirm('Are you sure you want to end this class? This will close the room for all participants.')) {
-      if (currentRoomId) {
-        endRoom(currentRoomId);
-        // Redirect teacher back to dashboard after ending class
-        navigate('/teacher');
-      } else {
-        toast.error('No active room found', {
-          position: 'top-center',
-          autoClose: 2000,
-        });
-      }
-    }
-  }, [currentRoomId, endRoom, navigate]);
-
-  const reactions = ['👍', '👎', '❤️', '😂', '😮', '🤔'];
-
-  const isUserSilenced = (userId) => {
-    const participant = room?.participants.find(p => p.id === userId);
-    return participant?.silencedUntil && new Date() < participant.silencedUntil;
-  };
-
-  if (!room) return null;
-
-  const activePoll = room.polls.find(poll => poll.active);
-  const currentUserSilenced = user && isUserSilenced(user.id);
-  
-  // Handle copy room code
-  const handleCopyCode = useCallback(() => {
-    if (currentRoom?.code) {
-      navigator.clipboard.writeText(currentRoom.code);
-      setCopiedCode(currentRoom.code);
-      toast.success('Room code copied to clipboard!', {
-        position: 'top-center',
-        autoClose: 2000,
-      });
-      setTimeout(() => setCopiedCode(''), 2000);
-    }
-  }, [currentRoom?.code]);
-
-  // Handle leave room
   const handleLeaveRoom = () => {
     leaveRoom();
-    navigate(user?.role === 'teacher' ? '/teacher' : '/student');
+    navigate(user.role === 'teacher' ? '/teacher' : '/student');
   };
 
+  const handleEndRoom = () => {
+    if (window.confirm('Are you sure you want to end this classroom for everyone?')) {
+      endRoom(currentRoom.id);
+      navigate('/teacher');
+    }
+  };
+
+  if (!currentRoom) {
+    return <div className="flex items-center justify-center h-screen bg-background text-text">Loading room...</div>;
+  }
+
   return (
-    <div className="min-h-screen bg-bg flex flex-col">
-      {/* Header */}
-      <div className="bg-card/80 backdrop-blur-sm shadow-sm border-b border-border p-3 z-10">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={handleLeaveRoom}
-              className="p-2 rounded-full text-text-secondary hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </button>
+    <div className="flex h-screen bg-background text-text font-sans">
+      <div className="flex-1 flex flex-col bg-bg-main">
+        <div className="bg-card/80 backdrop-blur-sm border-b border-border p-3 sm:p-4 flex items-center justify-between z-10">
+          <div className="flex items-center gap-3">
+
+            <button onClick={handleLeaveRoom} className="p-2 hover:bg-bg-hover rounded-full transition-colors flex items-center justify-center"><ArrowLeft className="w-5 h-5" /></button>
             <div>
-              <h1 className="text-lg font-bold text-text">{room.name}</h1>
-              <p className="text-sm text-text-secondary">Room Code: <span className="font-mono">{room.code}</span></p>
+              <h2 className="font-bold text-lg text-text truncate">{currentRoom?.name}</h2>
+              <div className="flex items-center gap-2 text-xs text-text-secondary">
+                <span>{currentRoom.participants.length} participants</span>
+                <div className="w-px h-3 bg-border"></div>
+                <button onClick={handleCopy} className="flex items-center gap-1 font-mono hover:text-text">
+                  {copied ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3" />}
+                  {copied ? 'Copied!' : currentRoom.code}
+                </button>
+              </div>
             </div>
           </div>
-          
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
             {user?.role === 'teacher' && (
               <>
-                <button
-                  onClick={() => setShowPollForm(true)}
-                  className="hidden sm:flex items-center space-x-2 bg-primary text-white px-3 py-1.5 rounded-lg hover:bg-primary/90 transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
-                >
-                  <BarChart3 className="w-4 h-4" />
-                  <span>Create Poll</span>
+                <button onClick={() => setShowPollForm(true)} className="p-2 hover:bg-bg-hover rounded-full transition-colors flex items-center justify-center" title="Create Poll">
+                  <BarChart3 className="w-5 h-5" />
                 </button>
-                <button
-                  onClick={() => setShowModerationPanel(!showModerationPanel)}
-                  className="flex items-center space-x-2 bg-amber-500/10 text-amber-600 dark:text-amber-400 px-3 py-1.5 rounded-lg hover:bg-amber-500/20 transition-colors"
-                >
-                  <Shield className="w-4 h-4" />
-                  <span className="hidden sm:inline">Moderate</span>
+                <button onClick={handleEndRoom} className="p-2 hover:bg-bg-hover rounded-full transition-colors flex items-center justify-center" title="End Classroom">
+                  <LogOut className="w-5 h-5 text-red-500" />
                 </button>
-                {user.id === room.teacherId && (
-                  <button
-                    onClick={handleEndClass}
-                    className="flex items-center space-x-2 bg-red-500/10 text-red-600 dark:text-red-400 px-3 py-1.5 rounded-lg hover:bg-red-500/20 transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    <span className="hidden sm:inline">End Room</span>
-                  </button>
-                )}
               </>
             )}
-            <button
-              onClick={() => setShowParticipants(!showParticipants)}
-              className="flex items-center space-x-2 bg-primary/10 text-primary px-3 py-1.5 rounded-lg hover:bg-primary/20 transition-colors"
-            >
-              <Users className="w-4 h-4" />
-              <span>{room.participants.length}</span>
+            <button onClick={() => setShowParticipants(prev => !prev)} className="p-2 hover:bg-bg-hover rounded-full transition-colors flex items-center justify-center" title="View Participants">
+              <Users className="w-5 h-5" />
             </button>
           </div>
         </div>
-      </div>
 
-      <div className="flex-1 flex overflow-hidden">
-        {/* Main Chat Area */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Active Poll */}
-          {activePoll && (
-            <div className="p-4 border-b border-border bg-primary/5 dark:bg-primary/10">
-              <div className="max-w-md mx-auto bg-card rounded-xl p-5 shadow-lg border border-primary/20">
-                <h3 className="font-bold text-text text-lg mb-3">Poll: {activePoll.question}</h3>
-                <div className="space-y-2">
-                  {activePoll.options.map(option => {
-                    const userVoted = user && (activePoll.votes[option] || []).includes(user.id);
-                    return (
-                      <button
-                        key={option}
-                        onClick={() => votePoll(activePoll.id, option)}
-                        disabled={user?.role === 'teacher' || activePoll.closedAt}
-                        className={`w-full p-3 rounded-lg text-left transition-all border ${userVoted ? 'bg-primary/20 border-primary font-semibold' : 'bg-bg-hover border-border hover:border-primary/50'} disabled:opacity-50 disabled:cursor-not-allowed`}
-                      >
-                        {option}
-                      </button>
-                    )
-                  })}
-                </div>
-                {user?.role === 'teacher' && !activePoll.closedAt && (
-                  <button onClick={() => closePoll(activePoll.id)} className="w-full mt-3 py-2 bg-red-500/10 text-red-500 rounded-lg hover:bg-red-500/20 text-sm font-semibold">End Poll</button>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Messages */}
+        <div className="flex-1 flex overflow-hidden">
           <div className="flex-1 overflow-y-auto p-4 sm:p-6">
             <MessageCard 
-              messages={room.messages}
+              messages={currentRoom.messages}
               user={user}
               reactions={reactions}
               addReaction={addReaction}
@@ -290,48 +258,65 @@ const ChatRoom = () => {
               }}
               messagesEndRef={messagesEndRef}
             />
+            <div className="max-w-4xl mx-auto space-y-5">
+              {activePoll && <PollDisplay poll={activePoll} room={currentRoom} />}
+            </div>
           </div>
 
-          {/* Message Input */}
-          <div className="bg-card/80 backdrop-blur-sm border-t border-border p-2 sm:p-4">
-            <div className="max-w-4xl mx-auto">
-              {currentUserSilenced ? (
-                <div className="flex items-center justify-center space-x-2 text-red-500 py-2 text-sm">
-                  <VolumeX className="w-5 h-5" />
-                  <span>You are silenced until {user?.silencedUntil && formatTime(user.silencedUntil)}</span>
-                </div>
-              ) : (
-                <div className="relative">
-                  {showError && (
-                    <div className="absolute bottom-full left-0 right-0 p-2">
-                      <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-2 mb-2 rounded-lg flex items-center text-sm" role="alert">
-                        <AlertTriangle className="w-5 h-5 mr-2 flex-shrink-0" />
-                        <p>{lastError}</p>
-                        <button onClick={() => setShowError(false)} className="ml-auto p-1"><X className="w-4 h-4"/></button>
+          {showParticipants && (
+            <div className="w-full max-w-xs bg-card/80 backdrop-blur-sm border-l border-border p-4 flex flex-col">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="font-bold text-lg">Participants</h3>
+                <button onClick={() => setShowParticipants(false)} className="p-2 hover:bg-bg-hover rounded-full transition-colors"><X className="w-5 h-5" /></button>
+              </div>
+              <div className="overflow-y-auto space-y-3">
+                {currentRoom.participants?.map(p => (
+                  <div key={p.id} className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-sm">{p.role === 'teacher' ? p.anonymousName.charAt(0).toUpperCase() : 'S'}</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm truncate">{p.anonymousName}</p>
+                        <p className="text-xs text-text-secondary">{p.role}</p>
                       </div>
                     </div>
-                  )}
-                  <div className="flex items-center bg-bg rounded-xl border-2 border-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
-                    <textarea
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      placeholder="Type your message... (Shift+Enter for new line)"
-                      className="flex-1 px-4 py-3 bg-transparent resize-none outline-none text-text placeholder-text-secondary/70"
-                      maxLength={500}
-                      rows={1}
-                      style={{maxHeight: '100px'}}
-                    />
-                    <button
-                      onClick={handleSendMessage}
-                      disabled={!message.trim()}
-                      className="p-2 text-primary rounded-full hover:bg-primary/10 disabled:text-text-secondary disabled:hover:bg-transparent transition-colors mr-2"
-                    >
-                      <Send className="w-5 h-5" />
-                    </button>
+                    {user?.role === 'teacher' && p.id !== user.id && (
+                      <button onClick={() => handleShowModeration(p.id)} className="p-2 hover:bg-bg-hover rounded-full transition-colors"><Shield className="w-4 h-4 text-text-secondary" /></button>
+                    )}
                   </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="bg-card/80 backdrop-blur-sm border-t border-border p-3 sm:p-4">
+          <div className="max-w-4xl mx-auto">
+            {replyTo && (
+              <div className="flex items-center justify-between bg-bg-input rounded-t-xl px-3 py-2 border-b-2 border-primary/20">
+                <div>
+                  <p className="text-sm font-bold text-primary">Replying to {replyTo.username}</p>
+                  <p className="text-sm text-text-secondary truncate w-full max-w-xs sm:max-w-md md:max-w-lg">{replyTo.content}</p>
                 </div>
-              )}
+                <button onClick={() => setReplyTo(null)} className="p-1.5 hover:bg-black/10 dark:hover:bg-white/10 rounded-full">
+                  <X className="w-4 h-4 text-text-secondary" />
+                </button>
+              </div>
+            )}
+            <div className="relative">
+              <textarea
+                ref={inputRef}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Type a message..."
+                className={`w-full bg-bg-input border-2 border-border p-3 pr-12 resize-none focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all ${replyTo ? 'rounded-b-xl' : 'rounded-xl'}`}
+                style={{ overflowY: 'hidden' }}
+              />
+              <button onClick={handleSendMessage} className="absolute right-3 bottom-2.5 p-2 rounded-full bg-primary text-white hover:bg-primary/90 transition-colors disabled:bg-border disabled:cursor-not-allowed" disabled={!message.trim()}>
+                <Send className="w-5 h-5" />
+              </button>
             </div>
           </div>
         </div>
@@ -346,7 +331,6 @@ const ChatRoom = () => {
         )}
       </div>
 
-      {/* Poll Creation Modal */}
       {showPollForm && (
         <PollForm
           onClose={() => setShowPollForm(false)}
@@ -358,7 +342,6 @@ const ChatRoom = () => {
         />
       )}
 
-      {/* Moderation Panel */}
       {showModerationPanel && selectedUser && (
          <ModerationPanel
           selectedUser={selectedUser}

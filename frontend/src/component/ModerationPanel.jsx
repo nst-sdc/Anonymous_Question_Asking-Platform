@@ -45,3 +45,5 @@ const ModerationPanel = ({
     </div>
   );
 };
+
+export default ModerationPanel;

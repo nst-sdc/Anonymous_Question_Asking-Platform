@@ -19,8 +19,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 // Poll Component to display active poll
 
-
-
 import MessageCard from './MessageCard';
 import PollForm from './PollForm';
 import ParticipantsSidebar from './ParticipantsSidebar';
@@ -204,33 +202,6 @@ const ChatRoom = () => {
               {activePoll && <PollDisplay poll={activePoll} room={currentRoom} />}
             </div>
           </div>
-
-          {showParticipants && (
-            <div className="w-full max-w-xs bg-card/80 backdrop-blur-sm border-l border-border p-4 flex flex-col">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-bold text-lg">Participants</h3>
-                <button onClick={() => setShowParticipants(false)} className="p-2 hover:bg-bg-hover rounded-full transition-colors"><X className="w-5 h-5" /></button>
-              </div>
-              <div className="overflow-y-auto space-y-3">
-                {currentRoom.participants?.map(p => (
-                  <div key={p.id} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold text-sm">{p.role === 'teacher' ? p.anonymousName.charAt(0).toUpperCase() : 'S'}</span>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-sm truncate">{p.anonymousName}</p>
-                        <p className="text-xs text-text-secondary">{p.role}</p>
-                      </div>
-                    </div>
-                    {user?.role === 'teacher' && p.id !== user.id && (
-                      <button onClick={() => handleShowModeration(p.id)} className="p-2 hover:bg-bg-hover rounded-full transition-colors"><Shield className="w-4 h-4 text-text-secondary" /></button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
         <div className="bg-card/80 backdrop-blur-sm border-t border-border p-3 sm:p-4">

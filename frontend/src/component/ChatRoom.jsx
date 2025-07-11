@@ -25,6 +25,7 @@ import MessageCard from './MessageCard';
 import PollForm from './PollForm';
 import ParticipantsSidebar from './ParticipantsSidebar';
 import ModerationPanel from './ModerationPanel'
+import PollDisplay from './PollDisplay';
 
 const ChatRoom = () => {
   const [message, setMessage] = useState('');

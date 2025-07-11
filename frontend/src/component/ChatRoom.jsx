@@ -19,6 +19,7 @@ import { formatTime, getTimeRemaining } from '../utils/helpers';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 import MessageCard from './MessageCard';
 import PollForm from './PollForm';
 

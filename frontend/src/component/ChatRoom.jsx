@@ -373,7 +373,7 @@ const ChatRoom = () => {
       {/* Poll Creation Modal */}
       {showPollForm && (
         <PollForm
-          setShowPollForm={setShowPollForm}
+          onClose={() => setShowPollForm(false)}
           pollQuestion={pollQuestion}
           setPollQuestion={setPollQuestion}
           pollOptions={pollOptions}

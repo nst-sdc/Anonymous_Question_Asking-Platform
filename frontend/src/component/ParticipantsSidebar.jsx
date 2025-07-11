@@ -1,7 +1,7 @@
 import React from 'react'
 import { Ban, VolumeX } from 'lucide-react'
 
-const ParticipantsSidebar = ({participant,room, isUserSilenced}) => {
+const ParticipantsSidebar = ({participant, room, isUserSilenced}) => {
   return (
     <div className="w-72 bg-card/70 backdrop-blur-sm border-l border-border p-4 overflow-y-auto">
         <h3 className="font-bold text-text mb-4">Participants ({room.participants.length})</h3>

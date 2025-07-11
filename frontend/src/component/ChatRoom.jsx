@@ -225,6 +225,7 @@ const ChatRoom = () => {
         setMessage('');
         setReplyTo(null);
       }
+      
     } catch (error) {
       console.error('Error sending message:', error);
     }

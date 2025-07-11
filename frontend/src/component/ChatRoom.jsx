@@ -263,13 +263,13 @@ const ChatRoom = () => {
           />
         )}
 
-      {showModerationPanel && selectedUser && (
-        <ModerationPanel
-          selectedUser={selectedUser}
-          onSilence={handleSilence}
-          onClose={() => setShowModerationPanel(false)}
-        />
-      )}
+        {showModerationPanel && selectedUser && (
+          <ModerationPanel
+            selectedUser={selectedUser}
+            onSilence={handleSilence}
+            onClose={() => setShowModerationPanel(false)}
+          />
+        )}
     </div>
   );
 };

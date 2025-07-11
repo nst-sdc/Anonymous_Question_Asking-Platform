@@ -1,5 +1,5 @@
 import React from 'react'
-import { X } from 'lucide-react';
+import { X, Trash2 } from 'lucide-react';
 
 const PollForm = ({setShowPollForm, pollQuestion, setPollQuestion, pollOptions,setPollOptions, handleCreatePoll}) => {
   return (

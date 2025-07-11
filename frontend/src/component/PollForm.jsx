@@ -1,11 +1,11 @@
 import React from 'react'
 import { X, Trash2 } from 'lucide-react';
 
-const PollForm = ({setShowPollForm, pollQuestion, setPollQuestion, pollOptions,setPollOptions, handleCreatePoll}) => {
+const PollForm = ({onClose, pollQuestion, setPollQuestion, pollOptions,setPollOptions, handleCreatePoll}) => {
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
         <div className="bg-card rounded-2xl shadow-xl w-full max-w-md p-6 relative">
-            <button onClick={() => setShowPollForm(false)} className="absolute top-3 right-3 p-2 text-text-secondary hover:bg-bg-hover rounded-full"><X/></button>
+            <button onClick={onClose} className="absolute top-3 right-3 p-2 text-text-secondary hover:bg-bg-hover rounded-full"><X/></button>
             <h2 className="text-2xl font-bold text-text text-center mb-2">Create a Poll</h2>
             <p className="mb-6 text-text-secondary text-center">Engage your students with a quick poll.</p>
             <div className="w-full mb-4">

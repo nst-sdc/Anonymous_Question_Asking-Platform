@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom light theme overrides (optional, for better contrast and appearance) */
+html {
+  background-color: #f8fafc; /* tailwind slate-50 */
+}
+body {
+  color: #1e293b; /* tailwind slate-800 */
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+}
+
+/* Example for card or container backgrounds */
+.bg-card-light {
+  background-color: #fff;
+  box-shadow: 0 2px 8px 0 rgba(30,41,59,0.04);
+}
+.bg-card-dark {
+  background-color: #1e293b;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.18);
+}
+
+/* Example for border and accent colors */
+.border-accent-light {
+  border-color: #3b82f6;
+}
+.border-accent-dark {
+  border-color: #6366f1;
+}
+
+/* Example for button styles */
+.btn-primary {
+  @apply px-4 py-2 rounded font-semibold shadow bg-blue-600 text-white hover:bg-blue-700 transition;
+}
+.btn-primary-light {
+  @apply bg-blue-600 text-white hover:bg-blue-700;
+}
+.btn-primary-dark {
+  @apply bg-indigo-600 text-white hover:bg-indigo-700;
+}
+
+/* Ensure dark mode works via Tailwind's class strategy */
+.dark html {
+  background-color: #0f172a;
+}
+.dark body {
+  color: #f1f5f9;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}

@@ -76,6 +76,90 @@ The **Anonymous Question Asking Platform** is a real-time, web-based application
 
 ---
 
+### 🚀 Getting Started
+
+Follow these instructions to get the project up and running on your local machine.
+
+#### **Prerequisites**
+
+*   Node.js and npm (or yarn)
+*   A Supabase account
+
+#### **1. Clone the Repository**
+
+```bash
+git clone <repository-url>
+cd Anonymous_Question_Asking-Platform
+```
+
+#### **2. Setup Backend**
+
+1.  Navigate to the `backend` directory:
+    ```bash
+    cd backend
+    ```
+
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+
+3.  Create a `.env` file by copying the example file:
+    ```bash
+    cp .env.example .env
+    ```
+
+4.  Get your Supabase credentials:
+    *   Go to your Supabase project dashboard.
+    *   Navigate to **Project Settings** > **API**.
+    *   Find your **Project URL** and **Service Role Key**.
+
+5.  Update the `.env` file with your credentials:
+    ```
+    SUPABASE_URL=your_supabase_project_url
+    SUPABASE_SERVICE_KEY=your_supabase_service_role_key
+    ```
+
+6.  Start the backend server:
+    ```bash
+    npm start
+    ```
+
+#### **3. Setup Frontend**
+
+1.  Navigate to the `frontend` directory from the root:
+    ```bash
+    cd ../frontend
+    ```
+
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+
+3.  Create a `.env` file:
+    ```bash
+    cp .env.example .env
+    ```
+
+4.  Get your Supabase credentials:
+    *   Go to your Supabase project dashboard.
+    *   Navigate to **Project Settings** > **API**.
+    *   Find your **Project URL** and **anon Public Key**.
+
+5.  Update the `.env` file with your credentials:
+    ```
+    VITE_SUPABASE_URL=your_supabase_project_url
+    VITE_SUPABASE_ANON_KEY=your_supabase_anon_public_key
+    ```
+
+6.  Start the frontend development server:
+    ```bash
+    npm run dev
+    ```
+
+---
+
 ### 🔧 **Technical Architecture** (Optional - If applicable)
 
 * **Frontend**: React.js

@@ -1,16 +1,38 @@
 {
-    "name": "anonymous-question-asking-platform",
-    "version": "1.0.0",
-    "private": true,
-    "scripts": {
-      "install:frontend": "cd frontend && npm install",
-      "install:backend": "cd backend && npm install",
-      "install": "npm-run-all install:*",
-      "dev:frontend": "cd frontend && npm run dev",
-      "dev:backend": "cd backend && npm run dev",
-      "dev": "npm-run-all --parallel dev:*"
-    },
-    "devDependencies": {
-      "npm-run-all": "^4.1.5"
-    }
+  "name": "qa",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --config vite.config.js",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "start": "vite --config vite.config.js"
+  },
+  "dependencies": {
+    "@dicebear/collection": "^9.2.3",
+    "@dicebear/core": "^9.2.3",
+    "@supabase/supabase-js": "^2.50.5",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "lucide-react": "^0.344.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.6.3",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.18",
+    "eslint": "^9.9.1",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "globals": "^15.9.0",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "vite": "^5.4.2"
   }
+}

@@ -52,30 +52,18 @@ export const RoomProvider = ({ children }) => {
 
     // Message listeners
     socket.on('new_message', (messageData) => {
-      const newMessage = {
-        id: messageData.id,
-        room_id: messageData.roomId,
-        user_id: messageData.userId,
-        content: messageData.content,
-        reply_to: messageData.replyTo,
-        created_at: messageData.timestamp,
-        anonymous_id: messageData.anonymousId,
-        reactions: messageData.reactions
-      };
-      
-      setMessages(prev => [...prev, newMessage]);
+      // The backend now sends the complete message object
+      setMessages(prev => [...prev, messageData]);
     });
 
-    socket.on('reaction_added', (reactionData) => {
+    socket.on('reaction_update', (reactionData) => {
       setMessages(prev => prev.map(msg => {
         if (msg.id === reactionData.messageId) {
-          const newReactions = { ...msg.reactions };
-          if (reactionData.reactionType === 'yes') {
-            newReactions.yes = (newReactions.yes || 0) + 1;
-          } else {
-            newReactions.no = (newReactions.no || 0) + 1;
-          }
-          return { ...msg, reactions: newReactions };
+          return {
+            ...msg,
+            reactions: reactionData.reactions,
+            user_reaction: reactionData.user_reactions[user.id] || null
+          };
         }
         return msg;
       }));
@@ -83,6 +71,7 @@ export const RoomProvider = ({ children }) => {
 
     // Poll listeners
     socket.on('new_poll', (pollData) => {
+      console.log('DEBUG: Received new_poll event', pollData);
       const newPoll = {
         id: pollData.id,
         room_id: pollData.roomId,
@@ -91,12 +80,12 @@ export const RoomProvider = ({ children }) => {
         poll_type: pollData.pollType,
         options: pollData.options,
         created_at: pollData.createdAt,
-        is_active: pollData.isActive,
+        is_active: pollData.isActive === undefined ? pollData.is_active : pollData.isActive,
         vote_counts: pollData.voteCounts,
         user_vote: null,
         total_votes: 0
       };
-      
+      console.log('DEBUG: newPoll mapped for state', newPoll);
       setPolls(prev => [newPoll, ...prev]);
     });
 
@@ -112,6 +101,30 @@ export const RoomProvider = ({ children }) => {
         }
         return poll;
       }));
+    });
+
+    socket.on('poll_ended', ({ pollId }) => {
+      console.log('DEBUG: Received poll_ended event', { pollId });
+      setPolls(prev => prev.filter(p => p.id !== pollId));
+    });
+
+    // Room state listener
+    socket.on('room_state', (stateData) => {
+      console.log('DEBUG: Received room_state event', stateData);
+      setRoomMembers(stateData.members || []);
+      const mappedPolls = (stateData.polls || []).map(p => ({ ...p, user_vote: null, total_votes: Object.keys(p.votes || {}).length }));
+      setPolls(mappedPolls);
+    });
+
+    // Member activity listeners
+    socket.on('user_joined', (joinData) => {
+      console.log('DEBUG: Received user_joined event', joinData);
+      setRoomMembers(joinData.members || []);
+    });
+
+    socket.on('user_left', (leftData) => {
+      console.log('DEBUG: Received user_left event', leftData);
+      setRoomMembers(leftData.members || []);
     });
 
     socket.on('poll_ended', (endData) => {
@@ -205,7 +218,7 @@ export const RoomProvider = ({ children }) => {
       socket.off('poll_error');
       socket.off('vote_error');
     };
-  }, [currentRoom, user]);
+  }, [currentRoom, user, isOrganizer]);
 
   // Create room
   const createRoom = async (name) => {
@@ -447,57 +460,18 @@ export const RoomProvider = ({ children }) => {
   };
 
   // Add reaction
-  const addReaction = async (messageId, type) => {
-    if (!user || !currentRoom || !currentUserMember) return;
+  const addReaction = (messageId, type) => {
+    if (!user || !currentRoom) return;
 
-    try {
-      // Send via Socket.IO for real-time updates
-      socketService.addReaction(
-        currentRoom.id, 
-        messageId, 
-        user.id, 
-        type, 
-        currentUserMember.anonymous_id
-      );
+    // Optimistic UI update can be done here if desired, but for simplicity,
+    // we'll rely on the server broadcast for now.
 
-      // Handle database storage
-      const { data: existingReaction } = await supabase
-        .from('message_reactions')
-        .select('*')
-        .eq('message_id', messageId)
-        .eq('user_id', user.id)
-        .eq('reaction_type', type)
-        .maybeSingle();
-
-      if (existingReaction) {
-        // Remove reaction if it exists
-        await supabase
-          .from('message_reactions')
-          .delete()
-          .eq('id', existingReaction.id);
-      } else {
-        // Remove opposite reaction if it exists
-        await supabase
-          .from('message_reactions')
-          .delete()
-          .eq('message_id', messageId)
-          .eq('user_id', user.id)
-          .neq('reaction_type', type);
-
-        // Add new reaction
-        await supabase
-          .from('message_reactions')
-          .insert({
-            message_id: messageId,
-            user_id: user.id,
-            reaction_type: type,
-          });
-      }
-      
-    } catch (error) {
-      console.error('Error adding reaction:', error);
-      throw error;
-    }
+    socketService.addReaction(
+      currentRoom.id,
+      messageId,
+      user.id,
+      type
+    );
   };
 
   // Create poll
@@ -647,32 +621,34 @@ export const RoomProvider = ({ children }) => {
 
     const loadInitialData = async () => {
       try {
-        // Load messages
+        // Load messages with their replies
         const { data: messagesData } = await supabase
           .from('messages')
-          .select('*')
+          .select('*, reply_to_message:reply_to (*)')
           .eq('room_id', currentRoom.id)
           .order('created_at', { ascending: true });
 
         if (messagesData) {
           const messagesWithReactions = await Promise.all(
             messagesData.map(async (msg) => {
+              // Load reactions for each message
               const { data: reactions } = await supabase
                 .from('message_reactions')
-                .select('reaction_type')
+                .select('reaction_type, user_id')
                 .eq('message_id', msg.id);
 
-              const reactionCounts = reactions?.reduce(
-                (acc, reaction) => {
-                  acc[reaction.reaction_type]++;
-                  return acc;
-                },
-                { yes: 0, no: 0 }
-              ) || { yes: 0, no: 0 };
+              const reactionCounts = reactions?.reduce((acc, reaction) => {
+                acc[reaction.reaction_type] = (acc[reaction.reaction_type] || 0) + 1;
+                return acc;
+              }, {}) || {};
+
+              const userReaction = reactions?.find(r => r.user_id === user.id)?.reaction_type || null;
 
               return {
                 ...msg,
+                reply_to_message: msg.reply_to_message || null,
                 reactions: reactionCounts,
+                user_reaction: userReaction,
               };
             })
           );

@@ -1,184 +1,136 @@
-# **Anonymous Question Asking Platform**
+# 🗣️ Annoymeet: Real-Time Anonymous Interaction Platform
+
+**Annoymeet** is a real-time, web-based application designed to foster open and honest communication in educational and professional settings. It allows participants to join rooms anonymously, ask questions, and engage in discussions without fear of judgment, while providing room organizers with tools to maintain a productive and respectful environment.
+
+## ✨ Live Demo
+
+- **Frontend (Vercel):** [annoymeet.vercel.app](https://annoymeet.vercel.app)  
+- **Backend (Render):** [annoymeet.onrender.com](https://annoymeet.onrender.com)
 
 ---
 
-### 🧠 **Project Overview**
+## 🎯 Core Features
 
-The **Anonymous Question Asking Platform** is a real-time, web-based application that facilitates anonymous interactions between students and teachers. Designed primarily for educational settings, the platform ensures that students can express doubts or feedback without fear of judgment, while giving teachers moderation tools to manage and maintain a respectful environment.
-
----
-
-### 🎯 **Objectives**
-
-* Encourage anonymous student-teacher interaction to promote honest and open communication.
-* Provide teachers with control mechanisms to maintain discipline.
-* Prevent misuse through abuse filters and moderation tools.
+- 🔐 **Anonymous Participation:** Join rooms with a randomly generated anonymous ID to ensure privacy.
+- 💬 **Real-Time Chat:** Engage in instant messaging with all room participants.
+- 📊 **Interactive Polls:** Create and participate in live polls to gather instant feedback.
+- 😀 **Emoji Reactions:** React to messages to express sentiment without cluttering the chat.
+- 🚫 **Profanity Filtering:** Automatically blocks messages containing inappropriate language.
+- 🔑 **Secure & Simple Access:** Join rooms with a unique 6-digit code.
+- 💾 **Persistent Sessions:** Sessions are stored locally to allow easy reconnection.
 
 ---
 
-### 🏗️ **Core Features**
+## 🛠️ Technical Architecture
 
-#### 👥 **User Roles**
+This project is built using a modern and scalable tech stack:
 
-1. **Students**
-2. **Teachers**
-
----
-
-### 🔐 **Authentication System**
-
-* **Role-Based Login**: Separate login portals for students and teachers.
-* **Anonymous Identity**: Upon login, each student is assigned a **randomly generated anonymous username**.
-* **Secure Sessions**: Authentication tokens to ensure secure access.
+- **Frontend:** React.js with [Vite](https://vitejs.dev/) for a fast development experience.
+- **Backend:** Node.js with Express.js for server-side logic.
+- **Real-Time Communication:** Socket.IO for low-latency, bidirectional communication.
+- **Database & Auth:** Supabase (PostgreSQL-based backend-as-a-service).
+- **Styling:** Tailwind CSS for responsive and utility-first UI.
 
 ---
 
-### 🧑‍🎓 **Student Functionalities**
+## 🚀 Getting Started
 
-* **Anonymous Chat Participation**
+Follow these steps to run the project locally for development and testing.
 
-  * Join chat rooms using a **unique room code**.
-  * Communicate anonymously with teachers and peers.
-  * **Profanity Filter**: All messages are screened for abusive content and blocked if detected.
+### ✅ Prerequisites
 
-* **Engagement Tools**
-
-  * **Poll Participation**: Students can vote in real-time polls created by the teacher.
-  * **Reactions**: Send emoji-based reactions to messages or announcements.
+- Node.js (v18 or higher)
+- npm or yarn
+- A free [Supabase](https://supabase.com) account
 
 ---
 
-### 👩‍🏫 **Teacher Functionalities**
-
-* **Room Management**
-
-  * Create a chat room with a **unique access code**.
-  * Share the code with students to allow entry.
-
-* **Moderation Tools**
-
-  * **Silencing Students**: Temporarily mute any student for the following durations:
-
-    * 10 minutes
-    * 20 minutes
-    * 30 minutes
-    * 1 hour
-    * 24 hours
-  * **Permanent Ban Rule**: If a student is silenced **4 times for 20 minutes or more**, they are automatically **permanently banned** from the platform.
-
----
-
-### 🛡️ **Content Moderation & Abuse Prevention**
-
-* **Profanity Detection**: Messages are filtered through a predefined list of abusive or inappropriate words.
-* **Logging Violations**: Each incident (e.g., being silenced or sending flagged content) is recorded.
-* **Ban Enforcement**: Upon hitting the violation threshold, the system auto-enforces a ban.
-
----
-
-### 🚀 Getting Started
-
-Follow these instructions to get the project up and running on your local machine.
-
-#### **Prerequisites**
-
-*   Node.js and npm (or yarn)
-*   A Supabase account
-
-#### **1. Clone the Repository**
+### 📁 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd Anonymous_Question_Asking-Platform
+git clone https://github.com/CodeMaverick-143/Annoymeet.git
+cd Annoymeet
+```
+---
+
+### 🔧 2. Backend Setup
+
+Navigate to the backend directory:
+
+```bash
+cd backend
 ```
 
-#### **2. Setup Backend**
+Install dependencies:
 
-1.  Navigate to the `backend` directory:
-    ```bash
-    cd backend
-    ```
+```bash
+npm install
+```
 
-2.  Install dependencies:
-    ```bash
-    npm install
-    ```
+Create a `.env` file and add your Supabase credentials from your Supabase Project's **Settings > API** section:
 
-3.  Create a `.env` file by copying the example file:
-    ```bash
-    cp .env.example .env
-    ```
+```env
+# .env
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_ANON_KEY=your_supabase_anon_public_key
+```
 
-4.  Get your Supabase credentials:
-    *   Go to your Supabase project dashboard.
-    *   Navigate to **Project Settings** > **API**.
-    *   Find your **Project URL** and **Service Role Key**.
+Start the backend server:
 
-5.  Update the `.env` file with your credentials:
-    ```
-    SUPABASE_URL=your_supabase_project_url
-    SUPABASE_SERVICE_KEY=your_supabase_service_role_key
-    ```
+```bash
+npm start
+```
 
-6.  Start the backend server:
-    ```bash
-    npm start
-    ```
-
-#### **3. Setup Frontend**
-
-1.  Navigate to the `frontend` directory from the root:
-    ```bash
-    cd ../frontend
-    ```
-
-2.  Install dependencies:
-    ```bash
-    npm install
-    ```
-
-3.  Create a `.env` file:
-    ```bash
-    cp .env.example .env
-    ```
-
-4.  Get your Supabase credentials:
-    *   Go to your Supabase project dashboard.
-    *   Navigate to **Project Settings** > **API**.
-    *   Find your **Project URL** and **anon Public Key**.
-
-5.  Update the `.env` file with your credentials:
-    ```
-    VITE_SUPABASE_URL=your_supabase_project_url
-    VITE_SUPABASE_ANON_KEY=your_supabase_anon_public_key
-    ```
-
-6.  Start the frontend development server:
-    ```bash
-    npm run dev
-    ```
+Backend will run at: [http://localhost:3001](http://localhost:3001)
 
 ---
 
-### 🔧 **Technical Architecture** (Optional - If applicable)
+### 💻 3. Frontend Setup
 
-* **Frontend**: React.js
-* **Backend**: Node.js + Express / Django (TBD)
-* **Database**: MongoDB / PostgreSQL (TBD)
-* **Authentication**: JWT / Firebase Auth
-* **Deployment**: Vercel / Netlify (frontend), Railway / Heroku / Render (backend)
+Open a new terminal, then navigate to the frontend directory:
+
+```bash
+cd frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Create a `.env.local` file and add the required credentials:
+
+```env
+# .env.local
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_public_key
+VITE_BACKEND_URL=http://localhost:3001
+```
+
+Start the frontend development server:
+
+```bash
+npm run dev
+```
+
+Frontend will be available at: [http://localhost:5173](http://localhost:5173)
 
 ---
 
-### 🚀 **Future Enhancements**
+## 🌟 Future Enhancements
 
-* Real-time Q\&A summary for teachers.
-* Anonymous voting for “most helpful” student questions.
-* Role-based analytics dashboard.
-* Integration with Google Classroom or Microsoft Teams.
+* 🧹 **Enhanced Moderation:** Mute/remove participants.
+* 🔼 **Q\&A Prioritization:** Upvote system for popular questions.
+* 🎨 **Theming Support:** Customize room UI/UX.
+* 📈 **Analytics Dashboard:** Engagement insights for organizers.
 
 ---
 
-### 📌 Conclusion
+## 📄 License
 
-The **Anonymous Question Asking Platform** serves as a bridge for safer, transparent, and moderated academic interaction. By offering anonymity to students and control to teachers, it promotes active participation, curiosity, and learning — all while maintaining discipline and respect in digital classrooms.
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE.md) file for details.
+
+---
+
+> Made with ❤️ by [CodeMaverick-143](https://github.com/CodeMaverick-143)

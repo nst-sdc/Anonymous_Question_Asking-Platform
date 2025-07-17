@@ -38,7 +38,6 @@ const CreateRoom = ({ onBack, onRoomCreated }) => {
   };
 
   const handleEnterRoom = () => {
-    // Store room data in context
     onRoomCreated(roomCode);
   };
 

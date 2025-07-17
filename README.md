@@ -131,6 +131,4 @@ Frontend will be available at: [http://localhost:5173](http://localhost:5173)
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE.md) file for details.
 
----
 
-> Made with ❤️ by [CodeMaverick-143](https://github.com/CodeMaverick-143)

@@ -443,18 +443,52 @@ export const RoomProvider = ({ children }) => {
   };
 
   // Add reaction
-  const addReaction = (messageId, type) => {
+  const addReaction = async (messageId, type) => {
     if (!user || !currentRoom) return;
 
-    // Optimistic UI update can be done here if desired, but for simplicity,
-    // we'll rely on the server broadcast for now.
+    try {
+      // Check if user already has a reaction on this message
+      const { data: existingReaction } = await supabase
+        .from('message_reactions')
+        .select('*')
+        .eq('message_id', messageId)
+        .eq('user_id', user.id)
+        .maybeSingle();
 
-    socketService.addReaction(
-      currentRoom.id,
-      messageId,
-      user.id,
-      type
-    );
+      // If user is clicking the same reaction, remove it
+      if (existingReaction && existingReaction.reaction_type === type) {
+        await supabase
+          .from('message_reactions')
+          .delete()
+          .eq('id', existingReaction.id);
+      } else {
+        // If user has a different reaction, update it; otherwise insert new
+        if (existingReaction) {
+          await supabase
+            .from('message_reactions')
+            .update({ reaction_type: type })
+            .eq('id', existingReaction.id);
+        } else {
+          await supabase
+            .from('message_reactions')
+            .insert({
+              message_id: messageId,
+              user_id: user.id,
+              reaction_type: type
+            });
+        }
+      }
+
+      // Notify other users via Socket.IO for real-time updates
+      socketService.addReaction(
+        currentRoom.id,
+        messageId,
+        user.id,
+        type
+      );
+    } catch (error) {
+      console.error('Error updating reaction:', error);
+    }
   };
 
   // Create poll

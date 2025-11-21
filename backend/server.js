@@ -57,7 +57,6 @@ const addUserToRoom = (roomId, userId, socketId, anonymousId) => {
     rooms.set(roomId, {
       id: roomId,
       members: new Map(),
-      messages: [],
       polls: new Map()
     });
   }
@@ -151,7 +150,6 @@ io.on('connection', (socket) => {
     if (room) {
       socket.emit('room_state', {
         members,
-        messages: room.messages,
         polls: activePolls || []
       });
     }
@@ -180,7 +178,7 @@ io.on('connection', (socket) => {
   });
 
   // Handle new message
-  socket.on('send_message', (data) => {
+  socket.on('send_message', async (data) => {
     const { roomId, userId, content, anonymousId, replyTo } = data;
 
     // Check for profanity
@@ -192,10 +190,42 @@ io.on('connection', (socket) => {
     }
 
     const cleanedContent = cleanMessage(content);
-    const room = rooms.get(roomId);
 
+    // Fetch parent message if this is a reply
+    let parentMessage = null;
+    if (replyTo) {
+      try {
+        const { data: parent } = await supabase
+          .from('messages')
+          .select('id, content, user_id')
+          .eq('id', replyTo)
+          .single();
+
+        if (parent) {
+          // Get anonymous_id for parent message author
+          const { data: parentMember } = await supabase
+            .from('room_members')
+            .select('anonymous_id')
+            .eq('room_id', roomId)
+            .eq('user_id', parent.user_id)
+            .single();
+
+          parentMessage = {
+            id: parent.id,
+            content: parent.content,
+            anonymous_id: parentMember?.anonymous_id || 'Unknown'
+          };
+        }
+      } catch (error) {
+        console.error('Error fetching parent message:', error);
+      }
+    }
+
+    // Prepare message data for broadcast
+    // Note: Frontend will save to Supabase with proper authentication
+    // Backend only broadcasts for real-time updates
     const messageData = {
-      id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       user_id: userId,
       content: cleanedContent,
       anonymous_id: anonymousId,
@@ -203,68 +233,52 @@ io.on('connection', (socket) => {
       reactions: {},
       user_reactions: {},
       reply_to: replyTo,
-      parent_message: null
+      parent_message: parentMessage
     };
 
-    if (replyTo && room) {
-      const parentMessage = room.messages.find(m => m.id === replyTo);
-      if (parentMessage) {
-        messageData.parent_message = {
-          id: parentMessage.id,
-          content: parentMessage.content,
-          anonymous_id: parentMessage.anonymous_id
-        };
-      }
-    }
-
-    if (room) {
-      room.messages.push(messageData);
-    }
-
-    // Broadcast message to all users in room
+    // Broadcast message to all users in room for real-time updates
     io.to(roomId).emit('new_message', messageData);
     console.log(`Message sent in room ${roomId} by ${anonymousId}`);
   });
 
   // Handle message reaction
-  socket.on('add_reaction', (data) => {
+  socket.on('add_reaction', async (data) => {
     const { roomId, messageId, userId, reactionType } = data;
-    const room = rooms.get(roomId);
-    if (!room) return;
 
-    const message = room.messages.find(m => m.id === messageId);
-    if (!message) return;
+    try {
+      // Frontend already saved the reaction to Supabase with proper auth
+      // Backend just fetches updated counts and broadcasts to other users
 
-    const userCurrentReaction = message.user_reactions[userId];
+      // Fetch updated reaction counts from Supabase
+      const { data: allReactions } = await supabase
+        .from('message_reactions')
+        .select('reaction_type, user_id')
+        .eq('message_id', messageId);
 
-    // If user is clicking the same reaction, undo it
-    if (userCurrentReaction === reactionType) {
-      message.reactions[reactionType] = (message.reactions[reactionType] || 0) - 1;
-      if (message.reactions[reactionType] <= 0) {
-        delete message.reactions[reactionType];
-      }
-      delete message.user_reactions[userId];
-    } else {
-      // If user has an existing reaction, remove it first
-      if (userCurrentReaction) {
-        message.reactions[userCurrentReaction] = (message.reactions[userCurrentReaction] || 0) - 1;
-        if (message.reactions[userCurrentReaction] <= 0) {
-          delete message.reactions[userCurrentReaction];
-        }
-      }
-      // Add the new reaction
-      message.reactions[reactionType] = (message.reactions[reactionType] || 0) + 1;
-      message.user_reactions[userId] = reactionType;
+      // Calculate reaction counts
+      const reactions = allReactions?.reduce((acc, reaction) => {
+        acc[reaction.reaction_type] = (acc[reaction.reaction_type] || 0) + 1;
+        return acc;
+      }, {}) || {};
+
+      // Create user_reactions map
+      const userReactions = allReactions?.reduce((acc, reaction) => {
+        acc[reaction.user_id] = reaction.reaction_type;
+        return acc;
+      }, {}) || {};
+
+      const reactionData = {
+        messageId,
+        reactions,
+        user_reactions: userReactions
+      };
+
+      // Broadcast reaction update to all users in room
+      io.to(roomId).emit('reaction_update', reactionData);
+      console.log(`Reaction updated for message ${messageId} by ${userId}`);
+    } catch (error) {
+      console.error('Error handling reaction:', error);
     }
-
-    const reactionData = {
-      messageId,
-      reactions: message.reactions,
-      user_reactions: message.user_reactions
-    };
-
-    io.to(roomId).emit('reaction_update', reactionData);
-    console.log(`Reaction updated for message ${messageId} by ${userId}`);
   });
 
   // Handle poll creation

@@ -64,3 +64,4 @@ Thumbs.db
 /frontend/dist
 /frontend/coveragenode_modules/
 node_modules/
+.env

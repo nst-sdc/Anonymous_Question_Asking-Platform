@@ -103,78 +103,29 @@ export const RoomProvider = ({ children }) => {
       }));
     });
 
+    // Poll ended listener - removes poll from active list
     socket.on('poll_ended', ({ pollId }) => {
       console.log('DEBUG: Received poll_ended event', { pollId });
       setPolls(prev => prev.filter(p => p.id !== pollId));
     });
 
-    // Room state listener
-    socket.on('room_state', (stateData) => {
-      console.log('DEBUG: Received room_state event', stateData);
-      setRoomMembers(stateData.members || []);
-      const mappedPolls = (stateData.polls || []).map(p => ({ ...p, user_vote: null, total_votes: Object.keys(p.votes || {}).length }));
-      setPolls(mappedPolls);
-    });
-
-    // Member activity listeners
-    socket.on('user_joined', (joinData) => {
-      console.log('DEBUG: Received user_joined event', joinData);
-      setRoomMembers(joinData.members || []);
-    });
-
-    socket.on('user_left', (leftData) => {
-      console.log('DEBUG: Received user_left event', leftData);
-      setRoomMembers(leftData.members || []);
-    });
-
-    socket.on('poll_ended', (endData) => {
-      setPolls(prev => prev.map(poll => {
-        if (poll.id === endData.pollId) {
-          return {
-            ...poll,
-            is_active: false,
-            vote_counts: endData.finalResults.voteCounts,
-            total_votes: endData.finalResults.totalVotes
-          };
-        }
-        return poll;
-      }));
-    });
-
-    // Member listeners
-    socket.on('user_joined', (data) => {
-      setRoomMembers(data.members.map((member) => ({
-        id: member.userId,
-        room_id: currentRoom.id,
-        user_id: member.userId,
-        anonymous_id: member.anonymousId,
-        joined_at: member.joinedAt,
-        is_active: true
-      })));
-    });
-
-    socket.on('user_left', (data) => {
-      setRoomMembers(data.members.map((member) => ({
-        id: member.userId,
-        room_id: currentRoom.id,
-        user_id: member.userId,
-        anonymous_id: member.anonymousId,
-        joined_at: member.joinedAt,
-        is_active: true
-      })));
-    });
-
+    // Room state listener - initial state when joining room
     socket.on('room_state', (state) => {
-      setRoomMembers(state.members.map((member) => ({
+      console.log('DEBUG: Received room_state event', state);
+
+      // Map members with proper structure
+      const mappedMembers = state.members.map((member) => ({
         id: member.userId,
         room_id: currentRoom.id,
         user_id: member.userId,
         anonymous_id: member.anonymousId,
         joined_at: member.joinedAt,
         is_active: true
-      })));
-      
-      setPolls(state.polls.map((poll) => ({
+      }));
+      setRoomMembers(mappedMembers);
+
+      // Map polls with proper structure
+      const mappedPolls = state.polls.map((poll) => ({
         id: poll.id,
         room_id: poll.roomId,
         created_by: poll.createdBy,
@@ -186,7 +137,39 @@ export const RoomProvider = ({ children }) => {
         vote_counts: poll.voteCounts,
         user_vote: poll.votes[user.id] ?? null,
         total_votes: Object.keys(poll.votes).length
-      })));
+      }));
+      setPolls(mappedPolls);
+    });
+
+    // Member activity listeners
+    socket.on('user_joined', (data) => {
+      console.log('DEBUG: Received user_joined event', data);
+
+      // Map members with proper structure
+      const mappedMembers = data.members.map((member) => ({
+        id: member.userId,
+        room_id: currentRoom.id,
+        user_id: member.userId,
+        anonymous_id: member.anonymousId,
+        joined_at: member.joinedAt,
+        is_active: true
+      }));
+      setRoomMembers(mappedMembers);
+    });
+
+    socket.on('user_left', (data) => {
+      console.log('DEBUG: Received user_left event', data);
+
+      // Map members with proper structure
+      const mappedMembers = data.members.map((member) => ({
+        id: member.userId,
+        room_id: currentRoom.id,
+        user_id: member.userId,
+        anonymous_id: member.anonymousId,
+        joined_at: member.joinedAt,
+        is_active: true
+      }));
+      setRoomMembers(mappedMembers);
     });
 
     // Error listeners
@@ -223,11 +206,11 @@ export const RoomProvider = ({ children }) => {
   // Create room
   const createRoom = async (name) => {
     if (!user) throw new Error('User not authenticated');
-    
+
     setLoading(true);
     try {
       const code = generateRoomCode();
-      
+
       const { data: room, error } = await supabase
         .from('rooms')
         .insert({
@@ -254,7 +237,7 @@ export const RoomProvider = ({ children }) => {
 
       setCurrentRoom(room);
       setIsOrganizer(true);
-      
+
       const memberData = {
         id: user.id,
         room_id: room.id,
@@ -264,17 +247,17 @@ export const RoomProvider = ({ children }) => {
         is_active: true
       };
       setCurrentUserMember(memberData);
-      
+
       // Join Socket.IO room
       socketService.joinRoom(room.id, user.id, anonymousId);
-      
+
       // Store in localStorage for persistence
       localStorage.setItem('anonymeet_current_room', JSON.stringify({
         room,
         isOrganizer: true,
         anonymousId
       }));
-      
+
       return room;
     } catch (error) {
       console.error('Error creating room:', error);
@@ -287,7 +270,7 @@ export const RoomProvider = ({ children }) => {
   // Join room
   const joinRoom = async (code) => {
     if (!user) throw new Error('User not authenticated');
-    
+
     setLoading(true);
     try {
       // Find room by code
@@ -309,7 +292,7 @@ export const RoomProvider = ({ children }) => {
         .maybeSingle();
 
       let anonymousId;
-      
+
       if (!existingMember) {
         // Join the room
         anonymousId = generateAnonymousId();
@@ -320,7 +303,7 @@ export const RoomProvider = ({ children }) => {
             user_id: user.id,
             anonymous_id: anonymousId,
           });
-        
+
         if (memberError) throw memberError;
       } else {
         // Reactivate membership if inactive
@@ -334,7 +317,7 @@ export const RoomProvider = ({ children }) => {
       setCurrentRoom(room);
       const organizer = room.created_by === user.id;
       setIsOrganizer(organizer);
-      
+
       const memberData = {
         id: user.id,
         room_id: room.id,
@@ -344,17 +327,17 @@ export const RoomProvider = ({ children }) => {
         is_active: true
       };
       setCurrentUserMember(memberData);
-      
+
       // Join Socket.IO room
       socketService.joinRoom(room.id, user.id, anonymousId);
-      
+
       // Store in localStorage for persistence
       localStorage.setItem('anonymeet_current_room', JSON.stringify({
         room,
         isOrganizer: organizer,
         anonymousId
       }));
-      
+
       return room;
     } catch (error) {
       console.error('Error joining room:', error);
@@ -384,7 +367,7 @@ export const RoomProvider = ({ children }) => {
       setPolls([]);
       setIsOrganizer(false);
       setCurrentUserMember(null);
-      
+
       // Clear from localStorage
       localStorage.removeItem('anonymeet_current_room');
     } catch (error) {
@@ -420,7 +403,7 @@ export const RoomProvider = ({ children }) => {
       setPolls([]);
       setIsOrganizer(false);
       setCurrentUserMember(null);
-      
+
       // Clear from localStorage
       localStorage.removeItem('anonymeet_current_room');
     } catch (error) {
@@ -436,10 +419,10 @@ export const RoomProvider = ({ children }) => {
     try {
       // Send via Socket.IO for real-time delivery
       socketService.sendMessage(
-        currentRoom.id, 
-        user.id, 
-        content, 
-        currentUserMember.anonymous_id, 
+        currentRoom.id,
+        user.id,
+        content,
+        currentUserMember.anonymous_id,
         replyTo
       );
 
@@ -452,7 +435,7 @@ export const RoomProvider = ({ children }) => {
           content,
           reply_to: replyTo || null,
         });
-      
+
     } catch (error) {
       console.error('Error sending message:', error);
       throw error;
@@ -480,7 +463,7 @@ export const RoomProvider = ({ children }) => {
 
     try {
       const pollOptions = type === 'yesno' ? ['Yes', 'No'] : (options || []);
-      
+
       // Send via Socket.IO for real-time delivery
       socketService.createPoll(
         currentRoom.id,
@@ -501,7 +484,7 @@ export const RoomProvider = ({ children }) => {
           poll_type: type,
           options: pollOptions,
         });
-      
+
     } catch (error) {
       console.error('Error creating poll:', error);
       throw error;
@@ -546,7 +529,7 @@ export const RoomProvider = ({ children }) => {
             option_index: optionIndex,
           });
       }
-      
+
     } catch (error) {
       console.error('Error voting on poll:', error);
       throw error;
@@ -566,7 +549,7 @@ export const RoomProvider = ({ children }) => {
         .from('polls')
         .update({ is_active: false })
         .eq('id', pollId);
-      
+
     } catch (error) {
       console.error('Error ending poll:', error);
       throw error;
@@ -581,7 +564,7 @@ export const RoomProvider = ({ children }) => {
     if (savedRoom && !currentRoom) {
       try {
         const { room, isOrganizer: savedIsOrganizer, anonymousId } = JSON.parse(savedRoom);
-        
+
         // Verify room still exists and user is still a member
         supabase
           .from('room_members')
@@ -602,7 +585,7 @@ export const RoomProvider = ({ children }) => {
                 joined_at: data.joined_at,
                 is_active: true
               });
-              
+
               // Rejoin Socket.IO room
               socketService.joinRoom(room.id, user.id, anonymousId);
             } else {

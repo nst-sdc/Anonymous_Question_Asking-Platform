@@ -3,6 +3,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const cors = require('cors');
 const Filter = require('bad-words');
+const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
 const app = express();
@@ -10,7 +11,9 @@ const server = http.createServer(app);
 
 // Frontend URL that is allowed to connect
 const allowedOrigins = [
-  "https://annoymeet.vercel.app"
+  "https://annoymeet.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:3000"
 ];
 
 const io = socketIo(server, {
@@ -35,7 +38,7 @@ const filter = new Filter();
 const rooms = new Map();
 const userSockets = new Map();
 const roomCleanupTimers = new Map();
-const supabase = require('./utils/supabase');
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
 
 // Helper functions
 const getRoomMembers = (roomId) => {
@@ -58,7 +61,7 @@ const addUserToRoom = (roomId, userId, socketId, anonymousId) => {
       polls: new Map()
     });
   }
-  
+
   const room = rooms.get(roomId);
   room.members.set(userId, {
     userId,
@@ -66,7 +69,7 @@ const addUserToRoom = (roomId, userId, socketId, anonymousId) => {
     anonymousId,
     joinedAt: new Date().toISOString()
   });
-  
+
   userSockets.set(socketId, { userId, roomId, anonymousId });
 };
 
@@ -111,12 +114,12 @@ io.on('connection', (socket) => {
   // Join room
   socket.on('join_room', async (data) => {
     const { roomId, userId, anonymousId } = data;
-    
+
     socket.join(roomId);
     addUserToRoom(roomId, userId, socket.id, anonymousId);
-    
+
     const members = getRoomMembers(roomId);
-    
+
     // Notify all users in room about new member
     io.to(roomId).emit('user_joined', {
       userId,
@@ -124,7 +127,7 @@ io.on('connection', (socket) => {
       members,
       organizer_id: rooms.get(roomId)?.organizer_id
     });
-    
+
     // Fetch active polls from Supabase
     const { data: activePolls, error: pollsError } = await supabase
       .from('polls')
@@ -152,26 +155,26 @@ io.on('connection', (socket) => {
         polls: activePolls || []
       });
     }
-    
+
     console.log(`User ${anonymousId} joined room ${roomId}`);
   });
 
   // Leave room
   socket.on('leave_room', (data) => {
     const { roomId, userId, anonymousId } = data;
-    
+
     socket.leave(roomId);
     removeUserFromRoom(roomId, userId);
-    
+
     const members = getRoomMembers(roomId);
-    
+
     // Notify remaining users
     socket.to(roomId).emit('user_left', {
       userId,
       anonymousId,
       members
     });
-    
+
     userSockets.delete(socket.id);
     console.log(`User ${anonymousId} left room ${roomId}`);
   });
@@ -179,7 +182,7 @@ io.on('connection', (socket) => {
   // Handle new message
   socket.on('send_message', (data) => {
     const { roomId, userId, content, anonymousId, replyTo } = data;
-    
+
     // Check for profanity
     if (containsProfanity(content)) {
       socket.emit('message_error', {
@@ -187,7 +190,7 @@ io.on('connection', (socket) => {
       });
       return;
     }
-    
+
     const cleanedContent = cleanMessage(content);
     const room = rooms.get(roomId);
 
@@ -217,7 +220,7 @@ io.on('connection', (socket) => {
     if (room) {
       room.messages.push(messageData);
     }
-    
+
     // Broadcast message to all users in room
     io.to(roomId).emit('new_message', messageData);
     console.log(`Message sent in room ${roomId} by ${anonymousId}`);
@@ -267,7 +270,7 @@ io.on('connection', (socket) => {
   // Handle poll creation
   socket.on('create_poll', async (data) => {
     const { roomId, userId, question, pollType, options, anonymousId } = data;
-    
+
     // Check for profanity in question and options
     if (containsProfanity(question)) {
       socket.emit('poll_error', {
@@ -275,7 +278,7 @@ io.on('connection', (socket) => {
       });
       return;
     }
-    
+
     const cleanOptions = options.map(option => {
       if (containsProfanity(option)) {
         socket.emit('poll_error', {
@@ -285,11 +288,11 @@ io.on('connection', (socket) => {
       }
       return cleanMessage(option);
     });
-    
+
     if (cleanOptions.includes(null)) return;
-    
+
     const pollId = `poll_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     const pollData = {
       id: pollId,
       roomId,
@@ -303,13 +306,13 @@ io.on('connection', (socket) => {
       createdAt: new Date().toISOString(),
       creatorAnonymousId: anonymousId
     };
-    
+
     // Store poll in room
     const room = rooms.get(roomId);
     if (room) {
       room.polls.set(pollId, pollData);
     }
-    
+
     // Save poll to Supabase
     const { error } = await supabase.from('polls').insert([{
       id: pollId,
@@ -347,7 +350,7 @@ io.on('connection', (socket) => {
     poll.votes[userId] = optionIndex;
 
     // Recalculate and update vote counts
-    poll.voteCounts = poll.options.map((_, index) => 
+    poll.voteCounts = poll.options.map((_, index) =>
       Object.values(poll.votes).filter(vote => vote === index).length
     );
     const totalVotes = Object.keys(poll.votes).length;
@@ -360,7 +363,7 @@ io.on('connection', (socket) => {
       voteCounts: poll.voteCounts,
       totalVotes
     };
-    
+
     // Update poll in Supabase
     const { error } = await supabase
       .from('polls')
@@ -381,21 +384,21 @@ io.on('connection', (socket) => {
   // Handle end poll
   socket.on('end_poll', async (data) => {
     const { roomId, pollId, userId } = data;
-    
+
     const room = rooms.get(roomId);
     if (!room || !room.polls.has(pollId)) {
       socket.emit('poll_error', { error: 'Poll not found' });
       return;
     }
-    
+
     const poll = room.polls.get(pollId);
-    
+
     // Check if user is poll creator or room organizer
     if (poll.createdBy !== userId) {
       socket.emit('poll_error', { error: 'Only poll creator can end the poll' });
       return;
     }
-    
+
     // Mark the poll as inactive in Supabase
     const { error } = await supabase
       .from('polls')
@@ -410,10 +413,10 @@ io.on('connection', (socket) => {
 
     // Remove the poll from memory
     room.polls.delete(pollId);
-    
+
     // Broadcast poll end to all users in room
     io.to(roomId).emit('poll_ended', { pollId });
-    
+
     console.log(`Poll ${pollId} ended in room ${roomId}`);
   });
 
@@ -432,18 +435,26 @@ io.on('connection', (socket) => {
         anonymousId,
         members
       });
-      
+
       userSockets.delete(socket.id);
     }
-    
+
     console.log('User disconnected:', socket.id);
   });
 });
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
+  res.json({
+    status: 'OK',
     timestamp: new Date().toISOString(),
     activeRooms: rooms.size,
     connectedUsers: userSockets.size
+  });
+});
+
+// Start server
+const PORT = process.env.PORT || 3001;
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

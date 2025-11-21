@@ -305,51 +305,58 @@ io.on('connection', (socket) => {
 
     if (cleanOptions.includes(null)) return;
 
-    const pollId = `poll_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    try {
+      // Save poll to Supabase first to get a proper UUID
+      const { data: savedPoll, error } = await supabase
+        .from('polls')
+        .insert([{
+          room_id: roomId,
+          created_by: userId,
+          creator_anonymous_id: anonymousId,
+          question: cleanMessage(question),
+          poll_type: pollType,
+          options: cleanOptions,
+          votes: {},
+          vote_counts: new Array(cleanOptions.length).fill(0),
+          is_active: true
+        }])
+        .select()
+        .single();
 
-    const pollData = {
-      id: pollId,
-      roomId,
-      createdBy: userId,
-      question: cleanMessage(question),
-      pollType,
-      options: cleanOptions,
-      votes: {},
-      voteCounts: new Array(cleanOptions.length).fill(0),
-      isActive: true,
-      createdAt: new Date().toISOString(),
-      creatorAnonymousId: anonymousId
-    };
+      if (error) {
+        console.error('Error saving poll to Supabase:', error);
+        socket.emit('poll_error', { error: 'Could not save the poll.' });
+        return;
+      }
 
-    // Store poll in room
-    const room = rooms.get(roomId);
-    if (room) {
-      room.polls.set(pollId, pollData);
+      // Prepare poll data for in-memory storage and broadcast
+      const pollData = {
+        id: savedPoll.id,
+        roomId,
+        createdBy: userId,
+        question: savedPoll.question,
+        pollType,
+        options: cleanOptions,
+        votes: {},
+        voteCounts: new Array(cleanOptions.length).fill(0),
+        isActive: true,
+        createdAt: savedPoll.created_at,
+        creatorAnonymousId: anonymousId
+      };
+
+      // Store poll in room for active tracking
+      const room = rooms.get(roomId);
+      if (room) {
+        room.polls.set(savedPoll.id, pollData);
+      }
+
+      // Broadcast new poll to all users in room
+      io.to(roomId).emit('new_poll', pollData);
+      console.log(`Poll created in room ${roomId} by ${anonymousId}`);
+    } catch (error) {
+      console.error('Error creating poll:', error);
+      socket.emit('poll_error', { error: 'An error occurred while creating the poll.' });
     }
-
-    // Save poll to Supabase
-    const { error } = await supabase.from('polls').insert([{
-      id: pollId,
-      room_id: roomId,
-      created_by: userId,
-      creator_anonymous_id: anonymousId,
-      question: pollData.question,
-      poll_type: pollType,
-      options: cleanOptions,
-      votes: {},
-      vote_counts: pollData.voteCounts,
-      is_active: true
-    }]);
-
-    if (error) {
-      console.error('Error saving poll to Supabase:', error);
-      socket.emit('poll_error', { error: 'Could not save the poll.' });
-      return;
-    }
-
-    // Broadcast new poll to all users in room
-    io.to(roomId).emit('new_poll', pollData);
-    console.log(`Poll created in room ${roomId} by ${anonymousId}`);
   });
 
   // Handle poll vote

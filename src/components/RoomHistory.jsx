@@ -72,12 +72,16 @@ const RoomHistory = ({ onBack, onRejoinRoom }) => {
     loadRoomHistory();
   }, [user]);
 
+  const [joiningRoomCode, setJoiningRoomCode] = useState(null);
+
   const handleRejoin = async (code) => {
     try {
+      setJoiningRoomCode(code);
       const room = await joinRoom(code);
       onRejoinRoom(code);
     } catch (err) {
       setError(err.message || 'Failed to rejoin room');
+      setJoiningRoomCode(null);
     }
   };
 
@@ -216,10 +220,15 @@ const RoomHistory = ({ onBack, onRejoinRoom }) => {
                       ) : room.is_active && room.member_count > 0 && (
                         <button
                           onClick={() => handleRejoin(room.code)}
-                          className="flex items-center space-x-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors font-medium"
+                          disabled={joiningRoomCode === room.code}
+                          className="flex items-center space-x-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors font-medium disabled:opacity-50"
                         >
-                          <ExternalLink className="w-4 h-4" />
-                          <span>Rejoin</span>
+                          {joiningRoomCode === room.code ? (
+                            <div className="w-4 h-4 border-2 border-blue-600 dark:border-blue-400 border-t-transparent rounded-full animate-spin" />
+                          ) : (
+                            <ExternalLink className="w-4 h-4" />
+                          )}
+                          <span>{joiningRoomCode === room.code ? 'Joining...' : 'Rejoin'}</span>
                         </button>
                       )}
                     </div>

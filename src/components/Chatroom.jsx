@@ -38,14 +38,28 @@ const Chatroom = ({ onLeaveRoom }) => {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
+  const isMounted = useRef(false);
+
   useEffect(() => {
+    isMounted.current = true;
     if (user && code && !currentRoom) {
       joinRoom(code).catch((err) => {
-        // Optionally handle error (room not found, etc)
-        // You could add a toast or notification here
         console.error('Failed to join room from URL:', err);
+        // If room is invalid or ended, redirect back to home
+        alert(err.message || 'Error joining room');
+        onLeaveRoom();
       });
     }
+    return () => {
+      isMounted.current = false;
+      // Delay leaveRoom to cancel out React StrictMode instant remount checks
+      setTimeout(() => {
+        // If we navigate away but haven't explicitly clicked Leave Room
+        if (!isMounted.current && currentRoom) {
+          leaveRoom();
+        }
+      }, 100);
+    };
     // eslint-disable-next-line
   }, [user, code, currentRoom]);
 
@@ -64,7 +78,14 @@ const Chatroom = ({ onLeaveRoom }) => {
   }, [messages]);
 
   if (!currentRoom) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600 dark:text-slate-300">Joining room...</p>
+        </div>
+      </div>
+    );
   }
 
   const handleSendMessage = (e) => {

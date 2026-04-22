@@ -46,9 +46,19 @@ export const RoomProvider = ({ children }) => {
 
   // Setup Socket.IO listeners
   useEffect(() => {
-    if (!currentRoom || !user) return;
+    if (!currentRoom || !user || !currentUserMember) return;
 
     const socket = socketService.connect();
+
+    const handleConnect = () => {
+      console.log('DEBUG: Socket connected/reconnected, joining room');
+      socketService.joinRoom(currentRoom.id, user.id, currentUserMember.anonymous_id);
+    };
+
+    socket.on('connect', handleConnect);
+    if (socket.connected) {
+      handleConnect();
+    }
 
     // Message listeners
     socket.on('new_message', (messageData) => {
@@ -193,8 +203,9 @@ export const RoomProvider = ({ children }) => {
     });
 
     return () => {
+      socket.off('connect', handleConnect);
       socket.off('new_message');
-      socket.off('reaction_added');
+      socket.off('reaction_update');
       socket.off('new_poll');
       socket.off('poll_vote_update');
       socket.off('poll_ended');
@@ -205,7 +216,7 @@ export const RoomProvider = ({ children }) => {
       socket.off('poll_error');
       socket.off('vote_error');
     };
-  }, [currentRoom, user, isOrganizer]);
+  }, [currentRoom, user, isOrganizer, currentUserMember]);
 
   // Create room
   const createRoom = async (name) => {
@@ -252,9 +263,6 @@ export const RoomProvider = ({ children }) => {
       };
       setCurrentUserMember(memberData);
 
-      // Join Socket.IO room
-      socketService.joinRoom(room.id, user.id, anonymousId);
-
       // Store in localStorage for persistence
       localStorage.setItem('anonymeet_current_room', JSON.stringify({
         room,
@@ -277,46 +285,40 @@ export const RoomProvider = ({ children }) => {
 
     setLoading(true);
     try {
-      // Find room by code
+      // Fetch room and upsert member in an optimized way
       const { data: room, error: roomError } = await supabase
         .from('rooms')
         .select('*')
         .eq('code', code)
         .single();
-
+        
       if (roomError) throw new Error('Room not found');
       if (room.is_active === false) throw new Error('This room has ended and can no longer be joined.');
 
-      // Check if already a member
-      const { data: existingMember } = await supabase
+      // Check existing to grab anonymousId if it exists, otherwise generate one
+      let { data: existingMember } = await supabase
         .from('room_members')
-        .select('*')
+        .select('anonymous_id, id')
         .eq('room_id', room.id)
         .eq('user_id', user.id)
         .maybeSingle();
 
-      let anonymousId;
+      const anonymousId = existingMember ? existingMember.anonymous_id : generateAnonymousId();
 
-      if (!existingMember) {
-        // Join the room
-        anonymousId = generateAnonymousId();
-        const { error: memberError } = await supabase
-          .from('room_members')
-          .insert({
-            room_id: room.id,
-            user_id: user.id,
-            anonymous_id: anonymousId,
-          });
+      // Upsert room membership
+      const { error: memberError } = await supabase
+        .from('room_members')
+        .upsert({
+          id: existingMember ? existingMember.id : undefined,
+          room_id: room.id,
+          user_id: user.id,
+          anonymous_id: anonymousId,
+          is_active: true
+        }, {
+          onConflict: 'room_id,user_id'
+        });
 
-        if (memberError) throw memberError;
-      } else {
-        // Reactivate membership if inactive
-        anonymousId = existingMember.anonymous_id;
-        await supabase
-          .from('room_members')
-          .update({ is_active: true })
-          .eq('id', existingMember.id);
-      }
+      if (memberError) throw memberError;
 
       setCurrentRoom(room);
       const organizer = room.created_by === user.id;
@@ -331,9 +333,6 @@ export const RoomProvider = ({ children }) => {
         is_active: true
       };
       setCurrentUserMember(memberData);
-
-      // Join Socket.IO room
-      socketService.joinRoom(room.id, user.id, anonymousId);
 
       // Store in localStorage for persistence
       localStorage.setItem('anonymeet_current_room', JSON.stringify({

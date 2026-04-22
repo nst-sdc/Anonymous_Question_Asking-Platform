@@ -83,7 +83,9 @@ export const RoomProvider = ({ children }) => {
         is_active: pollData.isActive === undefined ? pollData.is_active : pollData.isActive,
         vote_counts: pollData.voteCounts,
         user_vote: null,
-        total_votes: 0
+        total_votes: 0,
+        ends_at: pollData.endsAt || null,
+        duration: pollData.duration || 0
       };
       console.log('DEBUG: newPoll mapped for state', newPoll);
       setPolls(prev => [newPoll, ...prev]);
@@ -136,7 +138,9 @@ export const RoomProvider = ({ children }) => {
         is_active: poll.isActive,
         vote_counts: poll.voteCounts,
         user_vote: poll.votes[user.id] ?? null,
-        total_votes: Object.keys(poll.votes).length
+        total_votes: Object.keys(poll.votes).length,
+        ends_at: poll.endsAt || null,
+        duration: poll.duration || 0
       }));
       setPolls(mappedPolls);
     });
@@ -492,7 +496,7 @@ export const RoomProvider = ({ children }) => {
   };
 
   // Create poll
-  const createPoll = async (question, type, options) => {
+  const createPoll = async (question, type, options, duration = 0) => {
     if (!user || !currentRoom || !currentUserMember) return;
 
     try {
@@ -505,19 +509,25 @@ export const RoomProvider = ({ children }) => {
         question,
         type,
         pollOptions,
-        currentUserMember.anonymous_id
+        currentUserMember.anonymous_id,
+        duration
       );
 
       // Also store in Supabase for persistence
+      const insertData = {
+        room_id: currentRoom.id,
+        created_by: user.id,
+        question,
+        poll_type: type,
+        options: pollOptions,
+      };
+      if (duration > 0) {
+        insertData.ends_at = new Date(Date.now() + duration * 1000).toISOString();
+        insertData.duration = duration;
+      }
       await supabase
         .from('polls')
-        .insert({
-          room_id: currentRoom.id,
-          created_by: user.id,
-          question,
-          poll_type: type,
-          options: pollOptions,
-        });
+        .insert(insertData);
 
     } catch (error) {
       console.error('Error creating poll:', error);

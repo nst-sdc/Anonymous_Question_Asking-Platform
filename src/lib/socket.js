@@ -85,8 +85,8 @@ class SocketService {
   }
 
   // Poll methods
-  createPoll(roomId, userId, question, pollType, options, anonymousId) {
-    this.socket?.emit('create_poll', { roomId, userId, question, pollType, options, anonymousId });
+  createPoll(roomId, userId, question, pollType, options, anonymousId, duration = 0) {
+    this.socket?.emit('create_poll', { roomId, userId, question, pollType, options, anonymousId, duration });
   }
 
   votePoll(roomId, pollId, userId, optionIndex, anonymousId) {

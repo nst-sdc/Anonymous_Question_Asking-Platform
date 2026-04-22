@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
-import { X, Plus, Minus, BarChart3 } from 'lucide-react';
+import { X, Plus, Minus, BarChart3, Clock } from 'lucide-react';
 import { useRoom } from '../contexts/RoomContext';
+
+const TIMER_OPTIONS = [
+  { label: 'No Timer', value: 0 },
+  { label: '30 sec', value: 30 },
+  { label: '1 min', value: 60 },
+  { label: '2 min', value: 120 },
+  { label: '5 min', value: 300 },
+  { label: '10 min', value: 600 },
+];
 
 const PollModal = ({ isOpen, onClose, onCreatePoll }) => {
   const { loading } = useRoom();
   const [pollType, setPollType] = useState('yesno');
   const [question, setQuestion] = useState('');
   const [options, setOptions] = useState(['', '']);
+  const [duration, setDuration] = useState(0);
   const [error, setError] = useState('');
 
   const handleAddOption = () => {
@@ -36,6 +46,7 @@ const PollModal = ({ isOpen, onClose, onCreatePoll }) => {
         type: pollType,
         question: question.trim(),
         options: pollType === 'yesno' ? ['Yes', 'No'] : options.filter(opt => opt.trim()),
+        duration: duration, // 0 means no timer
       };
 
       onCreatePoll(poll);
@@ -170,6 +181,32 @@ const PollModal = ({ isOpen, onClose, onCreatePoll }) => {
               </div>
             </div>
           )}
+
+          {/* Timer */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
+              <div className="flex items-center space-x-2">
+                <Clock className="w-4 h-4" />
+                <span>Timer (optional)</span>
+              </div>
+            </label>
+            <div className="grid grid-cols-3 gap-2">
+              {TIMER_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setDuration(opt.value)}
+                  className={`p-2.5 rounded-xl border-2 text-sm font-medium transition-all ${
+                    duration === opt.value
+                      ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300'
+                      : 'border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-500'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <button
             type="submit"

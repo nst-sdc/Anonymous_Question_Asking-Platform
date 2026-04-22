@@ -9,18 +9,28 @@ const AuthModal = ({ isOpen, onClose, onSuccess, defaultAction }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccessMessage('');
     
     try {
       if (action === 'signin') {
         await signIn(email, password);
+        onSuccess();
       } else {
-        await signUp(email, password);
+        const result = await signUp(email, password);
+        if (result?.emailConfirmationRequired) {
+          setSuccessMessage(
+            'Account created! Please check your email inbox (and spam folder) for a confirmation link before signing in.'
+          );
+          // Don't call onSuccess — user needs to confirm email first
+        } else {
+          onSuccess();
+        }
       }
-      onSuccess();
     } catch (err) {
       setError(err.message || 'An error occurred');
     }
@@ -58,6 +68,12 @@ const AuthModal = ({ isOpen, onClose, onSuccess, defaultAction }) => {
         {error && (
           <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-xl">
             <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-xl">
+            <p className="text-sm text-green-600 dark:text-green-400">{successMessage}</p>
           </div>
         )}
 

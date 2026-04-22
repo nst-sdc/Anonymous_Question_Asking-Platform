@@ -40,7 +40,16 @@ export const AuthProvider = ({ children }) => {
         email,
         password,
       });
-      if (error) throw error;
+      if (error) {
+        // Provide a user-friendly message for unconfirmed emails
+        if (error.message === 'Email not confirmed') {
+          const friendlyError = new Error(
+            'Your email is not confirmed yet. Please check your inbox (and spam folder) for a confirmation link, or sign up again to resend it.'
+          );
+          throw friendlyError;
+        }
+        throw error;
+      }
     } catch (error) {
       console.error('Error signing in:', error);
       throw error;
@@ -52,11 +61,19 @@ export const AuthProvider = ({ children }) => {
   const signUp = async (email, password) => {
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
       });
       if (error) throw error;
+      
+      // Check if email confirmation is required
+      // When confirmation is needed, identities array will be empty or user won't have a confirmed email
+      if (data?.user && !data?.session) {
+        return { emailConfirmationRequired: true };
+      }
+      
+      return { emailConfirmationRequired: false };
     } catch (error) {
       console.error('Error signing up:', error);
       throw error;

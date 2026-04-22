@@ -106,7 +106,7 @@ const Chatroom = ({ onLeaveRoom }) => {
     }
   };
   const handleCreatePoll = (poll) => {
-    createPoll(poll.question, poll.type, poll.options);
+    createPoll(poll.question, poll.type, poll.options, poll.duration || 0);
     setShowPollModal(false);
   };
 
@@ -299,17 +299,19 @@ const Chatroom = ({ onLeaveRoom }) => {
       {/* Polls Sidebar */}
       {polls.length > 0 && (
         <aside className="hidden xl:flex flex-col w-96 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-l border-slate-200/50 dark:border-slate-700/50 overflow-hidden shadow-2xl flex-shrink-0">
-          <div className="p-6">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center">
-                <BarChart3 className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-slate-800 dark:text-white">Active Polls</h3>
-                <p className="text-sm text-slate-600 dark:text-slate-400">{polls.length} poll{polls.length !== 1 ? 's' : ''} running</p>
+          <div className="flex flex-col h-full">
+            <div className="p-6 pb-2 flex-shrink-0">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center">
+                  <BarChart3 className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-slate-800 dark:text-white">Active Polls</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">{polls.length} poll{polls.length !== 1 ? 's' : ''} running</p>
+                </div>
               </div>
             </div>
-            <div className="space-y-6 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto px-6 pb-6 space-y-6">
               <AnimatePresence>
                 {polls.map(poll => (
                   <motion.div

@@ -283,7 +283,7 @@ io.on('connection', (socket) => {
 
   // Handle poll creation
   socket.on('create_poll', async (data) => {
-    const { roomId, userId, question, pollType, options, anonymousId } = data;
+    const { roomId, userId, question, pollType, options, anonymousId, duration } = data;
 
     // Check for profanity in question and options
     if (containsProfanity(question)) {
@@ -305,21 +305,32 @@ io.on('connection', (socket) => {
 
     if (cleanOptions.includes(null)) return;
 
+    // Calculate endsAt if duration is set
+    const endsAt = duration && duration > 0
+      ? new Date(Date.now() + duration * 1000).toISOString()
+      : null;
+
     try {
       // Save poll to Supabase first to get a proper UUID
+      const insertData = {
+        room_id: roomId,
+        created_by: userId,
+        creator_anonymous_id: anonymousId,
+        question: cleanMessage(question),
+        poll_type: pollType,
+        options: cleanOptions,
+        votes: {},
+        vote_counts: new Array(cleanOptions.length).fill(0),
+        is_active: true
+      };
+      if (endsAt) {
+        insertData.ends_at = endsAt;
+        insertData.duration = duration;
+      }
+
       const { data: savedPoll, error } = await supabase
         .from('polls')
-        .insert([{
-          room_id: roomId,
-          created_by: userId,
-          creator_anonymous_id: anonymousId,
-          question: cleanMessage(question),
-          poll_type: pollType,
-          options: cleanOptions,
-          votes: {},
-          vote_counts: new Array(cleanOptions.length).fill(0),
-          is_active: true
-        }])
+        .insert([insertData])
         .select()
         .single();
 
@@ -341,7 +352,9 @@ io.on('connection', (socket) => {
         voteCounts: new Array(cleanOptions.length).fill(0),
         isActive: true,
         createdAt: savedPoll.created_at,
-        creatorAnonymousId: anonymousId
+        creatorAnonymousId: anonymousId,
+        endsAt: endsAt,
+        duration: duration || 0
       };
 
       // Store poll in room for active tracking
@@ -352,7 +365,28 @@ io.on('connection', (socket) => {
 
       // Broadcast new poll to all users in room
       io.to(roomId).emit('new_poll', pollData);
-      console.log(`Poll created in room ${roomId} by ${anonymousId}`);
+      console.log(`Poll created in room ${roomId} by ${anonymousId}${duration ? ` (${duration}s timer)` : ''}`);
+
+      // Auto-end poll when timer expires
+      if (duration && duration > 0) {
+        setTimeout(async () => {
+          const currentRoom = rooms.get(roomId);
+          if (currentRoom && currentRoom.polls.has(savedPoll.id)) {
+            // Mark as inactive in Supabase
+            await supabase
+              .from('polls')
+              .update({ is_active: false })
+              .eq('id', savedPoll.id);
+
+            // Remove from memory
+            currentRoom.polls.delete(savedPoll.id);
+
+            // Broadcast poll end
+            io.to(roomId).emit('poll_ended', { pollId: savedPoll.id });
+            console.log(`Poll ${savedPoll.id} auto-ended after ${duration}s timer`);
+          }
+        }, duration * 1000);
+      }
     } catch (error) {
       console.error('Error creating poll:', error);
       socket.emit('poll_error', { error: 'An error occurred while creating the poll.' });

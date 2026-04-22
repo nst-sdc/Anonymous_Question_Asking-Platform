@@ -137,11 +137,27 @@ io.on('connection', (socket) => {
     if (pollsError) {
       console.error('Error fetching polls from Supabase:', pollsError);
     } else {
-      // Update in-memory poll store for now
+      // Map DB columns to our in-memory camelCase structure
+      const mappedPolls = activePolls.map(dbPoll => ({
+        id: dbPoll.id,
+        roomId: dbPoll.room_id,
+        createdBy: dbPoll.created_by,
+        question: dbPoll.question,
+        pollType: dbPoll.poll_type,
+        options: dbPoll.options || [],
+        createdAt: dbPoll.created_at,
+        isActive: dbPoll.is_active,
+        votes: dbPoll.votes || {},
+        voteCounts: dbPoll.vote_counts || new Array((dbPoll.options || []).length).fill(0),
+        endsAt: dbPoll.ends_at,
+        duration: dbPoll.duration
+      }));
+
+      // Update in-memory poll store
       const room = rooms.get(roomId);
       if (room) {
         room.polls.clear();
-        activePolls.forEach(poll => room.polls.set(poll.id, poll));
+        mappedPolls.forEach(poll => room.polls.set(poll.id, poll));
       }
     }
 
@@ -150,7 +166,7 @@ io.on('connection', (socket) => {
     if (room) {
       socket.emit('room_state', {
         members,
-        polls: activePolls || []
+        polls: Array.from(room.polls.values())
       });
     }
 

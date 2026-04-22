@@ -16,7 +16,7 @@ class SocketService {
 
     // Create socket connection
     this.socket = io(BACKEND_URL, {
-      transports: ['polling'],
+      transports: ['websocket', 'polling'], // Prioritize WebSockets for instant disconnects
       timeout: 20000,
       forceNew: true,
       withCredentials: false,
